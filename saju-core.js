@@ -233,6 +233,7 @@
   function pad(n) { return (n < 10 ? '0' : '') + n; }
 
   return {
+    버전: '20260918b',
     calc: calc,
     tzOffsetMinutes: tzOffsetMinutes,
     기본경도: SEOUL_LON,

@@ -5,9 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>운때</title>
 <meta name="description" content="사주로 타고난 '운'을 세우고, 타로 3장으로 지금의 '때'를 읽습니다.">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="stylesheet" crossorigin
+      href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
 <style>
   /* ──────────────────────────────────────────────────────────
      디자인 컨셉 : 미드나잇 코스모스 (Midnight Cosmos)
@@ -32,10 +32,12 @@
     --silver:    #9FB3D1;
     --danger:    #D98F63;
     --radius: 14px;
-    --serif: "Noto Serif KR", "Noto Serif CJK KR", AppleMyungjo, "Nanum Myeongjo",
+    /* 본문 — Pretendard Variable (동적 서브셋: 쓰인 글자 묶음만 내려받는다) */
+    --sans: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont,
+            "Apple SD Gothic Neo", "Segoe UI", Roboto, "Noto Sans KR", sans-serif;
+    /* 명조 — 워드마크와 한자 명식에만 쓴다. 웹폰트를 받지 않고 시스템 것으로 해결한다. */
+    --serif: AppleMyungjo, "Noto Serif KR", "Noto Serif CJK KR", "Nanum Myeongjo",
              Batang, 바탕, serif;
-    --sans: "Pretendard", -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo",
-            "Segoe UI", Roboto, "Noto Sans KR", sans-serif;
     --mok: #7FBF9A; --hwa: #E08A72; --to: #D8BC7A; --geum: #AFC0DA; --su: #7E9FD9;
   }
   * { box-sizing: border-box; }
@@ -89,8 +91,7 @@
     margin-bottom: 20px;
   }
   .eyebrow {
-    font-family: var(--serif);
-    font-size: .74rem; font-weight: 600; letter-spacing: .22em;
+    font-size: .72rem; font-weight: 700; letter-spacing: .2em;
     color: var(--gold); text-transform: uppercase;
     margin: 0 0 18px; padding-bottom: 13px;
     border-bottom: 1px solid var(--line);
@@ -111,7 +112,7 @@
     display: inline-flex; align-items: center; justify-content: center;
     width: 24px; height: 24px; margin-bottom: 9px;
     border: 1px solid var(--gold-lo); border-radius: 50%;
-    font-family: var(--serif); font-size: .74rem; color: var(--gold);
+    font-size: .74rem; font-weight: 700; color: var(--gold);
     line-height: 1;
   }
   .howto b { display: block; font-size: .87rem; color: var(--ink); margin-bottom: 4px; }
@@ -144,8 +145,7 @@
     width: 100%; margin-top: 4px; padding: 16px;
     background: transparent; color: var(--gold-hi);
     border: 1px solid var(--gold-lo); border-radius: 10px;
-    font-family: var(--serif);
-    font-size: 1rem; font-weight: 600; letter-spacing: .26em; text-indent: .26em;
+    font-size: 1rem; font-weight: 700; letter-spacing: .26em; text-indent: .26em;
     cursor: pointer;
     transition: background .18s ease, color .18s ease, box-shadow .18s ease;
   }
@@ -168,10 +168,10 @@
     width: 31px; height: 31px; border-radius: 50%;
     border: 1px solid var(--gold-lo); background: var(--bg);
     display: flex; align-items: center; justify-content: center;
-    font-family: var(--serif); font-size: .72rem; color: var(--gold);
+    font-size: .72rem; font-weight: 700; color: var(--gold);
   }
   .stage > .stitle {
-    font-family: var(--serif); font-size: 1.05rem; font-weight: 600;
+    font-size: 1.08rem; font-weight: 700;
     color: var(--gold-hi); margin: 0 0 3px; letter-spacing: .06em;
   }
   .stage > .slead { margin: 0 0 16px; font-size: .8rem; color: var(--ink-faint); }
@@ -190,7 +190,7 @@
   /* 오행 막대 */
   .wx-bars { display: flex; flex-direction: column; gap: 7px; margin: 20px 0 2px; }
   .wx-row { display: flex; align-items: center; gap: 10px; font-size: .79rem; }
-  .wx-name { width: 22px; color: var(--ink-dim); flex: none; font-family: var(--serif); }
+  .wx-name { width: 22px; color: var(--ink-dim); flex: none; font-weight: 600; }
   .wx-track { flex: 1; height: 8px; background: var(--bg-2); border-radius: 4px; overflow: hidden; }
   .wx-fill { display: block; height: 100%; min-width: 2px; border-radius: 4px; transition: width .7s ease; }
   .wx-num { width: 16px; text-align: right; color: var(--ink-faint); font-variant-numeric: tabular-nums; flex: none; }
@@ -214,7 +214,7 @@
     font-family: var(--serif); font-size: 1.8rem; color: var(--gold-hi);
     background: var(--gold-film);
   }
-  .dm-body h4 { margin: 0 0 2px; font-size: .95rem; font-family: var(--serif); color: var(--ink); line-height: 1.6; }
+  .dm-body h4 { margin: 0 0 2px; font-size: .95rem; font-weight: 700; color: var(--ink); line-height: 1.6; }
   .dm-body .tag { vertical-align: middle; }
 
   .tag {
@@ -241,10 +241,10 @@
     border-radius: 6px; pointer-events: none;
   }
   .tcard.rev { border-color: rgba(201,169,106,.28); }
-  .tcard .tpos { font-family: var(--serif); font-size: .68rem; letter-spacing: .16em; color: var(--gold); }
+  .tcard .tpos { font-size: .68rem; font-weight: 600; letter-spacing: .16em; color: var(--gold); }
   .tcard .tglyph { font-size: 1.9rem; line-height: 1; }
   .tcard.rev .tglyph { transform: rotate(180deg); }
-  .tcard .tname { font-family: var(--serif); font-size: .82rem; font-weight: 600; line-height: 1.4; color: var(--ink); }
+  .tcard .tname { font-size: .83rem; font-weight: 600; line-height: 1.45; color: var(--ink); }
   .tcard .tmeta { font-size: .66rem; color: var(--ink-faint); margin-top: 3px; }
   .tcard .trev {
     position: absolute; top: 9px; right: 9px; font-size: .6rem; letter-spacing: .1em;
@@ -262,7 +262,7 @@
     border-radius: 50%; border: 1px solid currentColor; background: currentColor;
     box-shadow: 0 0 0 4px rgba(255,255,255,.035);
   }
-  .fnode b { display: block; font-family: var(--serif); font-size: .76rem; color: var(--gold); letter-spacing: .1em; }
+  .fnode b { display: block; font-size: .76rem; font-weight: 700; color: var(--gold); letter-spacing: .1em; }
   .fnode em {
     display: block; font-style: normal; font-size: .71rem; line-height: 1.45;
     color: var(--ink-dim); margin-top: 3px; word-break: keep-all;
@@ -285,15 +285,15 @@
   .reading { border-top: 1px solid var(--line); padding-top: 18px; margin-top: 18px; }
   .rhead { display: flex; align-items: baseline; gap: 9px; flex-wrap: wrap; margin-bottom: 8px; }
   .rpos {
-    font-family: var(--serif); font-size: .7rem; letter-spacing: .16em; color: var(--gold);
+    font-size: .7rem; font-weight: 600; letter-spacing: .16em; color: var(--gold);
     border: 1px solid var(--gold-lo); border-radius: 3px; padding: 1px 7px; line-height: 1.6;
   }
-  .rhead h3 { font-family: var(--serif); font-size: 1rem; font-weight: 600; margin: 0; color: var(--ink); }
+  .rhead h3 { font-size: 1.02rem; font-weight: 700; margin: 0; color: var(--ink); }
   .rdesc { margin: 0 0 13px; font-size: .86rem; color: var(--ink-dim); }
   .rgrid { display: grid; grid-template-columns: 1fr 1fr; gap: 11px; }
   .rcell { background: var(--panel-2); border: 1px solid var(--line); border-radius: 10px; padding: 13px 14px; }
   .rcell .clab {
-    display: block; font-family: var(--serif); font-size: .68rem; letter-spacing: .16em;
+    display: block; font-size: .68rem; font-weight: 600; letter-spacing: .16em;
     color: var(--gold); margin-bottom: 6px;
   }
   .rcell p { margin: 0; font-size: .83rem; color: var(--ink); }
@@ -302,7 +302,7 @@
   /* ── 총평 ────────────────────────────────────────────── */
   .verdict p { margin: 0 0 11px; font-size: .9rem; }
   .verdict p:last-child { margin-bottom: 0; }
-  .verdict .lead { font-family: var(--serif); font-size: 1rem; color: var(--gold-hi); line-height: 1.75; }
+  .verdict .lead { font-size: 1rem; font-weight: 600; color: var(--gold-hi); line-height: 1.78; }
   .verdict .close {
     border-top: 1px solid var(--line); padding-top: 13px; margin-top: 15px; color: var(--ink-dim); font-size: .86rem;
   }
@@ -423,9 +423,10 @@
 
 </div>
 
-<script src="saju-core.js"></script>
-<script src="tarot-data.js"></script>
-<script src="fortune-data.js"></script>
+<!-- ?v= 는 캐시 무효화용. JS를 고치면 아래 세 곳과 필요버전을 함께 올린다. -->
+<script src="saju-core.js?v=20260918b"></script>
+<script src="tarot-data.js?v=20260918b"></script>
+<script src="fortune-data.js?v=20260918b"></script>
 <script>
 (function () {
   'use strict';
@@ -436,6 +437,20 @@
   };
   var GLYPH = { major: '✦', wands: '❋', cups: '☾', swords: '✧', pentacles: '✵' };
   var WX = ['목', '화', '토', '금', '수'];
+  var 필요버전 = '20260918b';
+
+  /** 브라우저가 예전 JS를 캐시해 두면 조용히 깨진다. 눌렀을 때 바로 알려준다. */
+  function 버전확인() {
+    var 낡음 = [];
+    if (SajuCore.버전 !== 필요버전) 낡음.push('saju-core.js');
+    if (TarotData.버전 !== 필요버전) 낡음.push('tarot-data.js');
+    if (FortuneData.버전 !== 필요버전) 낡음.push('fortune-data.js');
+    if (!낡음.length) return true;
+    alert('브라우저에 예전 파일이 남아 있습니다 (' + 낡음.join(', ') + ').\n\n' +
+          '강력 새로고침으로 해결됩니다.\n' +
+          '  Mac: Cmd + Shift + R\n  Windows: Ctrl + Shift + R');
+    return false;
+  }
 
   function esc(s) {
     return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) {
@@ -605,6 +620,8 @@
   }
 
   document.getElementById('drawBtn').addEventListener('click', function () {
+    if (!버전확인()) return;
+
     var dateStr = document.getElementById('birthdate').value;
     if (!dateStr) { alert('생년월일을 입력해 주세요.'); return; }
 
