@@ -172,7 +172,7 @@
   }
 
   return {
-    버전: '20260918j',
+    버전: '20260919a',
     DECK: DECK,
     SUITS: SUITS,
     RANKS: RANKS,
