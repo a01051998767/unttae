@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>운때</title>
-<meta name="description" content="사주로 타고난 '운'을 세우고, 타로 3장으로 지금의 '때'를 읽습니다.">
+<meta name="description" content="사주로 타고난 '운'을 세우고, 타로로 지금의 '때'를 읽습니다.">
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
 <link rel="stylesheet" crossorigin
       href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
@@ -566,7 +566,7 @@
     </div>
     <h1>운<span class="dim">·</span>때</h1>
     <div class="rule"></div>
-    <p class="sub">사주로 타고난 <b>운</b>을 세우고, 타로 세 장으로 지금의 <b>때</b>를 읽습니다</p>
+    <p class="sub">사주로 타고난 <b>운</b>을 세우고, 타로로 지금의 <b>때</b>를 읽습니다</p>
   </header>
 
   <!-- ── 사용법 ─────────────────────────────────────────── -->
@@ -683,12 +683,17 @@
 </div>
 
 <!-- ?v= 는 캐시 무효화용. JS를 고치면 아래 세 곳과 필요버전을 함께 올린다. -->
-<script src="saju-core.js?v=20260919e"></script>
-<script src="tarot-data.js?v=20260919e"></script>
-<script src="fortune-data.js?v=20260919e"></script>
+<script src="saju-core.js?v=20260919g"></script>
+<script src="tarot-data.js?v=20260919g"></script>
+<script src="fortune-data.js?v=20260919g"></script>
 <script>
 (function () {
   'use strict';
+
+  // 새로고침하면 브라우저가 이전 스크롤 위치를 되살린다. 첫 화면은 맨 위여야 한다.
+  if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+  window.scrollTo(0, 0);
+  window.addEventListener('load', function () { window.scrollTo(0, 0); });
 
   var WX_COLOR = {
     목: 'var(--mok)', 화: 'var(--hwa)', 토: 'var(--to)',
@@ -696,7 +701,7 @@
   };
   var GLYPH = { major: '✦', wands: '❋', cups: '☾', swords: '✧', pentacles: '✵' };
   var WX = ['목', '화', '토', '금', '수'];
-  var 필요버전 = '20260919e';
+  var 필요버전 = '20260919g';
 
   /** 브라우저가 예전 JS를 캐시해 두면 조용히 깨진다. 눌렀을 때 바로 알려준다. */
   function 버전확인() {
