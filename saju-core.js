@@ -9,13 +9,18 @@
  *   1) 벽시계 시각 + IANA 시간대 → UTC 절대시각
  *      (서머타임 1948~51·1955~60·1987~88, UTC+8:30 시기 1954~61 자동 처리)
  *   2) 년주·월주: UTC 절대시각을 절기 절대시각과 비교
- *   3) 일주·시주: 동경 135도 기준(UTC+9)으로 판정. 경도 보정은 선택
+ *   3) 일주·시주: 진태양시(출생지 경도 보정) + 정자시(23시부터 다음 날) 고정
+ *      - 정자시: 하루 = 12시진. 60x12x60x12 = 518,400 이라는 고전 체계의 전제를 지킨다.
+ *      - 진태양시: 동경 135도는 일본 아카시 자오선으로 한국 국토(124~132도) 밖이다.
+ *        보정은 시주뿐 아니라 자시 경계(=일주 경계)까지 함께 이동시킨다.
  */
 (function (root, factory) {
   if (typeof module === 'object' && module.exports) module.exports = factory();
   else root.SajuCore = factory();
 }(typeof self !== 'undefined' ? self : this, function () {
   'use strict';
+
+  var SEOUL_LON = 126.98;   // 경도 미지정 시 기본값 (서울)
 
   var GAN = '甲乙丙丁戊己庚辛壬癸'.split('');
   var ZHI = '子丑寅卯辰巳午未申酉戌亥'.split('');
@@ -109,30 +114,30 @@
    * @param {object} birth {year, month, day, hour, minute}  출생 벽시계 시각
    * @param {object} opt
    *   tz         IANA 시간대. 기본 'Asia/Seoul'
-   *   longitude  진태양시 경도 보정용 출생지 경도(도). null이면 보정 안 함 (서울≈126.98)
-   *   nightZi    true = 23시부터 일주를 다음날로. 기본 true
+   *   longitude  진태양시 보정용 출생지 경도(도). 기본 126.98(서울). 보정은 항상 적용된다.
    *   unknownHour true = 출생시각 모름. 시주를 null로 반환
+   *
+   * 시법은 정자시(23시부터 다음 날 일주)로 고정이며 옵션이 아니다.
    */
   function calc(birth, opt) {
     opt = opt || {};
     var tz = opt.tz || 'Asia/Seoul';
-    var nightZi = opt.nightZi !== false;
+    var lon = (opt.longitude == null) ? SEOUL_LON : opt.longitude;
 
     var offMin = tzOffsetMinutes(birth.year, birth.month, birth.day,
                                  birth.hour || 0, birth.minute || 0, tz);
     var utcMs = Date.UTC(birth.year, birth.month - 1, birth.day,
                          birth.hour || 0, birth.minute || 0, 0) - offMin * 60000;
 
-    // 판정용 현지시각 (동경 135도 기준 + 선택적 경도 보정)
-    var localMs = utcMs + 9 * 3600000;
-    if (opt.longitude != null) localMs += (opt.longitude - 135) * 4 * 60000;
+    // 판정용 현지시각 = 진태양시(평균태양시). 출생지 경도 보정을 항상 적용한다.
+    var localMs = utcMs + 9 * 3600000 + (lon - 135) * 4 * 60000;
     var L = new Date(localMs);
     var ly = L.getUTCFullYear(), lmo = L.getUTCMonth() + 1, ld = L.getUTCDate();
     var lh = L.getUTCHours(), lmi = L.getUTCMinutes();
 
     // ── 일주 ──
     var dayBase = Date.UTC(ly, lmo - 1, ld);
-    if (nightZi && lh >= 23) dayBase += 86400000;
+    if (lh >= 23) dayBase += 86400000;   // 정자시: 23시부터 다음 날 일주
     var D = new Date(dayBase);
     var dIdx = (jdn(D.getUTCFullYear(), D.getUTCMonth() + 1, D.getUTCDate()) + 49) % 60;
     var dayGan = dIdx % 10, dayZhi = dIdx % 12;
@@ -193,14 +198,14 @@
     if (ziGap <= 15) {
       경고.push({
         종류: '자시경계', 분차: ziGap,
-        설명: '자시 경계 ' + ziGap + '분 이내입니다. 야자시 유파에 따라 일주가 달라질 수 있습니다.'
+        설명: '자시 경계 ' + ziGap + '분 이내입니다. 출생 시각이 몇 분만 달라져도 일주와 시주가 함께 바뀝니다.'
       });
     }
     // 시지 경계 (매 홀수시 정각)
     var hourGap = Math.min((minOfDay + 60) % 120, 120 - ((minOfDay + 60) % 120));
     if (hourGap <= 10 && !opt.unknownHour) {
       경고.push({ 종류: '시지경계', 분차: hourGap,
-        설명: '시지 경계 ' + hourGap + '분 이내입니다. 진태양시 보정 여부에 따라 시주가 바뀝니다.' });
+        설명: '시지 경계 ' + hourGap + '분 이내입니다. 출생 시각이 몇 분만 달라져도 시주가 바뀝니다.' });
     }
     // 시간대가 표준(UTC+9)이 아닌 시기
     if (offMin !== 540) {
@@ -213,8 +218,9 @@
         입력시간대: tz,
         적용오프셋분: offMin,
         판정시각: ly + '-' + pad(lmo) + '-' + pad(ld) + ' ' + pad(lh) + ':' + pad(lmi),
-        경도보정: opt.longitude != null ? Math.round((opt.longitude - 135) * 4) + '분' : '없음',
-        야자시: nightZi ? '23시부터 다음날' : '자정부터 다음날'
+        경도: lon,
+        경도보정: Math.round((lon - 135) * 4) + '분',
+        시법: '정자시 (23시부터 다음 날 일주)'
       },
       경고: 경고,
       사주: { 년주: 년주, 월주: 월주, 일주: 일주, 시주: 시주 },
@@ -229,6 +235,8 @@
   return {
     calc: calc,
     tzOffsetMinutes: tzOffsetMinutes,
+    기본경도: SEOUL_LON,
+    시법: '정자시',
     지원범위: [1899, 2101],
     테이블크기: DATA.length
   };

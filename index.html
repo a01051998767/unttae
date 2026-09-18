@@ -4,233 +4,415 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>운때</title>
-<meta name="description" content="사주로 타고난 '때'를 세우고, 타로 3장으로 지금의 '운'을 읽습니다.">
+<meta name="description" content="사주로 타고난 '운'을 세우고, 타로 3장으로 지금의 '때'를 읽습니다.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
+  /* ──────────────────────────────────────────────────────────
+     디자인 컨셉 : 미드나잇 코스모스 (Midnight Cosmos)
+     딥 네이비 + 차콜 배경, 무광 골드 선(線), 세리프 타이포.
+     사주 명식(한자)과 타로 카드를 같은 굵기의 금색 선화로 통일하고
+     '때'의 흐름은 과거→현재→미래 타임라인 레일로 드러낸다.
+     ────────────────────────────────────────────────────────── */
   :root {
-    --bg: #0d0b14;
-    --bg-soft: #16132145;
-    --panel: #191527;
-    --panel-2: #211b33;
-    --line: #2f2745;
-    --ink: #ece8f5;
-    --ink-dim: #a79fc0;
-    --ink-faint: #746b91;
-    --gold: #d9b46a;
-    --gold-soft: #d9b46a22;
-    --accent: #8b7ad6;
-    --danger: #e0855f;
+    --bg:        #080B14;
+    --bg-2:      #050710;
+    --panel:     #0F1422;
+    --panel-2:   #151B2C;
+    --line:      #212A40;
+    --line-2:    #2E3A57;
+    --ink:       #E9ECF5;
+    --ink-dim:   #A4AEC6;
+    --ink-faint: #6A7590;
+    --gold:      #C9A96A;
+    --gold-hi:   #E7D2A0;
+    --gold-lo:   #8C7749;
+    --gold-film: rgba(201,169,106,.09);
+    --silver:    #9FB3D1;
+    --danger:    #D98F63;
     --radius: 14px;
-    --mok: #6fbf8b; --hwa: #e08a72; --to: #d2b478; --geum: #9fb4d4; --su: #7e9ad9;
+    --serif: "Noto Serif KR", "Noto Serif CJK KR", AppleMyungjo, "Nanum Myeongjo",
+             Batang, 바탕, serif;
+    --sans: "Pretendard", -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo",
+            "Segoe UI", Roboto, "Noto Sans KR", sans-serif;
+    --mok: #7FBF9A; --hwa: #E08A72; --to: #D8BC7A; --geum: #AFC0DA; --su: #7E9FD9;
   }
   * { box-sizing: border-box; }
   html, body { margin: 0; padding: 0; }
   body {
     background: var(--bg);
     color: var(--ink);
-    font-family: "Pretendard", -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo",
-                 "Segoe UI", Roboto, "Noto Sans KR", sans-serif;
-    line-height: 1.75;
+    font-family: var(--sans);
+    line-height: 1.8;
     -webkit-font-smoothing: antialiased;
     background-image:
-      radial-gradient(ellipse 80% 50% at 50% -10%, #2a2150 0%, transparent 60%),
-      radial-gradient(ellipse 60% 40% at 90% 10%, #1e2a4a 0%, transparent 55%);
+      radial-gradient(ellipse 90% 45% at 50% -8%,  #16203F 0%, transparent 62%),
+      radial-gradient(ellipse 55% 35% at 88% 12%,  #101B33 0%, transparent 58%),
+      radial-gradient(ellipse 70% 40% at 8% 45%,   #0D1526 0%, transparent 60%);
     background-attachment: fixed;
   }
-  .wrap { max-width: 720px; margin: 0 auto; padding: 48px 16px 80px; }
 
-  header { text-align: center; margin-bottom: 40px; }
-  h1 {
-    font-size: 1.9rem; font-weight: 600; letter-spacing: .14em;
-    margin: 0 0 10px; color: var(--gold);
+  /* 별 — 배경 장식 */
+  #stars { position: fixed; inset: 0; pointer-events: none; z-index: 0; }
+  #stars i {
+    position: absolute; display: block; border-radius: 50%;
+    background: #fff; opacity: .5;
+    animation: tw 5s ease-in-out infinite;
   }
-  .sub { color: var(--ink-faint); font-size: .86rem; letter-spacing: .04em; margin: 0; }
+  @keyframes tw { 0%,100% { opacity: .15 } 50% { opacity: .65 } }
+  @media (prefers-reduced-motion: reduce) { #stars i { animation: none } }
 
-  .card-panel {
-    background: var(--panel);
+  .wrap { position: relative; z-index: 1; max-width: 760px; margin: 0 auto; padding: 56px 18px 90px; }
+
+  /* ── 헤더 ───────────────────────────────────────────── */
+  header { text-align: center; margin-bottom: 44px; }
+  .moons { display: flex; justify-content: center; gap: 13px; margin-bottom: 20px; opacity: .85; }
+  .moons svg { display: block; }
+  h1 {
+    font-family: var(--serif);
+    font-size: 2.4rem; font-weight: 600; letter-spacing: .3em;
+    margin: 0 0 6px; color: var(--gold-hi);
+    text-indent: .3em;
+  }
+  h1 .dim { color: var(--gold-lo); }
+  .rule { width: 52px; height: 1px; background: var(--gold-lo); margin: 14px auto; opacity: .7; }
+  .sub { color: var(--ink-dim); font-size: .88rem; letter-spacing: .02em; margin: 0; }
+  .sub b { color: var(--gold); font-weight: 600; }
+
+  /* ── 공통 패널 ───────────────────────────────────────── */
+  .panel {
+    background: linear-gradient(180deg, var(--panel) 0%, #0C111D 100%);
     border: 1px solid var(--line);
     border-radius: var(--radius);
-    padding: 24px;
+    padding: 26px 24px;
     margin-bottom: 20px;
   }
-  h2 {
-    font-size: .78rem; font-weight: 600; letter-spacing: .16em;
+  .eyebrow {
+    font-family: var(--serif);
+    font-size: .74rem; font-weight: 600; letter-spacing: .22em;
     color: var(--gold); text-transform: uppercase;
-    margin: 0 0 18px; padding-bottom: 12px;
+    margin: 0 0 18px; padding-bottom: 13px;
     border-bottom: 1px solid var(--line);
+    display: flex; align-items: center; gap: 9px;
+  }
+  .eyebrow::before {
+    content: ""; width: 5px; height: 5px; flex: none;
+    border: 1px solid var(--gold); transform: rotate(45deg);
   }
 
+  /* ── 사용법 ──────────────────────────────────────────── */
+  .howto ol { list-style: none; margin: 0; padding: 0; display: grid; gap: 14px; grid-template-columns: repeat(3, 1fr); }
+  .howto li {
+    background: var(--panel-2); border: 1px solid var(--line);
+    border-radius: 11px; padding: 15px 14px 14px;
+  }
+  .howto .n {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 24px; height: 24px; margin-bottom: 9px;
+    border: 1px solid var(--gold-lo); border-radius: 50%;
+    font-family: var(--serif); font-size: .74rem; color: var(--gold);
+    line-height: 1;
+  }
+  .howto b { display: block; font-size: .87rem; color: var(--ink); margin-bottom: 4px; }
+  .howto p { margin: 0; font-size: .78rem; color: var(--ink-faint); line-height: 1.65; }
+
+  /* ── 입력 ────────────────────────────────────────────── */
   .field { margin-bottom: 16px; }
-  label { display: block; font-size: .8rem; color: var(--ink-dim); margin-bottom: 7px; }
+  label { display: block; font-size: .79rem; color: var(--ink-dim); margin-bottom: 7px; letter-spacing: .02em; }
   input[type=date], input[type=time], select {
-    width: 100%; padding: 11px 13px;
-    background: var(--bg); color: var(--ink);
-    border: 1px solid var(--line); border-radius: 9px;
+    width: 100%; padding: 12px 13px;
+    background: var(--bg-2); color: var(--ink);
+    border: 1px solid var(--line-2); border-radius: 9px;
     font-size: .95rem; font-family: inherit;
     color-scheme: dark;
   }
-  input:focus, select:focus { outline: 2px solid var(--accent); outline-offset: 1px; }
-  .row { display: flex; gap: 12px; }
+  input:disabled { opacity: .4; }
+  input:focus, select:focus { outline: 2px solid var(--gold-lo); outline-offset: 1px; }
+  .row { display: flex; gap: 13px; }
   .row > * { flex: 1; min-width: 0; }
-
-  .check { display: flex; align-items: center; gap: 9px; font-size: .86rem; color: var(--ink-dim); margin-bottom: 11px; }
-  .check input { width: 17px; height: 17px; accent-color: var(--accent); flex-shrink: 0; }
-
-  details.opts { margin-top: 6px; }
-  details.opts summary {
-    cursor: pointer; font-size: .82rem; color: var(--ink-faint);
-    padding: 7px 0; list-style: none; user-select: none;
+  .check { display: flex; align-items: center; gap: 9px; font-size: .84rem; color: var(--ink-dim); margin: 2px 0 14px; }
+  .check input { width: 17px; height: 17px; accent-color: var(--gold); flex: none; }
+  .check label { margin: 0; font-size: .84rem; }
+  .note {
+    font-size: .76rem; color: var(--ink-faint); line-height: 1.7;
+    border-left: 2px solid var(--line-2); padding-left: 11px; margin: 4px 0 16px;
   }
-  details.opts summary::-webkit-details-marker { display: none; }
-  details.opts summary::before { content: "▸ "; }
-  details.opts[open] summary::before { content: "▾ "; }
-  .opt-body { padding: 12px 0 2px; border-top: 1px dashed var(--line); margin-top: 6px; }
-  .hint { font-size: .76rem; color: var(--ink-faint); line-height: 1.6; margin: 5px 0 0; }
+  .note b { color: var(--gold); font-weight: 600; }
 
   button.go {
-    width: 100%; margin-top: 10px; padding: 15px;
-    background: linear-gradient(135deg, var(--gold) 0%, #c9a05a 100%);
-    color: #201a10; border: none; border-radius: 10px;
-    font-size: 1rem; font-weight: 700; font-family: inherit;
-    letter-spacing: .1em; cursor: pointer;
-    transition: transform .12s ease, filter .12s ease;
+    width: 100%; margin-top: 4px; padding: 16px;
+    background: transparent; color: var(--gold-hi);
+    border: 1px solid var(--gold-lo); border-radius: 10px;
+    font-family: var(--serif);
+    font-size: 1rem; font-weight: 600; letter-spacing: .26em; text-indent: .26em;
+    cursor: pointer;
+    transition: background .18s ease, color .18s ease, box-shadow .18s ease;
   }
-  button.go:hover { filter: brightness(1.08); }
+  button.go:hover { background: var(--gold-film); box-shadow: 0 0 22px rgba(201,169,106,.14); }
   button.go:active { transform: translateY(1px); }
 
+  /* ── 결과 레일 ───────────────────────────────────────── */
   #out { display: none; }
-  #out.show { display: block; animation: fade .45s ease both; }
-  @keyframes fade { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+  #out.show { display: block; animation: fade .5s ease both; }
+  @keyframes fade { from { opacity: 0; transform: translateY(12px) } to { opacity: 1; transform: none } }
+
+  .stage { position: relative; padding-left: 46px; padding-bottom: 8px; }
+  .stage::before {                     /* 세로 레일 */
+    content: ""; position: absolute; left: 15px; top: 34px; bottom: -12px;
+    width: 1px; background: linear-gradient(180deg, var(--gold-lo), var(--line));
+  }
+  .stage:last-child::before { display: none; }
+  .stage > .badge {
+    position: absolute; left: 0; top: 4px;
+    width: 31px; height: 31px; border-radius: 50%;
+    border: 1px solid var(--gold-lo); background: var(--bg);
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--serif); font-size: .72rem; color: var(--gold);
+  }
+  .stage > .stitle {
+    font-family: var(--serif); font-size: 1.05rem; font-weight: 600;
+    color: var(--gold-hi); margin: 0 0 3px; letter-spacing: .06em;
+  }
+  .stage > .slead { margin: 0 0 16px; font-size: .8rem; color: var(--ink-faint); }
 
   /* 사주 기둥 */
-  .pillars { display: grid; grid-template-columns: repeat(4, 1fr); gap: 9px; margin-bottom: 18px; }
-  .pillar { background: var(--panel-2); border: 1px solid var(--line); border-radius: 10px; padding: 13px 6px; text-align: center; }
-  .pillar .lab { font-size: .68rem; color: var(--ink-faint); letter-spacing: .1em; margin-bottom: 7px; }
-  .pillar .han { font-size: 1.5rem; font-weight: 600; letter-spacing: .04em; line-height: 1.3; }
-  .pillar .kor { font-size: .72rem; color: var(--ink-dim); margin-top: 3px; }
+  .pillars { display: grid; grid-template-columns: repeat(4, 1fr); gap: 9px; }
+  .pillar {
+    background: var(--panel-2); border: 1px solid var(--line);
+    border-radius: 10px; padding: 14px 6px 12px; text-align: center;
+  }
+  .pillar .lab { font-size: .67rem; color: var(--ink-faint); letter-spacing: .12em; margin-bottom: 8px; }
+  .pillar .han { font-family: var(--serif); font-size: 1.55rem; font-weight: 600; line-height: 1.25; color: var(--gold-hi); }
+  .pillar .kor { font-size: .71rem; color: var(--ink-dim); margin-top: 3px; }
+  .pillar.void .han { color: var(--ink-faint); }
 
   /* 오행 막대 */
-  .wx-bars { display: flex; flex-direction: column; gap: 7px; margin: 16px 0 4px; }
-  .wx-row { display: flex; align-items: center; gap: 10px; font-size: .8rem; }
-  .wx-name { width: 24px; color: var(--ink-dim); flex-shrink: 0; }
-  .wx-track { flex: 1; height: 9px; background: var(--bg); border-radius: 5px; overflow: hidden; }
-  .wx-fill { display: block; height: 100%; min-width: 2px; border-radius: 5px; transition: width .6s ease; }
-  .wx-num { width: 18px; text-align: right; color: var(--ink-faint); font-variant-numeric: tabular-nums; flex-shrink: 0; }
+  .wx-bars { display: flex; flex-direction: column; gap: 7px; margin: 20px 0 2px; }
+  .wx-row { display: flex; align-items: center; gap: 10px; font-size: .79rem; }
+  .wx-name { width: 22px; color: var(--ink-dim); flex: none; font-family: var(--serif); }
+  .wx-track { flex: 1; height: 8px; background: var(--bg-2); border-radius: 4px; overflow: hidden; }
+  .wx-fill { display: block; height: 100%; min-width: 2px; border-radius: 4px; transition: width .7s ease; }
+  .wx-num { width: 16px; text-align: right; color: var(--ink-faint); font-variant-numeric: tabular-nums; flex: none; }
+
+  .basis { font-size: .74rem; color: var(--ink-faint); margin: 16px 0 0; letter-spacing: .01em; }
+  .basis span { color: var(--ink-dim); }
 
   /* 경고 */
-  .warn { background: #2a1f18; border: 1px solid #5a412c; border-left: 3px solid var(--danger);
-          border-radius: 9px; padding: 12px 14px; margin-top: 14px; font-size: .82rem; color: #e8c3a8; }
+  .warn {
+    background: rgba(217,143,99,.07); border: 1px solid rgba(217,143,99,.28);
+    border-left: 2px solid var(--danger);
+    border-radius: 9px; padding: 11px 14px; margin-top: 12px; font-size: .8rem; color: #E7C3A6;
+  }
   .warn b { color: var(--danger); }
-  .warn + .warn { margin-top: 8px; }
 
-  /* 타로 */
-  .draw { display: grid; grid-template-columns: repeat(3, 1fr); gap: 11px; margin-bottom: 20px; }
-  .tcard {
-    background: linear-gradient(160deg, var(--panel-2) 0%, #191330 100%);
-    border: 1px solid var(--line); border-radius: 11px;
-    padding: 15px 9px; text-align: center; position: relative; overflow: hidden;
+  /* 일간 */
+  .daymaster { display: flex; align-items: flex-start; gap: 16px; }
+  .dm-seal {
+    width: 62px; height: 62px; flex: none; border: 1px solid var(--gold-lo); border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--serif); font-size: 1.8rem; color: var(--gold-hi);
+    background: var(--gold-film);
   }
-  .tcard.rev { border-color: #4a3a5e; }
-  .tcard.rev .tname { color: var(--ink-dim); }
-  .tcard .tpos { font-size: .67rem; letter-spacing: .12em; color: var(--gold); margin-bottom: 9px; }
-  .tcard .tglyph { font-size: 1.6rem; margin-bottom: 7px; line-height: 1; }
-  .tcard.rev .tglyph { transform: rotate(180deg); display: inline-block; }
-  .tcard .tname { font-size: .84rem; font-weight: 600; line-height: 1.4; }
-  .tcard .tmeta { font-size: .68rem; color: var(--ink-faint); margin-top: 6px; }
+  .dm-body h4 { margin: 0 0 2px; font-size: .95rem; font-family: var(--serif); color: var(--ink); line-height: 1.6; }
+  .dm-body .tag { vertical-align: middle; }
 
-  .read { margin-top: 6px; }
-  h3 {
-    font-size: .93rem; font-weight: 600; margin: 22px 0 8px;
-    color: var(--gold); display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap;
-  }
   .tag {
+    display: inline-block;
     font-size: .68rem; font-weight: 500; letter-spacing: .08em;
-    background: var(--gold-soft); color: var(--gold);
-    padding: 2px 8px; border-radius: 20px; border: 1px solid #d9b46a3a;
+    background: var(--gold-film); color: var(--gold);
+    padding: 1px 9px; border-radius: 20px; border: 1px solid rgba(201,169,106,.3);
     white-space: nowrap;
   }
-  .read p { margin: 0 0 9px; color: var(--ink); font-size: .92rem; }
-  .read p.dim { color: var(--ink-dim); font-size: .87rem; }
+  .prose { margin: 12px 0 0; font-size: .89rem; color: var(--ink); }
+  .prose.dim { color: var(--ink-dim); font-size: .85rem; margin-top: 7px; }
 
-  .flow { background: var(--bg-soft); border: 1px solid var(--line);
-          border-radius: 10px; padding: 14px 16px; margin: 10px 0; }
-  .flow .fh { font-size: .78rem; color: var(--gold); letter-spacing: .06em; margin-bottom: 5px; }
-  .flow p { margin: 0; font-size: .88rem; color: var(--ink-dim); }
+  /* ── 타로 카드 ───────────────────────────────────────── */
+  .draw { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+  .tcard {
+    position: relative; aspect-ratio: 5 / 8;
+    background: linear-gradient(165deg, var(--panel-2) 0%, #0B0F1B 100%);
+    border: 1px solid var(--line-2); border-radius: 10px;
+    padding: 12px 8px; text-align: center;
+    display: flex; flex-direction: column; align-items: center; justify-content: space-between;
+  }
+  .tcard::after {                      /* 안쪽 금선 테두리 */
+    content: ""; position: absolute; inset: 5px; border: 1px solid rgba(201,169,106,.22);
+    border-radius: 6px; pointer-events: none;
+  }
+  .tcard.rev { border-color: rgba(201,169,106,.28); }
+  .tcard .tpos { font-family: var(--serif); font-size: .68rem; letter-spacing: .16em; color: var(--gold); }
+  .tcard .tglyph { font-size: 1.9rem; line-height: 1; }
+  .tcard.rev .tglyph { transform: rotate(180deg); }
+  .tcard .tname { font-family: var(--serif); font-size: .82rem; font-weight: 600; line-height: 1.4; color: var(--ink); }
+  .tcard .tmeta { font-size: .66rem; color: var(--ink-faint); margin-top: 3px; }
+  .tcard .trev {
+    position: absolute; top: 9px; right: 9px; font-size: .6rem; letter-spacing: .1em;
+    color: var(--gold); border: 1px solid rgba(201,169,106,.4); border-radius: 3px; padding: 0 4px; line-height: 1.5;
+  }
 
-  footer { margin-top: 36px; padding-top: 22px; border-top: 1px solid var(--line);
-           font-size: .74rem; color: var(--ink-faint); line-height: 1.8; text-align: center; }
-  footer a { color: var(--ink-dim); }
+  /* ── 흐름 타임라인 ───────────────────────────────────── */
+  .flowline {
+    display: grid; grid-template-columns: 1fr auto 1fr auto 1fr;
+    align-items: start; gap: 4px; margin: 22px 0 6px;
+  }
+  .fnode { text-align: center; min-width: 0; }
+  .fdot {
+    display: block; width: 13px; height: 13px; margin: 0 auto 8px;
+    border-radius: 50%; border: 1px solid currentColor; background: currentColor;
+    box-shadow: 0 0 0 4px rgba(255,255,255,.035);
+  }
+  .fnode b { display: block; font-family: var(--serif); font-size: .76rem; color: var(--gold); letter-spacing: .1em; }
+  .fnode em {
+    display: block; font-style: normal; font-size: .71rem; line-height: 1.45;
+    color: var(--ink-dim); margin-top: 3px; word-break: keep-all;
+  }
+  .fconn { position: relative; padding: 0 4px; min-width: 54px; text-align: center; }
+  .fconn::before {
+    content: ""; position: absolute; left: 0; right: 0; top: 6px; height: 1px;
+    background: linear-gradient(90deg, transparent, var(--line-2) 22%, var(--line-2) 78%, transparent);
+  }
+  .fconn span {
+    position: relative; display: inline-block; margin-top: 16px;
+    font-size: .67rem; letter-spacing: .06em; color: var(--ink-faint);
+    border: 1px solid var(--line); border-radius: 20px; padding: 0 8px; background: var(--panel);
+  }
+  .flow-note { margin: 4px 0 0; font-size: .8rem; color: var(--ink-dim); }
+  .flow-note + .flow-note { margin-top: 5px; }
+  .flow-note b { color: var(--gold); font-weight: 600; }
 
-  @media (max-width: 480px) {
-    .wrap { padding: 32px 14px 60px; }
-    h1 { font-size: 1.5rem; }
+  /* ── 카드별 해설 ─────────────────────────────────────── */
+  .reading { border-top: 1px solid var(--line); padding-top: 18px; margin-top: 18px; }
+  .rhead { display: flex; align-items: baseline; gap: 9px; flex-wrap: wrap; margin-bottom: 8px; }
+  .rpos {
+    font-family: var(--serif); font-size: .7rem; letter-spacing: .16em; color: var(--gold);
+    border: 1px solid var(--gold-lo); border-radius: 3px; padding: 1px 7px; line-height: 1.6;
+  }
+  .rhead h3 { font-family: var(--serif); font-size: 1rem; font-weight: 600; margin: 0; color: var(--ink); }
+  .rdesc { margin: 0 0 13px; font-size: .86rem; color: var(--ink-dim); }
+  .rgrid { display: grid; grid-template-columns: 1fr 1fr; gap: 11px; }
+  .rcell { background: var(--panel-2); border: 1px solid var(--line); border-radius: 10px; padding: 13px 14px; }
+  .rcell .clab {
+    display: block; font-family: var(--serif); font-size: .68rem; letter-spacing: .16em;
+    color: var(--gold); margin-bottom: 6px;
+  }
+  .rcell p { margin: 0; font-size: .83rem; color: var(--ink); }
+  .rcell p + p { margin-top: 6px; color: var(--ink-dim); font-size: .8rem; }
+
+  /* ── 총평 ────────────────────────────────────────────── */
+  .verdict p { margin: 0 0 11px; font-size: .9rem; }
+  .verdict p:last-child { margin-bottom: 0; }
+  .verdict .lead { font-family: var(--serif); font-size: 1rem; color: var(--gold-hi); line-height: 1.75; }
+  .verdict .close {
+    border-top: 1px solid var(--line); padding-top: 13px; margin-top: 15px; color: var(--ink-dim); font-size: .86rem;
+  }
+
+  footer {
+    margin-top: 40px; padding-top: 24px; border-top: 1px solid var(--line);
+    font-size: .73rem; color: var(--ink-faint); line-height: 1.9; text-align: center;
+  }
+
+  @media (max-width: 560px) {
+    .wrap { padding: 36px 14px 64px; }
+    h1 { font-size: 1.85rem; }
+    .panel { padding: 20px 16px; }
+    .howto ol { grid-template-columns: 1fr; gap: 10px; }
+    .stage { padding-left: 38px; }
+    .stage::before { left: 13px; }
+    .stage > .badge { width: 27px; height: 27px; font-size: .66rem; }
     .pillars { gap: 6px; }
-    .pillar { padding: 10px 3px; }
-    .pillar .han { font-size: 1.2rem; }
+    .pillar { padding: 11px 3px 9px; }
+    .pillar .han { font-size: 1.22rem; }
     .draw { gap: 7px; }
-    .tcard { padding: 12px 5px; }
-    .tcard .tname { font-size: .76rem; }
-    .row { flex-direction: column; gap: 16px; }
+    .tcard { padding: 10px 5px; }
+    .tcard .tglyph { font-size: 1.45rem; }
+    .tcard .tname { font-size: .72rem; }
+    .rgrid { grid-template-columns: 1fr; }
+    .fconn { min-width: 38px; }
+    .row { flex-direction: column; gap: 0; }
   }
 </style>
 </head>
 <body>
+<div id="stars" aria-hidden="true"></div>
 <div class="wrap">
 
   <header>
-    <h1>운 때</h1>
-    <p class="sub">사주로 타고난 <b>때</b>를, 타로로 지금의 <b>운</b>을</p>
+    <div class="moons" aria-hidden="true">
+      <svg width="15" height="15" viewBox="0 0 20 20"><circle cx="10" cy="10" r="8.5" fill="none" stroke="#8C7749"/></svg>
+      <svg width="15" height="15" viewBox="0 0 20 20"><circle cx="10" cy="10" r="8.5" fill="none" stroke="#8C7749"/><path d="M10 1.5a8.5 8.5 0 0 0 0 17z" fill="#C9A96A" opacity=".55"/></svg>
+      <svg width="15" height="15" viewBox="0 0 20 20"><circle cx="10" cy="10" r="8.5" fill="#C9A96A" opacity=".8"/></svg>
+      <svg width="15" height="15" viewBox="0 0 20 20"><circle cx="10" cy="10" r="8.5" fill="none" stroke="#8C7749"/><path d="M10 1.5a8.5 8.5 0 0 1 0 17z" fill="#C9A96A" opacity=".55"/></svg>
+      <svg width="15" height="15" viewBox="0 0 20 20"><circle cx="10" cy="10" r="8.5" fill="none" stroke="#8C7749"/></svg>
+    </div>
+    <h1>운<span class="dim">·</span>때</h1>
+    <div class="rule"></div>
+    <p class="sub">사주로 타고난 <b>운</b>을 세우고, 타로 세 장으로 지금의 <b>때</b>를 읽습니다</p>
   </header>
 
-  <div class="card-panel">
-    <h2>생년월일시</h2>
+  <!-- ── 사용법 ─────────────────────────────────────────── -->
+  <section class="panel howto">
+    <h2 class="eyebrow">처음 오셨다면</h2>
+    <ol>
+      <li>
+        <span class="n">1</span>
+        <b>생년월일시를 넣습니다</b>
+        <p>양력 기준이에요. 처음엔 <b style="display:inline;color:var(--gold)">지금 시각</b>이 들어가 있으니 본인 것으로 바꿔 주세요. 시각을 모르면 아래 체크를 누르면 삼주만 봅니다.</p>
+      </li>
+      <li>
+        <span class="n">2</span>
+        <b>카드를 세 장 뽑습니다</b>
+        <p>버튼을 누르면 78장에서 과거·현재·미래 자리에 한 장씩 놓입니다. 뒤집혀 나오면 같은 뜻이 반대편에서 나타나요.</p>
+      </li>
+      <li>
+        <span class="n">3</span>
+        <b>운과 때를 겹쳐 읽습니다</b>
+        <p>사주가 <b style="display:inline;color:var(--gold)">타고난 운</b>, 타로가 <b style="display:inline;color:var(--gold)">지금의 때</b>. 이 둘을 포개서 보는 것이 운때입니다.</p>
+      </li>
+    </ol>
+  </section>
+
+  <!-- ── 입력 ───────────────────────────────────────────── -->
+  <section class="panel">
+    <h2 class="eyebrow">생년월일시</h2>
 
     <div class="row">
       <div class="field">
         <label for="birthdate">생년월일 (양력)</label>
-        <input type="date" id="birthdate" value="1990-05-15" min="1900-01-01" max="2100-12-31">
+        <input type="date" id="birthdate" min="1900-01-01" max="2100-12-31">
       </div>
       <div class="field">
         <label for="birthtime">태어난 시각</label>
-        <input type="time" id="birthtime" value="10:30">
+        <input type="time" id="birthtime">
       </div>
     </div>
 
     <div class="check">
       <input type="checkbox" id="unknownHour">
-      <label for="unknownHour" style="margin:0">태어난 시각을 모릅니다 (삼주만 봅니다)</label>
+      <label for="unknownHour">태어난 시각을 모릅니다 (시주를 빼고 삼주만 봅니다)</label>
     </div>
 
-    <details class="opts">
-      <summary>유파 설정 — 야자시 · 진태양시</summary>
-      <div class="opt-body">
-        <div class="field">
-          <label for="nightZi">자시(23시~) 처리</label>
-          <select id="nightZi">
-            <option value="1" selected>23시부터 다음날 일주 (조자시)</option>
-            <option value="0">자정부터 다음날 일주 (야자시)</option>
-          </select>
-        </div>
-        <div class="field">
-          <label for="longitude">진태양시 경도 보정</label>
-          <select id="longitude">
-            <option value="">보정 안 함 (동경 135도 기준)</option>
-            <option value="126.98">서울 · 경기 (−32분)</option>
-            <option value="129.08">부산 · 울산 (−24분)</option>
-            <option value="128.60">대구 · 경북 (−26분)</option>
-            <option value="126.85">광주 · 전남 (−33분)</option>
-            <option value="127.38">대전 · 충청 (−30분)</option>
-            <option value="126.53">제주 (−34분)</option>
-          </select>
-        </div>
-        <p class="hint">
-          두 항목 모두 명리학계에서 의견이 갈리는 부분이라 기본값을 정해 두었습니다.
-          결과가 다른 만세력과 다르면 대개 이 설정 차이입니다.
-        </p>
-      </div>
-    </details>
+    <div class="field">
+      <label for="region">태어난 지역 <span style="color:var(--ink-faint)">— 진태양시 보정에 씁니다</span></label>
+      <select id="region">
+        <option value="126.98" selected>서울 · 경기 · 인천 (−32분)</option>
+        <option value="127.38">대전 · 세종 · 충청 (−30분)</option>
+        <option value="126.85">광주 · 전남 · 전북 (−33분)</option>
+        <option value="128.60">대구 · 경북 (−26분)</option>
+        <option value="129.08">부산 · 울산 · 경남 (−24분)</option>
+        <option value="128.20">강원 (−27분)</option>
+        <option value="126.53">제주 (−34분)</option>
+      </select>
+    </div>
 
-    <button class="go" id="drawBtn">카드 뽑기</button>
-  </div>
+    <p class="note">
+      계산 기준은 <b>정자시</b>(23시부터 다음 날 일주)와 <b>진태양시</b>(출생지 경도 보정)로 고정되어 있습니다.
+      동경 135도는 일본 아카시의 자오선이라 한국 하늘과 최대 34분 어긋나기 때문입니다.
+      다른 만세력과 결과가 다르다면 대개 이 기준 차이입니다.
+    </p>
+
+    <button class="go" id="drawBtn">운때 보기</button>
+  </section>
 
   <div id="out"></div>
 
@@ -248,21 +430,44 @@
 (function () {
   'use strict';
 
-  var WX_COLOR = { 목: 'var(--mok)', 화: 'var(--hwa)', 토: 'var(--to)', 금: 'var(--geum)', 수: 'var(--su)' };
-  var GLYPH = {
-    major: '✦', wands: '❋', cups: '☾', swords: '✧', pentacles: '✵'
+  var WX_COLOR = {
+    목: 'var(--mok)', 화: 'var(--hwa)', 토: 'var(--to)',
+    금: 'var(--geum)', 수: 'var(--su)', 태극: 'var(--gold)'
   };
+  var GLYPH = { major: '✦', wands: '❋', cups: '☾', swords: '✧', pentacles: '✵' };
+  var WX = ['목', '화', '토', '금', '수'];
 
   function esc(s) {
-    return String(s).replace(/[&<>"']/g, function (c) {
+    return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) {
       return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
     });
   }
+  function pad2(n) { return (n < 10 ? '0' : '') + n; }
+
+  // ── 별 배경 ──────────────────────────────────────────
+  (function stars() {
+    var box = document.getElementById('stars'), html = '';
+    for (var i = 0; i < 64; i++) {
+      var sz = (Math.random() * 1.6 + 0.6).toFixed(2);
+      html += '<i style="left:' + (Math.random() * 100).toFixed(2) + '%;top:' +
+              (Math.random() * 100).toFixed(2) + '%;width:' + sz + 'px;height:' + sz +
+              'px;animation-delay:' + (Math.random() * 5).toFixed(2) + 's"></i>';
+    }
+    box.innerHTML = html;
+  }());
+
+  // ── 초기값: 현재 시각 ────────────────────────────────
+  (function now() {
+    var d = new Date();
+    document.getElementById('birthdate').value =
+      d.getFullYear() + '-' + pad2(d.getMonth() + 1) + '-' + pad2(d.getDate());
+    document.getElementById('birthtime').value =
+      pad2(d.getHours()) + ':' + pad2(d.getMinutes());
+  }());
 
   /** 78장에서 중복 없이 3장 + 정/역 */
   function drawThree() {
-    var deck = TarotData.DECK.slice();
-    var picked = [];
+    var deck = TarotData.DECK.slice(), picked = [];
     for (var i = 0; i < 3; i++) {
       var idx = Math.floor(Math.random() * deck.length);
       picked.push({ card: deck.splice(idx, 1)[0], 역방향: Math.random() < 0.5 });
@@ -272,81 +477,126 @@
 
   function pillarHTML(label, p) {
     if (!p) {
-      return '<div class="pillar"><div class="lab">' + label + '</div>' +
-             '<div class="han" style="color:var(--ink-faint)">?</div>' +
-             '<div class="kor">모름</div></div>';
+      return '<div class="pillar void"><div class="lab">' + label + '</div>' +
+             '<div class="han">—</div><div class="kor">모름</div></div>';
     }
     return '<div class="pillar"><div class="lab">' + label + '</div>' +
            '<div class="han">' + esc(p.한자) + '</div>' +
            '<div class="kor">' + esc(p.한글) + '</div></div>';
   }
 
-  function render(saju, draw, reading) {
-    var h = '';
+  function stage(no, title, lead, body) {
+    return '<section class="stage"><div class="badge">' + no + '</div>' +
+           '<h3 class="stitle">' + title + '</h3>' +
+           '<p class="slead">' + lead + '</p>' +
+           '<div class="panel">' + body + '</div></section>';
+  }
 
-    // ── 사주 ──
-    h += '<div class="card-panel"><h2>사주팔자</h2><div class="pillars">';
-    h += pillarHTML('년주', saju.사주.년주);
-    h += pillarHTML('월주', saju.사주.월주);
-    h += pillarHTML('일주', saju.사주.일주);
-    h += pillarHTML('시주', saju.사주.시주);
-    h += '</div>';
+  // ── STEP 01 · 운 (사주) ──────────────────────────────
+  function 운HTML(saju, reading) {
+    var b = '<div class="pillars">' +
+      pillarHTML('년주', saju.사주.년주) + pillarHTML('월주', saju.사주.월주) +
+      pillarHTML('일주', saju.사주.일주) + pillarHTML('시주', saju.사주.시주) + '</div>';
 
-    // 오행 막대
     var max = 1;
-    ['목', '화', '토', '금', '수'].forEach(function (k) { if (saju.오행분포[k] > max) max = saju.오행분포[k]; });
-    h += '<div class="wx-bars">';
-    ['목', '화', '토', '금', '수'].forEach(function (k) {
+    WX.forEach(function (k) { if (saju.오행분포[k] > max) max = saju.오행분포[k]; });
+    b += '<div class="wx-bars">';
+    WX.forEach(function (k) {
       var v = saju.오행분포[k];
-      h += '<div class="wx-row"><span class="wx-name">' + k + '</span>' +
-           '<span class="wx-track"><span class="wx-fill" style="width:' +
-           (v / max * 100) + '%;background:' + WX_COLOR[k] + '"></span></span>' +
+      b += '<div class="wx-row"><span class="wx-name">' + k + '</span>' +
+           '<span class="wx-track"><span class="wx-fill" style="width:' + (v / max * 100) +
+           '%;background:' + WX_COLOR[k] + '"></span></span>' +
            '<span class="wx-num">' + v + '</span></div>';
     });
-    h += '</div>';
+    b += '</div>';
 
-    // 경고
+    b += '<p class="basis">기준 · <span>정자시</span> · 진태양시 <span>' +
+         esc(saju.기준.경도보정) + '</span> 보정 → 판정 시각 <span>' +
+         esc(saju.기준.판정시각) + '</span></p>';
+
     saju.경고.forEach(function (w) {
-      h += '<div class="warn"><b>' + esc(w.종류) + '</b> · ' + esc(w.설명) + '</div>';
+      b += '<div class="warn"><b>' + esc(w.종류) + '</b> · ' + esc(w.설명) + '</div>';
     });
-    h += '</div>';
 
-    // ── 일간 ──
-    h += '<div class="card-panel"><h2>타고난 기운</h2>';
-    h += '<h3 style="margin-top:0">일간 ' + esc(reading.일간.글자) +
-         ' <span class="tag">' + esc(reading.일간.별명) + '</span></h3>';
-    h += '<p>' + esc(reading.일간.글) + '</p>';
-    h += '<p class="dim">' + esc(reading.오행.글) + '</p>';
-    h += '</div>';
+    b += '<div class="daymaster" style="margin-top:22px;padding-top:20px;border-top:1px solid var(--line)">' +
+         '<div class="dm-seal">' + esc(saju.일간.한자) + '</div>' +
+         '<div class="dm-body"><h4>일간 ' + esc(reading.일간.글자) + ' — ' + esc(reading.일간.별명) +
+         ' <span class="tag">' + esc(saju.일간.오행) + '</span></h4>' +
+         '<p class="prose" style="margin-top:6px">' + esc(reading.일간.글) + '</p></div></div>';
+    b += '<p class="prose dim">' + esc(reading.오행.글) + '</p>';
+    return b;
+  }
 
-    // ── 타로 ──
-    h += '<div class="card-panel"><h2>뽑힌 카드</h2><div class="draw">';
+  // ── STEP 02 · 때 (타로) ──────────────────────────────
+  function 때HTML(draw, reading) {
+    var b = '<div class="draw">';
     draw.forEach(function (d, i) {
       var c = d.card;
       var g = c.종류 === '메이저' ? GLYPH.major : GLYPH[c.수트키];
-      h += '<div class="tcard' + (d.역방향 ? ' rev' : '') + '">' +
+      b += '<div class="tcard' + (d.역방향 ? ' rev' : '') + '">' +
+           (d.역방향 ? '<span class="trev">역</span>' : '') +
            '<div class="tpos">' + esc(FortuneData.위치[i].라벨) + '</div>' +
            '<div class="tglyph" style="color:' + (WX_COLOR[c.오행] || 'var(--gold)') + '">' + g + '</div>' +
-           '<div class="tname">' + esc(c.이름) + (d.역방향 ? '<br>(역)' : '') + '</div>' +
-           '<div class="tmeta">' + esc(c.오행) + ' · ' + esc(reading.카드[i].음양) + '</div>' +
+           '<div><div class="tname">' + esc(c.이름) + '</div>' +
+           '<div class="tmeta">' + esc(c.오행) + ' · ' + esc(reading.카드[i].음양) + '</div></div>' +
            '</div>';
     });
-    h += '</div>';
+    b += '</div>';
 
-    // 카드별 해석
-    h += '<div class="read">';
+    // 흐름 타임라인
+    b += '<div class="flowline">';
     reading.카드.forEach(function (c, i) {
-      h += '<h3>' + esc(c.위치) + ' — ' + esc(c.카드이름) +
-           ' <span class="tag">' + esc(c.십성) + '</span></h3>';
-      h += '<p>' + esc(c.틀) + ': ' + esc(c.핵심) + '.</p>';
-      h += '<p class="dim">' + esc(c.십성글) + ' ' + esc(c.방향) + '</p>';
-      if (i < reading.흐름.length) {
-        var f = reading.흐름[i];
-        h += '<div class="flow"><div class="fh">' + esc(f.구간) + ' · ' + esc(f.관계) + '</div>' +
-             '<p>' + esc(f.글) + '</p></div>';
+      if (i > 0) {
+        var f = reading.흐름[i - 1];
+        b += '<div class="fconn"><span>' + esc(f.관계) + '</span></div>';
       }
+      b += '<div class="fnode"><span class="fdot" style="color:' + (WX_COLOR[c.오행] || 'var(--gold)') +
+           '"></span><b>' + esc(c.위치) + '</b><em title="' + esc(c.카드이름) + '">' +
+           esc(c.카드이름) + '</em></div>';
     });
-    h += '</div></div>';
+    b += '</div>';
+    reading.흐름.forEach(function (f) {
+      b += '<p class="flow-note"><b>' + esc(f.구간) + ' · ' + esc(f.관계) + '</b> — ' + esc(f.글) + '</p>';
+    });
+
+    // 카드별 해설
+    reading.카드.forEach(function (c) {
+      b += '<article class="reading">' +
+           '<div class="rhead"><span class="rpos">' + esc(c.위치) + '</span>' +
+           '<h3>' + esc(c.카드이름) + '</h3>' +
+           '<span class="tag">' + esc(c.오행) + ' · ' + esc(c.십성) + '</span></div>' +
+           '<p class="rdesc">' + esc(c.설명) + '</p>' +
+           '<div class="rgrid">' +
+             '<div class="rcell"><span class="clab">때 · 타로</span>' +
+               '<p>' + esc(c.틀) + ' — ' + esc(c.핵심) + '.</p>' +
+               '<p>' + esc(c.방향) + '</p></div>' +
+             '<div class="rcell"><span class="clab">운 · 사주</span>' +
+               '<p>' + esc(c.겹침) + ' ' + esc(c.십성정의) + '</p>' +
+               '<p>' + esc(c.십성글) + '</p></div>' +
+           '</div></article>';
+    });
+    return b;
+  }
+
+  // ── STEP 03 · 운때 ───────────────────────────────────
+  function 운때HTML(reading) {
+    return '<div class="verdict">' +
+      '<p class="lead">' + esc(reading.총평.운) + '</p>' +
+      '<p>' + esc(reading.총평.때) + '</p>' +
+      '<p class="close">' + esc(reading.총평.맺음) + '</p></div>';
+  }
+
+  function render(saju, draw, reading) {
+    var h = '';
+    h += stage('01', '운 — 타고난 바탕',
+               '태어난 순간의 하늘을 네 기둥으로 세웁니다.',
+               운HTML(saju, reading));
+    h += stage('02', '때 — 지금의 흐름',
+               '78장에서 놓인 세 장이 과거 · 현재 · 미래를 가리킵니다.',
+               때HTML(draw, reading));
+    h += stage('03', '운때 — 겹쳐 읽기',
+               '타고난 운 위에 지금의 때를 포갭니다.',
+               운때HTML(reading));
 
     var out = document.getElementById('out');
     out.innerHTML = h;
@@ -362,18 +612,15 @@
     var timeStr = document.getElementById('birthtime').value || '12:00';
     var dp = dateStr.split('-').map(Number);
     var tp = timeStr.split(':').map(Number);
-    var lon = document.getElementById('longitude').value;
 
     var saju;
     try {
       saju = SajuCore.calc(
-        { year: dp[0], month: dp[1], day: dp[2], hour: unknown ? 12 : tp[0], minute: unknown ? 0 : tp[1] },
-        {
-          tz: 'Asia/Seoul',
-          nightZi: document.getElementById('nightZi').value === '1',
-          longitude: lon ? parseFloat(lon) : null,
-          unknownHour: unknown
-        }
+        { year: dp[0], month: dp[1], day: dp[2],
+          hour: unknown ? 12 : tp[0], minute: unknown ? 0 : tp[1] },
+        { tz: 'Asia/Seoul',
+          longitude: parseFloat(document.getElementById('region').value),
+          unknownHour: unknown }
       );
     } catch (e) {
       alert('계산할 수 없는 날짜입니다: ' + e.message);
@@ -382,9 +629,9 @@
 
     var draw = drawThree();
     render(saju, draw, FortuneData.조립(saju, draw));
+    this.textContent = '다시 뽑기';
   });
 
-  // 시각 모름 체크 시 시간 입력 비활성
   document.getElementById('unknownHour').addEventListener('change', function () {
     document.getElementById('birthtime').disabled = this.checked;
   });
