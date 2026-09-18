@@ -195,14 +195,6 @@
   .wx-fill { display: block; height: 100%; min-width: 2px; border-radius: 4px; transition: width .7s ease; }
   .wx-num { width: 16px; text-align: right; color: var(--ink-faint); font-variant-numeric: tabular-nums; flex: none; }
 
-  /* 경고 */
-  .warn {
-    background: rgba(217,143,99,.07); border: 1px solid rgba(217,143,99,.28);
-    border-left: 2px solid var(--danger);
-    border-radius: 9px; padding: 11px 14px; margin-top: 12px; font-size: .8rem; color: #E7C3A6;
-  }
-  .warn b { color: var(--danger); }
-
   /* 일간 */
   .daymaster { display: flex; align-items: flex-start; gap: 16px; }
   .dm-seal {
@@ -523,9 +515,9 @@
 </div>
 
 <!-- ?v= 는 캐시 무효화용. JS를 고치면 아래 세 곳과 필요버전을 함께 올린다. -->
-<script src="saju-core.js?v=20260918e"></script>
-<script src="tarot-data.js?v=20260918e"></script>
-<script src="fortune-data.js?v=20260918e"></script>
+<script src="saju-core.js?v=20260918f"></script>
+<script src="tarot-data.js?v=20260918f"></script>
+<script src="fortune-data.js?v=20260918f"></script>
 <script>
 (function () {
   'use strict';
@@ -536,7 +528,7 @@
   };
   var GLYPH = { major: '✦', wands: '❋', cups: '☾', swords: '✧', pentacles: '✵' };
   var WX = ['목', '화', '토', '금', '수'];
-  var 필요버전 = '20260918e';
+  var 필요버전 = '20260918f';
 
   /** 브라우저가 예전 JS를 캐시해 두면 조용히 깨진다. 눌렀을 때 바로 알려준다. */
   function 버전확인() {
@@ -655,12 +647,7 @@
     });
     b += '</div>';
 
-    // 시지경계는 입력 정밀도에서 오는 경고라 화면에는 띄우지 않는다.
-    // 절기·자시 경계와 표준시 특이 시기는 결과 자체가 달라지는 사안이라 남긴다.
-    saju.경고.forEach(function (w) {
-      if (w.종류 === '시지경계') return;
-      b += '<div class="warn"><b>' + esc(w.종류) + '</b> · ' + esc(w.설명) + '</div>';
-    });
+    // 경고는 화면에 띄우지 않는다 (saju.경고 로는 계속 돌려받을 수 있다).
 
     b += '<div class="daymaster" style="margin-top:22px;padding-top:20px;border-top:1px solid var(--line)">' +
          '<div class="dm-seal">' + esc(saju.일간.한자) + '</div>' +
