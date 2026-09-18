@@ -12,7 +12,8 @@
  *   3) 일주·시주: 진태양시(출생지 경도 보정) + 정자시(23시부터 다음 날) 고정
  *      - 정자시: 하루 = 12시진. 60x12x60x12 = 518,400 이라는 고전 체계의 전제를 지킨다.
  *      - 진태양시: 동경 135도는 일본 아카시 자오선으로 한국 국토(124~132도) 밖이다.
- *        보정은 시주뿐 아니라 자시 경계(=일주 경계)까지 함께 이동시킨다.
+ *        기본 기준선은 동경 127.5도(-30분). 보정은 시주뿐 아니라
+ *        자시 경계(=일주 경계)까지 함께 이동시킨다 → 벽시계 23:30이 일주 경계.
  */
 (function (root, factory) {
   if (typeof module === 'object' && module.exports) module.exports = factory();
@@ -20,7 +21,10 @@
 }(typeof self !== 'undefined' ? self : this, function () {
   'use strict';
 
-  var SEOUL_LON = 126.98;   // 경도 미지정 시 기본값 (서울)
+  // 경도 미지정 시 기본값. 동경 127도 30분 = 한국 국토 중앙에 가까운 자오선이며,
+  // 국내 명리에서 진태양시 기준으로 가장 널리 쓰이는 값이다. 보정량이 정확히 -30분.
+  // 지역별 고유 경도와의 차이는 최대 6분(부산)이라 시지 경계 근처가 아니면 결과가 같다.
+  var KOREA_LON = 127.5;
 
   var GAN = '甲乙丙丁戊己庚辛壬癸'.split('');
   var ZHI = '子丑寅卯辰巳午未申酉戌亥'.split('');
@@ -114,7 +118,8 @@
    * @param {object} birth {year, month, day, hour, minute}  출생 벽시계 시각
    * @param {object} opt
    *   tz         IANA 시간대. 기본 'Asia/Seoul'
-   *   longitude  진태양시 보정용 출생지 경도(도). 기본 126.98(서울). 보정은 항상 적용된다.
+   *   longitude  진태양시 보정용 경도(도). 기본 127.5(한국 표준 기준선, -30분).
+   *              보정은 항상 적용된다. 지역별로 나누고 싶으면 값을 직접 넘긴다.
    *   unknownHour true = 출생시각 모름. 시주를 null로 반환
    *
    * 시법은 정자시(23시부터 다음 날 일주)로 고정이며 옵션이 아니다.
@@ -122,7 +127,7 @@
   function calc(birth, opt) {
     opt = opt || {};
     var tz = opt.tz || 'Asia/Seoul';
-    var lon = (opt.longitude == null) ? SEOUL_LON : opt.longitude;
+    var lon = (opt.longitude == null) ? KOREA_LON : opt.longitude;
 
     var offMin = tzOffsetMinutes(birth.year, birth.month, birth.day,
                                  birth.hour || 0, birth.minute || 0, tz);
@@ -203,9 +208,10 @@
     }
     // 시지 경계 (매 홀수시 정각)
     var hourGap = Math.min((minOfDay + 60) % 120, 120 - ((minOfDay + 60) % 120));
-    if (hourGap <= 10 && !opt.unknownHour) {
+    // 입력은 10분 단위(±5분), 경도는 단일 기준(±6분)이라 합쳐 약 11분의 불확실성이 있다.
+    if (hourGap <= 12 && !opt.unknownHour) {
       경고.push({ 종류: '시지경계', 분차: hourGap,
-        설명: '시지 경계 ' + hourGap + '분 이내입니다. 출생 시각이 몇 분만 달라져도 시주가 바뀝니다.' });
+        설명: '시지 경계 ' + hourGap + '분 이내입니다. 정확한 출생 분과 출생 지역에 따라 시주가 한 칸 달라질 수 있습니다.' });
     }
     // 시간대가 표준(UTC+9)이 아닌 시기
     if (offMin !== 540) {
@@ -233,10 +239,10 @@
   function pad(n) { return (n < 10 ? '0' : '') + n; }
 
   return {
-    버전: '20260918c',
+    버전: '20260918d',
     calc: calc,
     tzOffsetMinutes: tzOffsetMinutes,
-    기본경도: SEOUL_LON,
+    기본경도: KOREA_LON,
     시법: '정자시',
     지원범위: [1899, 2101],
     테이블크기: DATA.length

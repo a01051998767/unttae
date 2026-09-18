@@ -433,7 +433,7 @@
       <li>
         <span class="n">1</span>
         <b>생년월일시를 넣습니다</b>
-        <p>양력 기준이에요. 처음엔 <b style="display:inline;color:var(--gold)">지금 시각</b>이 들어가 있으니 본인 것으로 바꿔 주세요. 시각을 모르면 아래 체크를 누르면 삼주만 봅니다.</p>
+        <p>양력 기준이에요. 처음엔 <b style="display:inline;color:var(--gold)">지금 시각</b>이 들어가 있으니 본인 것으로 바꿔 주세요. 시각은 10분 단위면 충분하고, 모르면 아래 체크를 누르면 삼주만 봅니다.</p>
       </li>
       <li>
         <span class="n">2</span>
@@ -458,8 +458,8 @@
         <input type="date" id="birthdate" min="1900-01-01" max="2100-12-31">
       </div>
       <div class="field">
-        <label for="birthtime">태어난 시각</label>
-        <input type="time" id="birthtime">
+        <label for="birthtime">태어난 시각 <span style="color:var(--ink-faint)">— 10분 단위</span></label>
+        <input type="time" id="birthtime" step="600">
       </div>
     </div>
 
@@ -468,22 +468,10 @@
       <label for="unknownHour">태어난 시각을 모릅니다 (시주를 빼고 삼주만 봅니다)</label>
     </div>
 
-    <div class="field">
-      <label for="region">태어난 지역 <span style="color:var(--ink-faint)">— 진태양시 보정에 씁니다</span></label>
-      <select id="region">
-        <option value="126.98" selected>서울 · 경기 · 인천 (−32분)</option>
-        <option value="127.38">대전 · 세종 · 충청 (−30분)</option>
-        <option value="126.85">광주 · 전남 · 전북 (−33분)</option>
-        <option value="128.60">대구 · 경북 (−26분)</option>
-        <option value="129.08">부산 · 울산 · 경남 (−24분)</option>
-        <option value="128.20">강원 (−27분)</option>
-        <option value="126.53">제주 (−34분)</option>
-      </select>
-    </div>
-
     <p class="note">
-      계산 기준은 <b>정자시</b>(23시부터 다음 날 일주)와 <b>진태양시</b>(출생지 경도 보정)로 고정되어 있습니다.
-      동경 135도는 일본 아카시의 자오선이라 한국 하늘과 최대 34분 어긋나기 때문입니다.
+      계산 기준은 <b>정자시</b>(23시부터 다음 날 일주)와 <b>진태양시</b>(동경 127.5도, −30분)로 고정되어 있습니다.
+      동경 135도는 일본 아카시의 자오선이라 한국 하늘과 30분 넘게 어긋나기 때문입니다.
+      시각은 10분 단위로 충분합니다 — 시주는 두 시간에 한 번 바뀝니다.
       다른 만세력과 결과가 다르다면 대개 이 기준 차이입니다.
     </p>
 
@@ -544,9 +532,9 @@
 </div>
 
 <!-- ?v= 는 캐시 무효화용. JS를 고치면 아래 세 곳과 필요버전을 함께 올린다. -->
-<script src="saju-core.js?v=20260918c"></script>
-<script src="tarot-data.js?v=20260918c"></script>
-<script src="fortune-data.js?v=20260918c"></script>
+<script src="saju-core.js?v=20260918d"></script>
+<script src="tarot-data.js?v=20260918d"></script>
+<script src="fortune-data.js?v=20260918d"></script>
 <script>
 (function () {
   'use strict';
@@ -557,7 +545,7 @@
   };
   var GLYPH = { major: '✦', wands: '❋', cups: '☾', swords: '✧', pentacles: '✵' };
   var WX = ['목', '화', '토', '금', '수'];
-  var 필요버전 = '20260918c';
+  var 필요버전 = '20260918d';
 
   /** 브라우저가 예전 JS를 캐시해 두면 조용히 깨진다. 눌렀을 때 바로 알려준다. */
   function 버전확인() {
@@ -597,7 +585,7 @@
     document.getElementById('birthdate').value =
       d.getFullYear() + '-' + pad2(d.getMonth() + 1) + '-' + pad2(d.getDate());
     document.getElementById('birthtime').value =
-      pad2(d.getHours()) + ':' + pad2(d.getMinutes());
+      pad2(d.getHours()) + ':' + pad2(Math.round(d.getMinutes() / 10) % 6 * 10);
   }());
 
   /** 78장에서 중복 없이 n장 + 정/역 */
@@ -827,6 +815,8 @@
     var timeStr = document.getElementById('birthtime').value || '12:00';
     var dp = dateStr.split('-').map(Number);
     var tp = timeStr.split(':').map(Number);
+    tp[1] = Math.round((tp[1] || 0) / 10) * 10;      // 10분 단위로 맞춘다
+    if (tp[1] === 60) { tp[1] = 0; tp[0] = (tp[0] + 1) % 24; }
     var 질문 = document.getElementById('question').value.trim();
 
     var ab = { A: 'A', B: 'B' };
@@ -841,9 +831,7 @@
       saju = SajuCore.calc(
         { year: dp[0], month: dp[1], day: dp[2],
           hour: unknown ? 12 : tp[0], minute: unknown ? 0 : tp[1] },
-        { tz: 'Asia/Seoul',
-          longitude: parseFloat(document.getElementById('region').value),
-          unknownHour: unknown }
+        { tz: 'Asia/Seoul', unknownHour: unknown }
       );
     } catch (e) {
       alert('계산할 수 없는 날짜입니다: ' + e.message);
