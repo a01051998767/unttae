@@ -235,6 +235,27 @@
     font-style: normal; color: var(--gold); margin-right: 5px;
     font-variant-numeric: tabular-nums;
   }
+  .topics { display: flex; flex-wrap: wrap; gap: 7px; }
+  .topic {
+    background: transparent; border: 1px solid var(--line-2); border-radius: 20px;
+    color: var(--ink-dim); font-family: inherit; font-size: .82rem; padding: 6px 13px;
+    cursor: pointer; transition: all .15s ease;
+  }
+  .topic:hover { border-color: var(--gold-lo); color: var(--ink); }
+  .topic.on { border-color: var(--gold-lo); background: var(--gold-film); color: var(--gold-hi); font-weight: 600; }
+  .exq { display: flex; flex-direction: column; gap: 6px; margin: 0 0 14px; }
+  .exq button {
+    text-align: left; background: var(--panel-2); border: 1px solid var(--line);
+    border-radius: 9px; color: var(--ink-dim); font-family: inherit; font-size: .83rem;
+    padding: 9px 12px; cursor: pointer; transition: all .15s ease;
+  }
+  .exq button:hover { border-color: var(--gold-lo); color: var(--ink); }
+  .exq button::before { content: "\201C"; color: var(--gold-lo); margin-right: 5px; }
+  .caution {
+    font-size: .8rem; color: var(--ink-faint); line-height: 1.7;
+    border-left: 2px solid var(--line-2); padding-left: 11px; margin: 0 0 14px;
+  }
+
   .ask {
     border: 1px solid rgba(201,169,106,.3); background: var(--gold-film);
     border-radius: 11px; padding: 15px 16px; margin: 0 0 16px;
@@ -619,6 +640,13 @@
     <h2 class="eyebrow">무엇을 물을까요</h2>
 
     <div class="field">
+      <label>무엇에 대한 질문인가요 <span style="color:var(--ink-faint)">— 고르면 어울리는 배열을 맞춰 드립니다 (선택)</span></label>
+      <div class="topics" id="topics"></div>
+    </div>
+
+    <div id="topicEx"></div>
+
+    <div class="field">
       <label for="spread" style="display:flex;align-items:center;gap:9px">
         <span>스프레드 — 묻는 방식에 따라 배열이 달라집니다</span>
         <button type="button" class="reflink" data-ref="spr" style="margin-left:auto">9종 모두 보기</button>
@@ -683,9 +711,9 @@
 </div>
 
 <!-- ?v= 는 캐시 무효화용. JS를 고치면 아래 세 곳과 필요버전을 함께 올린다. -->
-<script src="saju-core.js?v=20260919g"></script>
-<script src="tarot-data.js?v=20260919g"></script>
-<script src="fortune-data.js?v=20260919g"></script>
+<script src="saju-core.js?v=20260919h"></script>
+<script src="tarot-data.js?v=20260919h"></script>
+<script src="fortune-data.js?v=20260919h"></script>
 <script>
 (function () {
   'use strict';
@@ -701,7 +729,7 @@
   };
   var GLYPH = { major: '✦', wands: '❋', cups: '☾', swords: '✧', pentacles: '✵' };
   var WX = ['목', '화', '토', '금', '수'];
-  var 필요버전 = '20260919g';
+  var 필요버전 = '20260919h';
 
   /** 브라우저가 예전 JS를 캐시해 두면 조용히 깨진다. 눌렀을 때 바로 알려준다. */
   function 버전확인() {
@@ -778,6 +806,46 @@
 
   function 현재스프레드() { return FortuneData.스프레드찾기(selSpread.value); }
 
+  // ── 주제 고르기 (선택 사항) ──────────────────────────
+  var 선택주제 = null;
+
+  (function 주제채우기() {
+    var box = document.getElementById('topics');
+    var h = '<button type="button" class="topic on" data-topic="">고르지 않음</button>';
+    FortuneData.주제.forEach(function (t) {
+      h += '<button type="button" class="topic" data-topic="' + t.id + '">' + esc(t.이름) + '</button>';
+    });
+    box.innerHTML = h;
+    box.addEventListener('click', function (e) {
+      var b = e.target.closest('.topic'); if (!b) return;
+      var id = b.getAttribute('data-topic');
+      선택주제 = id ? FortuneData.주제찾기(id) : null;
+      Array.prototype.forEach.call(box.children, function (c) {
+        c.className = 'topic' + (c.getAttribute('data-topic') === id ? ' on' : '');
+      });
+      if (선택주제 && 선택주제.추천) { selSpread.value = 선택주제.추천; 스프레드갱신(); }
+      주제안내();
+    });
+  }());
+
+  function 주제안내() {
+    var box = document.getElementById('topicEx');
+    if (!선택주제) { box.innerHTML = ''; return; }
+    var h = '';
+    if (선택주제.주의) h += '<p class="caution">' + esc(선택주제.주의) + '</p>';
+    h += '<div class="exq">';
+    선택주제.예시.forEach(function (q) {
+      h += '<button type="button" data-q="' + esc(q) + '">' + esc(q) + '</button>';
+    });
+    box.innerHTML = h + '</div>';
+  }
+  document.getElementById('topicEx').addEventListener('click', function (e) {
+    var b = e.target.closest('button[data-q]'); if (!b) return;
+    var q = document.getElementById('question');
+    q.value = b.getAttribute('data-q');
+    q.focus();
+  });
+
   function 스프레드갱신() {
     var sp = 현재스프레드();
     document.getElementById('spUse').textContent = sp.쓰임;
@@ -788,7 +856,8 @@
     });
     document.getElementById('spSlots').innerHTML = slots;
     document.getElementById('spGuide').textContent = sp.안내;
-    document.getElementById('question').placeholder = '예) ' + sp.질문예;
+    document.getElementById('question').placeholder =
+      '예) ' + ((선택주제 && 선택주제.예시[0]) || sp.질문예);
     document.getElementById('abBox').className = sp.선택지입력 ? 'show' : '';
     document.getElementById('drawBtn').textContent = '카드 ' + sp.장수 + '장 뽑기';
   }
@@ -1027,7 +1096,7 @@
     if (tp[1] === 60) { tp[1] = 0; tp[0] = (tp[0] + 1) % 24; }
     var 질문 = document.getElementById('question').value.trim();
 
-    var ab = { A: 'A', B: 'B' };
+    var ab = { A: 'A', B: 'B', 갈래: 선택주제 ? 선택주제.갈래 : null };
     if (sp.선택지입력) {
       ab.A = document.getElementById('optA').value.trim() || 'A';
       ab.B = document.getElementById('optB').value.trim() || 'B';

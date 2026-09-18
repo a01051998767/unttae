@@ -239,7 +239,7 @@
   function pad(n) { return (n < 10 ? '0' : '') + n; }
 
   return {
-    버전: '20260919g',
+    버전: '20260919h',
     calc: calc,
     tzOffsetMinutes: tzOffsetMinutes,
     // 자료실 화면이 쓰는 표
