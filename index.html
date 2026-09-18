@@ -231,6 +231,10 @@
     font-size: .75rem; color: var(--ink-dim); letter-spacing: .02em;
     border: 1px solid var(--line-2); border-radius: 20px; padding: 2px 9px;
   }
+  .sp-guide {
+    margin: 12px 0 0; padding-top: 11px; border-top: 1px dashed var(--line-2);
+    font-size: .82rem; color: var(--ink-faint); line-height: 1.7;
+  }
   .sp-slots span i {
     font-style: normal; color: var(--gold); margin-right: 5px;
     font-variant-numeric: tabular-nums;
@@ -646,6 +650,20 @@
 
     <div id="topicEx"></div>
 
+    <div class="ask">
+      <h4>질문 정하기</h4>
+      <ul>
+        <li>묻고 싶은 것을 <b>한 문장</b>으로 정리해 보세요. 질문이 흐리면 답도 흐립니다.</li>
+        <li>"될까요?"보다 <b>"어떻게 하면 좋을까요?"</b>가 읽기 좋은 질문입니다.</li>
+        <li>같은 질문을 계속 다시 뽑지 마세요. 오늘의 답은 한 번이면 충분합니다.</li>
+      </ul>
+    </div>
+
+    <div class="field">
+      <label for="question">질문 <span style="color:var(--ink-faint)">— 적어두면 결과에 함께 표시됩니다 (선택)</span></label>
+      <input type="text" id="question" maxlength="80" placeholder="">
+    </div>
+
     <div class="field">
       <label for="spread" style="display:flex;align-items:center;gap:9px">
         <span>스프레드 — 묻는 방식에 따라 배열이 달라집니다</span>
@@ -657,21 +675,7 @@
     <div class="sp-info">
       <p class="sp-use" id="spUse"></p>
       <div class="sp-slots" id="spSlots"></div>
-    </div>
-
-    <div class="ask">
-      <h4>뽑기 전에</h4>
-      <p id="spGuide"></p>
-      <ul>
-        <li>묻고 싶은 것을 <b>한 문장</b>으로 정리해 보세요. 질문이 흐리면 답도 흐립니다.</li>
-        <li>"될까요?"보다 <b>"어떻게 하면 좋을까요?"</b>가 읽기 좋은 질문입니다.</li>
-        <li>같은 질문을 계속 다시 뽑지 마세요. 오늘의 답은 한 번이면 충분합니다.</li>
-      </ul>
-    </div>
-
-    <div class="field">
-      <label for="question">질문 <span style="color:var(--ink-faint)">— 적어두면 결과에 함께 표시됩니다 (선택)</span></label>
-      <input type="text" id="question" maxlength="80" placeholder="">
+      <p class="sp-guide" id="spGuide"></p>
     </div>
 
     <div id="abBox">
@@ -711,9 +715,9 @@
 </div>
 
 <!-- ?v= 는 캐시 무효화용. JS를 고치면 아래 세 곳과 필요버전을 함께 올린다. -->
-<script src="saju-core.js?v=20260919j"></script>
-<script src="tarot-data.js?v=20260919j"></script>
-<script src="fortune-data.js?v=20260919j"></script>
+<script src="saju-core.js?v=20260919k"></script>
+<script src="tarot-data.js?v=20260919k"></script>
+<script src="fortune-data.js?v=20260919k"></script>
 <script>
 (function () {
   'use strict';
@@ -729,7 +733,7 @@
   };
   var GLYPH = { major: '✦', wands: '❋', cups: '☾', swords: '✧', pentacles: '✵' };
   var WX = ['목', '화', '토', '금', '수'];
-  var 필요버전 = '20260919j';
+  var 필요버전 = '20260919k';
 
   /** 브라우저가 예전 JS를 캐시해 두면 조용히 깨진다. 눌렀을 때 바로 알려준다. */
   function 버전확인() {
