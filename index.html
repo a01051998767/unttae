@@ -284,6 +284,13 @@
     overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
   }
   .branch .bcards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 7px; }
+
+  /* 묶음 배열 (켈틱 크로스) */
+  .groups { display: grid; grid-template-columns: 3fr 2fr; gap: 13px; align-items: start; }
+  .groups > * { min-width: 0; }
+  .gcards { display: grid; gap: 7px; }
+  .gcards.c3 { grid-template-columns: repeat(3, 1fr); }
+  .gcards.c2 { grid-template-columns: repeat(2, 1fr); }
   /* 그리드 자식은 기본 min-width:auto 라 긴 카드 이름이 칸을 밀어낸다 */
   .draw > *, .bcards > *, .fork-branches > *, .branch { min-width: 0; }
   .tcard {
@@ -301,13 +308,14 @@
   .tcard .tpos {
     font-size: .66rem; font-weight: 600; letter-spacing: .1em; color: var(--gold);
     line-height: 1.4; word-break: keep-all;
+    padding: 0 20px;          /* 역방향 배지와 겹치지 않도록 양쪽으로 자리를 비운다 */
   }
   .tcard .tglyph { font-size: 1.9rem; line-height: 1; }
   .tcard.rev .tglyph { transform: rotate(180deg); }
   .tcard .tname { font-size: .83rem; font-weight: 600; line-height: 1.45; color: var(--ink); word-break: keep-all; }
   .tcard .tmeta { font-size: .66rem; color: var(--ink-faint); margin-top: 3px; }
   .tcard .trev {
-    position: absolute; top: 9px; right: 9px; font-size: .6rem; letter-spacing: .1em;
+    position: absolute; top: 8px; right: 7px; font-size: .58rem; letter-spacing: .06em;
     color: var(--gold); border: 1px solid rgba(201,169,106,.4); border-radius: 3px; padding: 0 4px; line-height: 1.5;
   }
 
@@ -396,6 +404,7 @@
     .fconn { min-width: 34px; }
     .draw.five { grid-template-columns: repeat(3, 1fr); }
     .fork-branches { grid-template-columns: 1fr; }
+    .groups { grid-template-columns: 1fr; }
     .row { flex-direction: column; gap: 0; }
   }
 </style>
@@ -517,9 +526,9 @@
 </div>
 
 <!-- ?v= 는 캐시 무효화용. JS를 고치면 아래 세 곳과 필요버전을 함께 올린다. -->
-<script src="saju-core.js?v=20260918g"></script>
-<script src="tarot-data.js?v=20260918g"></script>
-<script src="fortune-data.js?v=20260918g"></script>
+<script src="saju-core.js?v=20260918h"></script>
+<script src="tarot-data.js?v=20260918h"></script>
+<script src="fortune-data.js?v=20260918h"></script>
 <script>
 (function () {
   'use strict';
@@ -530,7 +539,7 @@
   };
   var GLYPH = { major: '✦', wands: '❋', cups: '☾', swords: '✧', pentacles: '✵' };
   var WX = ['목', '화', '토', '금', '수'];
-  var 필요버전 = '20260918g';
+  var 필요버전 = '20260918h';
 
   /** 브라우저가 예전 JS를 캐시해 두면 조용히 깨진다. 눌렀을 때 바로 알려준다. */
   function 버전확인() {
@@ -726,7 +735,16 @@
       : '<p class="qline" style="border-color:var(--line);color:var(--ink-faint)">' +
         '질문은 적지 않으셨습니다. 뽑기 전 마음에 두셨던 물음을 떠올리며 읽어 보세요.</p>';
 
-    if (sp.레이아웃 === 'fork' && reading.카드.length === 7) {
+    if (sp.레이아웃 === 'group' && sp.묶음) {
+      b += '<div class="groups">';
+      sp.묶음.forEach(function (g) {
+        b += '<div class="branch"><h5>' + esc(g.이름) + '</h5>' +
+             '<div class="gcards ' + (g.idx.length % 3 === 0 ? 'c3' : 'c2') + '">';
+        g.idx.forEach(function (i) { if (reading.카드[i]) b += tileHTML(reading.카드[i]); });
+        b += '</div></div>';
+      });
+      b += '</div>';
+    } else if (sp.레이아웃 === 'fork' && reading.카드.length === 7) {
       b += '<div class="fork-top">' + tileHTML(reading.카드[0]) + '</div>';
       b += '<div class="fork-mark" aria-hidden="true">⋁</div>';
       b += '<div class="fork-branches">';
