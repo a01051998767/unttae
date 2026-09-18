@@ -422,6 +422,79 @@
   .verdict .close p + p { margin-top: 10px; }
   .verdict .close b { color: var(--gold-hi); font-weight: 700; }
 
+  /* ── 자료실 ──────────────────────────────────────────── */
+  details.ref { margin-top: 28px; }
+  details.ref > summary {
+    list-style: none; cursor: pointer; user-select: none;
+    background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius);
+    padding: 16px 20px; display: flex; align-items: center; gap: 11px;
+  }
+  details.ref > summary::-webkit-details-marker { display: none; }
+  details.ref > summary::before {
+    content: "+"; width: 22px; height: 22px; flex: none;
+    border: 1px solid var(--gold-lo); border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    color: var(--gold); font-size: .86rem; line-height: 1;
+  }
+  details.ref[open] > summary::before { content: "\2212"; }
+  details.ref > summary b { font-size: .92rem; color: var(--gold-hi); font-weight: 700; }
+  details.ref > summary span { font-size: .78rem; color: var(--ink-faint); }
+  details.ref[open] > summary { border-radius: var(--radius) var(--radius) 0 0; border-bottom: none; }
+  .ref-body {
+    background: var(--panel); border: 1px solid var(--line); border-top: none;
+    border-radius: 0 0 var(--radius) var(--radius); padding: 4px 20px 22px;
+  }
+  .tabs { display: flex; flex-wrap: wrap; gap: 7px; padding: 14px 0 16px; border-bottom: 1px solid var(--line); }
+  .tab {
+    background: transparent; border: 1px solid var(--line-2); border-radius: 20px;
+    color: var(--ink-dim); font-family: inherit; font-size: .79rem; padding: 5px 13px;
+    cursor: pointer; transition: all .15s ease;
+  }
+  .tab:hover { border-color: var(--gold-lo); color: var(--ink); }
+  .tab.on { border-color: var(--gold-lo); background: var(--gold-film); color: var(--gold-hi); font-weight: 600; }
+  .ref-pane { padding-top: 16px; }
+  .ref-pane h4 {
+    margin: 20px 0 9px; font-size: .84rem; font-weight: 700; color: var(--gold);
+    letter-spacing: .04em;
+  }
+  .ref-pane h4:first-child { margin-top: 4px; }
+  .ref-pane > p { margin: 0 0 14px; font-size: .86rem; color: var(--ink-dim); }
+  .rtable { width: 100%; border-collapse: collapse; font-size: .83rem; }
+  .rtable th, .rtable td {
+    text-align: left; padding: 8px 9px; border-bottom: 1px solid var(--line); vertical-align: top;
+  }
+  .rtable th { color: var(--ink-faint); font-weight: 600; font-size: .76rem; white-space: nowrap; }
+  .rtable td.han { font-family: var(--serif); font-size: 1.05rem; color: var(--gold-hi); white-space: nowrap; }
+  .rtable td b { color: var(--ink); font-weight: 600; }
+  .rtable tr:last-child td { border-bottom: none; }
+  .wxdot {
+    display: inline-block; width: 8px; height: 8px; border-radius: 50%;
+    margin-right: 6px; vertical-align: 1px;
+  }
+  .cyc { display: grid; gap: 8px; margin: 0 0 6px; }
+  .cyc div { font-size: .85rem; color: var(--ink); }
+  .cyc b { color: var(--gold); font-weight: 600; }
+  .deckgrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(168px, 1fr)); gap: 8px; }
+  .dcard {
+    border: 1px solid var(--line); border-radius: 9px; padding: 9px 11px;
+    background: var(--panel-2); min-width: 0;
+  }
+  .dcard .dn { font-size: .82rem; font-weight: 600; color: var(--ink); }
+  .dcard .dm { font-size: .73rem; color: var(--ink-faint); margin-top: 2px; }
+  .dcard .dd { font-size: .76rem; color: var(--ink-dim); margin-top: 5px; line-height: 1.6; }
+
+  /* 문맥 바로가기 */
+  .reflink {
+    background: transparent; border: 1px solid var(--line-2); border-radius: 20px;
+    color: var(--ink-faint); font-family: inherit; font-size: .73rem;
+    padding: 2px 10px; cursor: pointer; white-space: nowrap;
+    transition: all .15s ease;
+  }
+  .reflink:hover { border-color: var(--gold-lo); color: var(--gold); }
+  .reflink::before { content: "?"; margin-right: 5px; color: var(--gold-lo); font-weight: 700; }
+  .refrow { display: flex; flex-wrap: wrap; gap: 6px; justify-content: flex-end; margin-top: 12px; }
+  .spread-head .reflink, .overlap .clab .reflink { margin-left: auto; }
+
   footer {
     margin-top: 40px; padding-top: 24px; border-top: 1px solid var(--line);
     font-size: .78rem; color: var(--ink-faint); line-height: 1.9; text-align: center;
@@ -447,6 +520,9 @@
     .draw.five { grid-template-columns: repeat(3, 1fr); }
     .fork-branches { grid-template-columns: 1fr; }
     .groups { grid-template-columns: 1fr; }
+    .ref-body { padding: 4px 14px 18px; }
+    details.ref > summary { padding: 14px 15px; }
+    .deckgrid { grid-template-columns: 1fr 1fr; }
     .branch { padding: 12px 9px; }
     .tcard .tpos { padding: 0 15px; letter-spacing: 0; }
     .tcard .trev { top: 6px; right: 5px; padding: 0 3px; }
@@ -543,7 +619,10 @@
     <h2 class="eyebrow">무엇을 물을까요</h2>
 
     <div class="field">
-      <label for="spread">스프레드 — 묻는 방식에 따라 배열이 달라집니다</label>
+      <label for="spread" style="display:flex;align-items:center;gap:9px">
+        <span>스프레드 — 묻는 방식에 따라 배열이 달라집니다</span>
+        <button type="button" class="reflink" data-ref="spr" style="margin-left:auto">9종 모두 보기</button>
+      </label>
       <select id="spread"></select>
     </div>
 
@@ -585,6 +664,17 @@
 
   <div id="out"></div>
 
+  <details class="ref" id="ref">
+    <summary>
+      <b>재료 살펴보기</b>
+      <span>음양오행 · 천간 10 · 십성 · 카드 사이 관계 · 스프레드 · 타로 78장</span>
+    </summary>
+    <div class="ref-body">
+      <div class="tabs" id="refTabs"></div>
+      <div class="ref-pane" id="refPane"></div>
+    </div>
+  </details>
+
   <footer>
     재미로 보는 페이지입니다. 진로·건강·재정 등 실제 결정의 근거로 삼지 마세요.<br>
     절기 시각표는 천문 계산으로 교차검증했고, 해석 문장은 창작입니다.
@@ -593,9 +683,9 @@
 </div>
 
 <!-- ?v= 는 캐시 무효화용. JS를 고치면 아래 세 곳과 필요버전을 함께 올린다. -->
-<script src="saju-core.js?v=20260919d"></script>
-<script src="tarot-data.js?v=20260919d"></script>
-<script src="fortune-data.js?v=20260919d"></script>
+<script src="saju-core.js?v=20260919e"></script>
+<script src="tarot-data.js?v=20260919e"></script>
+<script src="fortune-data.js?v=20260919e"></script>
 <script>
 (function () {
   'use strict';
@@ -606,7 +696,7 @@
   };
   var GLYPH = { major: '✦', wands: '❋', cups: '☾', swords: '✧', pentacles: '✵' };
   var WX = ['목', '화', '토', '금', '수'];
-  var 필요버전 = '20260919d';
+  var 필요버전 = '20260919e';
 
   /** 브라우저가 예전 JS를 캐시해 두면 조용히 깨진다. 눌렀을 때 바로 알려준다. */
   function 버전확인() {
@@ -798,7 +888,7 @@
   function 때HTML(reading, 질문) {
     var sp = reading.스프레드;
     var b = '<div class="spread-head">' + esc(sp.이름) + ' · ' + esc(sp.부제) +
-            ' <span class="tag">' + sp.장수 + '장</span></div>';
+            ' <span class="tag">' + sp.장수 + '장</span>' + ref('deck', '타로 78장') + '</div>';
     b += 질문
       ? '<p class="qline">질문 — <b>' + esc(질문) + '</b></p>'
       : '<p class="qline" style="border-color:var(--line);color:var(--ink-faint)">' +
@@ -842,6 +932,7 @@
       b += '<p class="flow-note"><b>' + esc(관계별구간[rel].join(' / ')) + ' · ' + esc(rel) +
            '</b> — ' + esc(관계별글[rel]) + '</p>';
     });
+    if (관계순서.length) b += '<div class="refrow">' + ref('rel', '카드 사이 관계') + '</div>';
 
     reading.카드.forEach(function (c) {
       b += '<article class="reading">' +
@@ -873,7 +964,8 @@
     b += '<div class="vrow"><span class="clab">때 · 타로가 말하는 흐름</span>' +
          '<p>' + esc(v.때) + '</p></div>';
 
-    b += '<div class="overlap"><span class="clab">운때 · 겹쳐 보면</span>';
+    b += '<div class="overlap"><span class="clab">운때 · 겹쳐 보면' +
+         ref('sip', '십성이란') + '</span>';
     v.겹침.forEach(function (g) {
       b += '<div class="ol"><div class="ol-head">' +
            (g.라벨 ? '<span class="who">' + esc(g.라벨) + '</span>' : '') +
@@ -953,6 +1045,163 @@
     render(saju, FortuneData.조립(saju, draw, sp, ab), 질문);
     this.textContent = '다시 뽑기 (' + sp.장수 + '장)';
   });
+
+  // ── 자료실 ───────────────────────────────────────────
+  var WX_TONE = { 목: '뻗어나감', 화: '드러냄', 토: '버티고 쌓음', 금: '자르고 가림', 수: '흐르고 스밈' };
+
+  function 점(오행) {
+    return '<span class="wxdot" style="background:' + (WX_COLOR[오행] || 'var(--gold)') + '"></span>';
+  }
+  /** 문맥 속 바로가기 버튼 */
+  function ref(tab, label) {
+    return '<button type="button" class="reflink" data-ref="' + tab + '">' + esc(label) + '</button>';
+  }
+
+  var REF = [
+    { id: 'wx', 이름: '음양오행', 그리기: function () {
+      var h = '<p>이 페이지의 모든 연결은 오행 다섯 가지와 그 사이의 관계에서 나옵니다. ' +
+              '사주의 여덟 글자도, 타로 78장도 일단 오행으로 옮긴 뒤에 겹쳐 읽습니다.</p>';
+      h += '<h4>오행 다섯</h4><table class="rtable"><tr><th>오행</th><th>성질</th><th>사주에 많으면</th></tr>';
+      WX.forEach(function (k) {
+        h += '<tr><td class="han">' + 점(k) + k + '</td><td><b>' + esc(WX_TONE[k]) + '</b></td>' +
+             '<td>' + esc(FortuneData.강한오행[k]) + '</td></tr>';
+      });
+      h += '</table>';
+      h += '<h4>상생 — 앞이 뒤를 낳는다</h4><div class="cyc"><div>' +
+           '목 → 화 → 토 → 금 → 수 → 목' +
+           '</div><div style="color:var(--ink-dim);font-size:.8rem">나무가 불을 지피고, 불이 재가 되어 흙이 되고, 흙에서 쇠가 나오고, 쇠에 물이 맺히고, 물이 나무를 기릅니다.</div></div>';
+      h += '<h4>상극 — 앞이 뒤를 누른다</h4><div class="cyc"><div>' +
+           '목 → 토 → 수 → 화 → 금 → 목' +
+           '</div><div style="color:var(--ink-dim);font-size:.8rem">나무가 흙을 파고, 흙이 물을 막고, 물이 불을 끄고, 불이 쇠를 녹이고, 쇠가 나무를 벱니다.</div></div>';
+      h += '<h4>음양</h4><p style="margin:0">천간·지지와 카드마다 음양이 붙습니다. ' +
+           '타로는 숫자 홀수와 킹·나이트를 양, 짝수와 퀸·페이지를 음으로 봅니다. ' +
+           '뒤집혀 나온 카드는 음양이 반대로 뒤집힙니다.</p>';
+      return h;
+    } },
+
+    { id: 'gan', 이름: '천간 10 · 지지 12', 그리기: function () {
+      var h = '<p>사주 여덟 글자는 위 네 자(천간)와 아래 네 자(지지)로 이뤄집니다. ' +
+              '그중 <b style="color:var(--gold)">일주의 천간</b>이 곧 나 자신, 일간입니다.</p>';
+      h += '<h4>천간 10 — 일간이 되는 글자</h4><table class="rtable">' +
+           '<tr><th>글자</th><th>오행·음양</th><th>별명</th><th>성질</th></tr>';
+      SajuCore.천간표.forEach(function (g) {
+        var d = FortuneData.일간해설[g.한글] || { 별명: '', 글: '' };
+        h += '<tr><td class="han">' + esc(g.한자) + ' ' + esc(g.한글) + '</td>' +
+             '<td>' + 점(g.오행) + esc(g.오행) + ' · ' + esc(g.음양) + '</td>' +
+             '<td><b>' + esc(d.별명) + '</b></td><td>' + esc(d.글) + '</td></tr>';
+      });
+      h += '</table>';
+      h += '<h4>지지 12 — 띠와 시각이 되는 글자</h4><table class="rtable">' +
+           '<tr><th>글자</th><th>오행·음양</th><th>속에 든 천간</th></tr>';
+      SajuCore.지지표.forEach(function (z) {
+        h += '<tr><td class="han">' + esc(z.한자) + ' ' + esc(z.한글) + '</td>' +
+             '<td>' + 점(z.오행) + esc(z.오행) + ' · ' + esc(z.음양) + '</td>' +
+             '<td>' + esc(z.지장간.join(' · ')) + '</td></tr>';
+      });
+      return h + '</table>';
+    } },
+
+    { id: 'sip', 이름: '십성', 그리기: function () {
+      var h = '<p>십성은 <b style="color:var(--gold)">내 일간에서 본 상대의 자리</b>입니다. ' +
+              '같은 카드라도 뽑은 사람의 일간이 다르면 십성이 달라지고, 그래서 뜻도 달라집니다. ' +
+              '이 페이지가 사주와 타로를 잇는 고리예요.</p>';
+      h += '<table class="rtable"><tr><th>십성</th><th>한 줄 뜻</th><th>일간과의 관계</th></tr>';
+      ['비겁', '식상', '재성', '관성', '인성', '태극'].forEach(function (k) {
+        h += '<tr><td class="han">' + esc(k) + '</td>' +
+             '<td><b>' + esc(FortuneData.십성짧은뜻[k] || '') + '</b></td>' +
+             '<td>' + esc(FortuneData.십성정의[k] || '') + '</td></tr>';
+      });
+      h += '</table><h4>자리(과거·현재·미래)에 따라</h4><table class="rtable">' +
+           '<tr><th>십성</th><th>과거</th><th>현재</th><th>미래</th></tr>';
+      ['비겁', '식상', '재성', '관성', '인성', '태극'].forEach(function (k) {
+        var d = FortuneData.십성해설[k];
+        h += '<tr><td class="han">' + esc(k) + '</td><td>' + esc(d.과거) + '</td>' +
+             '<td>' + esc(d.현재) + '</td><td>' + esc(d.미래) + '</td></tr>';
+      });
+      return h + '</table>';
+    } },
+
+    { id: 'rel', 이름: '카드 사이 관계', 그리기: function () {
+      var h = '<p>이어진 두 카드의 오행을 견줘 흐름을 봅니다. ' +
+              '결과 화면의 타임라인에 붙는 칩이 이것이고, 총평에서는 쉬운 말로 바꿔 씁니다.</p>';
+      h += '<table class="rtable"><tr><th>관계</th><th>쉬운 말</th><th>뜻</th></tr>';
+      ['상생', '역생', '상극', '역극', '비견', '무관', '태극'].forEach(function (k) {
+        var e = FortuneData.관계쉬움[k] || {};
+        h += '<tr><td class="han">' + esc(k) + '</td><td><b>' + esc(e.관형 || '') + '</b></td>' +
+             '<td>' + esc(FortuneData.흐름해설[k] || '') + '</td></tr>';
+      });
+      return h + '</table>';
+    } },
+
+    { id: 'spr', 이름: '스프레드 9종', 그리기: function () {
+      var h = '<p>무엇을 묻느냐에 따라 카드를 놓는 자리가 달라집니다. ' +
+              '자리 이름이 곧 그 카드를 읽는 틀이에요.</p><table class="rtable">' +
+              '<tr><th>스프레드</th><th>장수</th><th>쓰임</th><th>자리</th></tr>';
+      FortuneData.스프레드.forEach(function (sp) {
+        h += '<tr><td><b>' + esc(sp.이름) + '</b><br><span style="color:var(--ink-faint);font-size:.78rem">' +
+             esc(sp.부제) + '</span></td><td>' + sp.장수 + '</td><td>' + esc(sp.쓰임) + '</td>' +
+             '<td>' + esc(sp.위치.map(function (p) {
+               return p.라벨.replace('{A}', 'A').replace('{B}', 'B');
+             }).join(' · ')) + '</td></tr>';
+      });
+      return h + '</table>';
+    } },
+
+    { id: 'deck', 이름: '타로 78장', 그리기: function () {
+      var h = '<p>78장 전부와 각 카드의 오행·음양, 그리고 바로 놓였을 때와 뒤집혀 놓였을 때의 뜻입니다. ' +
+              '수트를 오행으로 옮긴 연결은 창작입니다 — 전통 교리가 아닙니다.</p>';
+      function 묶음(제목, 목록) {
+        var t = '<h4>' + esc(제목) + '</h4><div class="deckgrid">';
+        목록.forEach(function (c) {
+          t += '<div class="dcard"><div class="dn">' + esc(c.이름) + '</div>' +
+               '<div class="dm">' + 점(c.오행) + esc(c.오행) + ' · ' + esc(c.음양) + '</div>' +
+               '<div class="dd">' + esc(c.설명) + '</div>' +
+               '<div class="dd"><b style="color:var(--ink)">정</b> ' + esc(c.정) + '<br>' +
+               '<b style="color:var(--ink)">역</b> ' + esc(c.역) + '</div></div>';
+        });
+        return t + '</div>';
+      }
+      h += 묶음('메이저 아르카나 22장', TarotData.DECK.filter(function (c) { return c.종류 === '메이저'; }));
+      TarotData.SUITS.forEach(function (su) {
+        h += 묶음(su.name + ' 14장 — ' + su.원소 + ' · ' + su.오행 + ' · ' + su.주제,
+                  TarotData.DECK.filter(function (c) { return c.수트키 === su.key; }));
+      });
+      return h;
+    } }
+  ];
+
+  (function 자료실() {
+    var tabs = document.getElementById('refTabs'), pane = document.getElementById('refPane');
+    var h = '';
+    REF.forEach(function (r, i) {
+      h += '<button type="button" class="tab' + (i === 0 ? ' on' : '') + '" data-t="' + r.id + '">' +
+           esc(r.이름) + '</button>';
+    });
+    tabs.innerHTML = h;
+    var 그려짐 = {};
+    function 보이기(id) {
+      REF.forEach(function (r) { if (r.id === id) {
+        if (!그려짐[id]) 그려짐[id] = r.그리기();
+        pane.innerHTML = 그려짐[id];
+      }});
+      Array.prototype.forEach.call(tabs.children, function (b) {
+        b.className = 'tab' + (b.getAttribute('data-t') === id ? ' on' : '');
+      });
+    }
+    tabs.addEventListener('click', function (e) {
+      var b = e.target.closest('.tab'); if (b) 보이기(b.getAttribute('data-t'));
+    });
+    보이기(REF[0].id);
+
+    // 문맥 버튼 → 자료실 열고 해당 탭으로
+    document.addEventListener('click', function (e) {
+      var b = e.target.closest('.reflink'); if (!b) return;
+      var box = document.getElementById('ref');
+      box.open = true;
+      보이기(b.getAttribute('data-ref'));
+      box.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  }());
 
   document.getElementById('unknownHour').addEventListener('change', function () {
     document.getElementById('birthtime').disabled = this.checked;

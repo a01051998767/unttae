@@ -239,9 +239,25 @@
   function pad(n) { return (n < 10 ? '0' : '') + n; }
 
   return {
-    버전: '20260919d',
+    버전: '20260919e',
     calc: calc,
     tzOffsetMinutes: tzOffsetMinutes,
+    // 자료실 화면이 쓰는 표
+    천간표: (function () {
+      var out = [];
+      for (var i = 0; i < 10; i++) {
+        out.push({ 한자: GAN[i], 한글: GAN_KO[i], 오행: GAN_WX[i], 음양: GAN_YY[i] });
+      }
+      return out;
+    }()),
+    지지표: (function () {
+      var out = [];
+      for (var i = 0; i < 12; i++) {
+        out.push({ 한자: ZHI[i], 한글: ZHI_KO[i], 오행: ZHI_WX[i], 음양: ZHI_YY[i],
+                   지장간: ZHI_HIDDEN[i] });
+      }
+      return out;
+    }()),
     기본경도: KOREA_LON,
     시법: '정자시',
     지원범위: [1899, 2101],
