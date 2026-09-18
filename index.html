@@ -121,6 +121,8 @@
   /* ── 입력 ────────────────────────────────────────────── */
   .field { margin-bottom: 16px; }
   label { display: block; font-size: .79rem; color: var(--ink-dim); margin-bottom: 7px; letter-spacing: .02em; }
+  optgroup { color: var(--ink-faint); font-style: normal; font-size: .82rem; }
+  optgroup option { color: var(--ink); font-size: .95rem; }
   input[type=date], input[type=time], select {
     width: 100%; padding: 12px 13px;
     background: var(--bg-2); color: var(--ink);
@@ -515,9 +517,9 @@
 </div>
 
 <!-- ?v= 는 캐시 무효화용. JS를 고치면 아래 세 곳과 필요버전을 함께 올린다. -->
-<script src="saju-core.js?v=20260918f"></script>
-<script src="tarot-data.js?v=20260918f"></script>
-<script src="fortune-data.js?v=20260918f"></script>
+<script src="saju-core.js?v=20260918g"></script>
+<script src="tarot-data.js?v=20260918g"></script>
+<script src="fortune-data.js?v=20260918g"></script>
 <script>
 (function () {
   'use strict';
@@ -528,7 +530,7 @@
   };
   var GLYPH = { major: '✦', wands: '❋', cups: '☾', swords: '✧', pentacles: '✵' };
   var WX = ['목', '화', '토', '금', '수'];
-  var 필요버전 = '20260918f';
+  var 필요버전 = '20260918g';
 
   /** 브라우저가 예전 JS를 캐시해 두면 조용히 깨진다. 눌렀을 때 바로 알려준다. */
   function 버전확인() {
@@ -585,10 +587,20 @@
   var selSpread = document.getElementById('spread');
 
   (function 스프레드채우기() {
-    var h = '';
+    var 묶음 = {}, 순서 = [];
     FortuneData.스프레드.forEach(function (sp) {
-      h += '<option value="' + sp.id + '"' + (sp.id === 'three-time' ? ' selected' : '') + '>' +
-           esc(sp.이름 + ' · ' + sp.부제 + ' (' + sp.장수 + '장)') + '</option>';
+      if (!묶음[sp.장수]) { 묶음[sp.장수] = []; 순서.push(sp.장수); }
+      묶음[sp.장수].push(sp);
+    });
+    순서.sort(function (a, b) { return a - b; });
+    var h = '';
+    순서.forEach(function (n) {
+      h += '<optgroup label="' + n + '장">';
+      묶음[n].forEach(function (sp) {
+        h += '<option value="' + sp.id + '"' + (sp.id === 'three-time' ? ' selected' : '') + '>' +
+             esc(sp.이름 + ' · ' + sp.부제) + '</option>';
+      });
+      h += '</optgroup>';
     });
     selSpread.innerHTML = h;
   }());
@@ -733,8 +745,15 @@
 
     사슬만들기(reading.흐름).forEach(function (ch) { b += 타임라인HTML(ch, reading); });
 
+    // 같은 관계가 여러 구간에 걸리면 설명이 똑같이 반복되므로 한 줄로 묶는다
+    var 관계순서 = [], 관계별구간 = {}, 관계별글 = {};
     reading.흐름.forEach(function (f) {
-      b += '<p class="flow-note"><b>' + esc(f.구간) + ' · ' + esc(f.관계) + '</b> — ' + esc(f.글) + '</p>';
+      if (!관계별구간[f.관계]) { 관계별구간[f.관계] = []; 관계순서.push(f.관계); 관계별글[f.관계] = f.글; }
+      관계별구간[f.관계].push(f.구간);
+    });
+    관계순서.forEach(function (rel) {
+      b += '<p class="flow-note"><b>' + esc(관계별구간[rel].join(' / ')) + ' · ' + esc(rel) +
+           '</b> — ' + esc(관계별글[rel]) + '</p>';
     });
 
     reading.카드.forEach(function (c) {
