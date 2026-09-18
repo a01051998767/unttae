@@ -195,9 +195,6 @@
   .wx-fill { display: block; height: 100%; min-width: 2px; border-radius: 4px; transition: width .7s ease; }
   .wx-num { width: 16px; text-align: right; color: var(--ink-faint); font-variant-numeric: tabular-nums; flex: none; }
 
-  .basis { font-size: .74rem; color: var(--ink-faint); margin: 16px 0 0; letter-spacing: .01em; }
-  .basis span { color: var(--ink-dim); }
-
   /* 경고 */
   .warn {
     background: rgba(217,143,99,.07); border: 1px solid rgba(217,143,99,.28);
@@ -433,7 +430,7 @@
       <li>
         <span class="n">1</span>
         <b>생년월일시를 넣습니다</b>
-        <p>양력 기준이에요. 처음엔 <b style="display:inline;color:var(--gold)">지금 시각</b>이 들어가 있으니 본인 것으로 바꿔 주세요. 시각은 10분 단위면 충분하고, 모르면 아래 체크를 누르면 삼주만 봅니다.</p>
+        <p>양력 기준이에요. 처음엔 <b style="display:inline;color:var(--gold)">지금 시각</b>이 들어가 있으니 본인 것으로 바꿔 주세요. 시각을 모르면 아래 체크를 누르면 삼주만 봅니다.</p>
       </li>
       <li>
         <span class="n">2</span>
@@ -458,7 +455,7 @@
         <input type="date" id="birthdate" min="1900-01-01" max="2100-12-31">
       </div>
       <div class="field">
-        <label for="birthtime">태어난 시각 <span style="color:var(--ink-faint)">— 10분 단위</span></label>
+        <label for="birthtime">태어난 시각</label>
         <input type="time" id="birthtime" step="600">
       </div>
     </div>
@@ -468,12 +465,6 @@
       <label for="unknownHour">태어난 시각을 모릅니다 (시주를 빼고 삼주만 봅니다)</label>
     </div>
 
-    <p class="note">
-      계산 기준은 <b>정자시</b>(23시부터 다음 날 일주)와 <b>진태양시</b>(동경 127.5도, −30분)로 고정되어 있습니다.
-      동경 135도는 일본 아카시의 자오선이라 한국 하늘과 30분 넘게 어긋나기 때문입니다.
-      시각은 10분 단위로 충분합니다 — 시주는 두 시간에 한 번 바뀝니다.
-      다른 만세력과 결과가 다르다면 대개 이 기준 차이입니다.
-    </p>
 
   </section>
 
@@ -532,9 +523,9 @@
 </div>
 
 <!-- ?v= 는 캐시 무효화용. JS를 고치면 아래 세 곳과 필요버전을 함께 올린다. -->
-<script src="saju-core.js?v=20260918d"></script>
-<script src="tarot-data.js?v=20260918d"></script>
-<script src="fortune-data.js?v=20260918d"></script>
+<script src="saju-core.js?v=20260918e"></script>
+<script src="tarot-data.js?v=20260918e"></script>
+<script src="fortune-data.js?v=20260918e"></script>
 <script>
 (function () {
   'use strict';
@@ -545,7 +536,7 @@
   };
   var GLYPH = { major: '✦', wands: '❋', cups: '☾', swords: '✧', pentacles: '✵' };
   var WX = ['목', '화', '토', '금', '수'];
-  var 필요버전 = '20260918d';
+  var 필요버전 = '20260918e';
 
   /** 브라우저가 예전 JS를 캐시해 두면 조용히 깨진다. 눌렀을 때 바로 알려준다. */
   function 버전확인() {
@@ -664,11 +655,10 @@
     });
     b += '</div>';
 
-    b += '<p class="basis">기준 · <span>정자시</span> · 진태양시 <span>' +
-         esc(saju.기준.경도보정) + '</span> 보정 → 판정 시각 <span>' +
-         esc(saju.기준.판정시각) + '</span></p>';
-
+    // 시지경계는 입력 정밀도에서 오는 경고라 화면에는 띄우지 않는다.
+    // 절기·자시 경계와 표준시 특이 시기는 결과 자체가 달라지는 사안이라 남긴다.
     saju.경고.forEach(function (w) {
+      if (w.종류 === '시지경계') return;
       b += '<div class="warn"><b>' + esc(w.종류) + '</b> · ' + esc(w.설명) + '</div>';
     });
 
