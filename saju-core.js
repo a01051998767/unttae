@@ -239,7 +239,7 @@
   function pad(n) { return (n < 10 ? '0' : '') + n; }
 
   return {
-    버전: '20260918h',
+    버전: '20260918i',
     calc: calc,
     tzOffsetMinutes: tzOffsetMinutes,
     기본경도: KOREA_LON,

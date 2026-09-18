@@ -373,12 +373,58 @@
   .rcell p + p { margin-top: 6px; color: var(--ink-dim); font-size: .8rem; }
 
   /* ── 총평 ────────────────────────────────────────────── */
-  .verdict p { margin: 0 0 11px; font-size: .9rem; }
-  .verdict p:last-child { margin-bottom: 0; }
-  .verdict .lead { font-size: 1rem; font-weight: 600; color: var(--gold-hi); line-height: 1.78; }
-  .verdict .close {
-    border-top: 1px solid var(--line); padding-top: 13px; margin-top: 15px; color: var(--ink-dim); font-size: .86rem;
+  .verdict p { margin: 0; font-size: .89rem; }
+  .vrow { margin-bottom: 15px; }
+  .vrow .clab {
+    display: block; font-size: .68rem; font-weight: 600; letter-spacing: .16em;
+    color: var(--gold); margin-bottom: 5px;
   }
+  .vrow p { color: var(--ink-dim); }
+
+  .overlap {
+    border: 1px solid rgba(201,169,106,.32); background: var(--gold-film);
+    border-radius: 12px; padding: 17px 18px; margin: 20px 0;
+  }
+  .overlap .clab {
+    display: flex; align-items: center; gap: 8px;
+    font-size: .72rem; font-weight: 700; letter-spacing: .16em; color: var(--gold); margin-bottom: 11px;
+  }
+  .overlap .clab::before {
+    content: ""; width: 5px; height: 5px; flex: none;
+    border: 1px solid var(--gold); transform: rotate(45deg);
+  }
+  .ol { padding-top: 13px; }
+  .ol + .ol { border-top: 1px dashed var(--line-2); margin-top: 13px; }
+  .ol:first-of-type { padding-top: 0; }
+  .ol-head { display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; margin-bottom: 6px; }
+  .ol-head .who { font-size: .8rem; font-weight: 700; color: var(--gold-hi); }
+  .grade {
+    font-size: .66rem; letter-spacing: .06em; padding: 1px 8px; border-radius: 20px;
+    border: 1px solid currentColor;
+  }
+  .ol p { color: var(--ink); font-size: .9rem; line-height: 1.8; }
+  .ol .evidence {
+    margin-top: 6px; font-size: .75rem; color: var(--ink-faint);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .domain {
+    border-left: 2px solid var(--gold-lo); padding-left: 13px; margin: 0 0 18px;
+  }
+  .domain p { color: var(--ink); }
+  .domain .clab {
+    display: block; font-size: .68rem; font-weight: 600; letter-spacing: .16em;
+    color: var(--gold); margin-bottom: 5px;
+  }
+
+  .verdict .close { border-top: 1px solid var(--line); padding-top: 15px; }
+  .verdict .close .clab {
+    display: block; font-size: .68rem; font-weight: 600; letter-spacing: .16em;
+    color: var(--gold); margin-bottom: 8px;
+  }
+  .verdict .close p { color: var(--ink); font-size: .92rem; line-height: 1.8; }
+  .verdict .close p + p { margin-top: 10px; }
+  .verdict .close b { color: var(--gold-hi); font-weight: 700; }
 
   footer {
     margin-top: 40px; padding-top: 24px; border-top: 1px solid var(--line);
@@ -526,9 +572,9 @@
 </div>
 
 <!-- ?v= 는 캐시 무효화용. JS를 고치면 아래 세 곳과 필요버전을 함께 올린다. -->
-<script src="saju-core.js?v=20260918h"></script>
-<script src="tarot-data.js?v=20260918h"></script>
-<script src="fortune-data.js?v=20260918h"></script>
+<script src="saju-core.js?v=20260918i"></script>
+<script src="tarot-data.js?v=20260918i"></script>
+<script src="fortune-data.js?v=20260918i"></script>
 <script>
 (function () {
   'use strict';
@@ -539,7 +585,7 @@
   };
   var GLYPH = { major: '✦', wands: '❋', cups: '☾', swords: '✧', pentacles: '✵' };
   var WX = ['목', '화', '토', '금', '수'];
-  var 필요버전 = '20260918h';
+  var 필요버전 = '20260918i';
 
   /** 브라우저가 예전 JS를 캐시해 두면 조용히 깨진다. 눌렀을 때 바로 알려준다. */
   function 버전확인() {
@@ -793,11 +839,38 @@
   }
 
   // ── STEP 03 · 운때 ───────────────────────────────────
+  var GRADE_COLOR = { 과다: 'var(--hwa)', 적정: 'var(--mok)', 부족: 'var(--su)', 태극: 'var(--gold)' };
+
   function 운때HTML(reading) {
-    return '<div class="verdict">' +
-      '<p class="lead">' + esc(reading.총평.운) + '</p>' +
-      '<p>' + esc(reading.총평.때) + '</p>' +
-      '<p class="close">' + esc(reading.총평.맺음).replace(/\n/g, '<br>') + '</p></div>';
+    var v = reading.총평;
+    var b = '<div class="verdict">';
+
+    b += '<div class="vrow"><span class="clab">운 · 사주가 말하는 바탕</span>' +
+         '<p>' + esc(v.운) + '</p></div>';
+    b += '<div class="vrow"><span class="clab">때 · 타로가 말하는 흐름</span>' +
+         '<p>' + esc(v.때) + '</p></div>';
+
+    b += '<div class="overlap"><span class="clab">운때 · 겹쳐 보면</span>';
+    v.겹침.forEach(function (g) {
+      b += '<div class="ol"><div class="ol-head">' +
+           (g.라벨 ? '<span class="who">' + esc(g.라벨) + '</span>' : '') +
+           '<span class="tag">' + esc(g.십성) + '</span>' +
+           '<span class="grade" style="color:' + (GRADE_COLOR[g.등급] || 'var(--gold)') + '">' +
+           esc(g.등급) + '</span></div>' +
+           '<p>' + esc(g.글) + '</p>' +
+           '<p class="evidence">' + esc(g.근거) + '</p></div>';
+    });
+    b += '</div>';
+
+    b += '<div class="domain"><span class="clab">' + esc(v.갈래) + '에 대해서는</span>' +
+         '<p>' + esc(v.갈래글) + '</p></div>';
+
+    b += '<div class="close"><span class="clab">그래서</span>';
+    v.맺음.forEach(function (m) {
+      b += '<p>' + (m.라벨 ? '<b>' + esc(m.라벨) + '</b> — ' : '') + esc(m.글) + '</p>';
+    });
+    b += '</div></div>';
+    return b;
   }
 
   function render(saju, reading, 질문) {
@@ -809,7 +882,7 @@
                '78장에서 뽑은 ' + reading.스프레드.장수 + '장이 각 자리에 놓였습니다.',
                때HTML(reading, 질문));
     h += stage('03', '운때 — 겹쳐 읽기',
-               '타고난 운 위에 지금의 때를 포갭니다.',
+               '카드가 가리키는 기운이 내 사주에 넘치는지 모자라는지까지 함께 봅니다.',
                운때HTML(reading));
 
     var out = document.getElementById('out');
