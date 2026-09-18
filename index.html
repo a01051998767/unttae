@@ -79,7 +79,7 @@
   }
   h1 .dim { color: var(--gold-lo); }
   .rule { width: 52px; height: 1px; background: var(--gold-lo); margin: 14px auto; opacity: .7; }
-  .sub { color: var(--ink-dim); font-size: .88rem; letter-spacing: .02em; margin: 0; }
+  .sub { color: var(--ink-dim); font-size: .92rem; letter-spacing: .02em; margin: 0; }
   .sub b { color: var(--gold); font-weight: 600; }
 
   /* ── 공통 패널 ───────────────────────────────────────── */
@@ -116,33 +116,35 @@
     line-height: 1;
   }
   .howto b { display: block; font-size: .87rem; color: var(--ink); margin-bottom: 4px; }
-  .howto p { margin: 0; font-size: .78rem; color: var(--ink-faint); line-height: 1.65; }
+  .howto p { margin: 0; font-size: .82rem; color: var(--ink-faint); line-height: 1.65; }
 
   /* ── 입력 ────────────────────────────────────────────── */
   .field { margin-bottom: 16px; }
-  label { display: block; font-size: .79rem; color: var(--ink-dim); margin-bottom: 7px; letter-spacing: .02em; }
+  label { display: block; font-size: .82rem; color: var(--ink-dim); margin-bottom: 7px; letter-spacing: .02em; }
   optgroup { color: var(--ink-faint); font-style: normal; font-size: .82rem; }
   optgroup option { color: var(--ink); font-size: .95rem; }
-  input[type=date], input[type=time], select {
-    width: 100%; padding: 12px 13px;
+  input[type=date], input[type=time], input[type=text], select {
+    display: block;
+    width: 100%; max-width: 100%; min-width: 0;
+    padding: 12px 13px;
     background: var(--bg-2); color: var(--ink);
     border: 1px solid var(--line-2); border-radius: 9px;
-    font-size: .95rem; font-family: inherit;
+    /* 16px 미만이면 iOS 사파리가 포커스 시 페이지를 확대해 화면 밖으로 밀어낸다 */
+    font-size: 1rem; font-family: inherit; line-height: 1.4;
     color-scheme: dark;
+    -webkit-appearance: none; appearance: none;
   }
+  /* 날짜·시각 입력은 사파리가 고유 너비를 잡아 넘치는 일이 있어 눌러둔다 */
+  input[type=date]::-webkit-date-and-time-value { text-align: left; margin: 0; }
+  input[type=date]::-webkit-calendar-picker-indicator,
+  input[type=time]::-webkit-calendar-picker-indicator { margin-left: auto; opacity: .55; }
   input:disabled { opacity: .4; }
   input:focus, select:focus { outline: 2px solid var(--gold-lo); outline-offset: 1px; }
   .row { display: flex; gap: 13px; }
   .row > * { flex: 1; min-width: 0; }
-  .check { display: flex; align-items: center; gap: 9px; font-size: .84rem; color: var(--ink-dim); margin: 2px 0 14px; }
+  .check { display: flex; align-items: center; gap: 9px; font-size: .87rem; color: var(--ink-dim); margin: 2px 0 14px; }
   .check input { width: 17px; height: 17px; accent-color: var(--gold); flex: none; }
-  .check label { margin: 0; font-size: .84rem; }
-  .note {
-    font-size: .76rem; color: var(--ink-faint); line-height: 1.7;
-    border-left: 2px solid var(--line-2); padding-left: 11px; margin: 4px 0 16px;
-  }
-  .note b { color: var(--gold); font-weight: 600; }
-
+  .check label { margin: 0; font-size: .87rem; }
   button.go {
     width: 100%; margin-top: 4px; padding: 16px;
     background: transparent; color: var(--gold-hi);
@@ -176,7 +178,7 @@
     font-size: 1.08rem; font-weight: 700;
     color: var(--gold-hi); margin: 0 0 3px; letter-spacing: .06em;
   }
-  .stage > .slead { margin: 0 0 16px; font-size: .8rem; color: var(--ink-faint); }
+  .stage > .slead { margin: 0 0 16px; font-size: .84rem; color: var(--ink-faint); }
 
   /* 사주 기둥 */
   .pillars { display: grid; grid-template-columns: repeat(4, 1fr); gap: 9px; }
@@ -184,14 +186,14 @@
     background: var(--panel-2); border: 1px solid var(--line);
     border-radius: 10px; padding: 14px 6px 12px; text-align: center;
   }
-  .pillar .lab { font-size: .67rem; color: var(--ink-faint); letter-spacing: .12em; margin-bottom: 8px; }
+  .pillar .lab { font-size: .72rem; color: var(--ink-faint); letter-spacing: .12em; margin-bottom: 8px; }
   .pillar .han { font-family: var(--serif); font-size: 1.55rem; font-weight: 600; line-height: 1.25; color: var(--gold-hi); }
-  .pillar .kor { font-size: .71rem; color: var(--ink-dim); margin-top: 3px; }
+  .pillar .kor { font-size: .75rem; color: var(--ink-dim); margin-top: 3px; }
   .pillar.void .han { color: var(--ink-faint); }
 
   /* 오행 막대 */
   .wx-bars { display: flex; flex-direction: column; gap: 7px; margin: 20px 0 2px; }
-  .wx-row { display: flex; align-items: center; gap: 10px; font-size: .79rem; }
+  .wx-row { display: flex; align-items: center; gap: 10px; font-size: .82rem; }
   .wx-name { width: 22px; color: var(--ink-dim); flex: none; font-weight: 600; }
   .wx-track { flex: 1; height: 8px; background: var(--bg-2); border-radius: 4px; overflow: hidden; }
   .wx-fill { display: block; height: 100%; min-width: 2px; border-radius: 4px; transition: width .7s ease; }
@@ -210,23 +212,23 @@
 
   .tag {
     display: inline-block;
-    font-size: .68rem; font-weight: 500; letter-spacing: .08em;
+    font-size: .72rem; font-weight: 500; letter-spacing: .06em;
     background: var(--gold-film); color: var(--gold);
     padding: 1px 9px; border-radius: 20px; border: 1px solid rgba(201,169,106,.3);
     white-space: nowrap;
   }
-  .prose { margin: 12px 0 0; font-size: .89rem; color: var(--ink); }
-  .prose.dim { color: var(--ink-dim); font-size: .85rem; margin-top: 7px; }
+  .prose { margin: 12px 0 0; font-size: .92rem; color: var(--ink); }
+  .prose.dim { color: var(--ink-dim); font-size: .88rem; margin-top: 7px; }
 
   /* ── 스프레드 고르기 ─────────────────────────────────── */
   .sp-info {
     background: var(--panel-2); border: 1px solid var(--line);
     border-radius: 11px; padding: 14px 15px; margin: 2px 0 14px;
   }
-  .sp-info .sp-use { margin: 0 0 10px; font-size: .84rem; color: var(--ink); }
+  .sp-info .sp-use { margin: 0 0 10px; font-size: .87rem; color: var(--ink); }
   .sp-slots { display: flex; flex-wrap: wrap; gap: 6px; }
   .sp-slots span {
-    font-size: .7rem; color: var(--ink-dim); letter-spacing: .02em;
+    font-size: .75rem; color: var(--ink-dim); letter-spacing: .02em;
     border: 1px solid var(--line-2); border-radius: 20px; padding: 2px 9px;
   }
   .sp-slots span i {
@@ -245,15 +247,9 @@
     content: ""; width: 5px; height: 5px; flex: none;
     border: 1px solid var(--gold); transform: rotate(45deg);
   }
-  .ask p { margin: 0 0 8px; font-size: .82rem; color: var(--ink-dim); }
-  .ask ul { margin: 0; padding-left: 17px; font-size: .79rem; color: var(--ink-faint); line-height: 1.75; }
+  .ask p { margin: 0 0 8px; font-size: .85rem; color: var(--ink-dim); }
+  .ask ul { margin: 0; padding-left: 17px; font-size: .83rem; color: var(--ink-faint); line-height: 1.75; }
   .ask ul b { color: var(--ink-dim); font-weight: 600; }
-  input[type=text] {
-    width: 100%; padding: 12px 13px;
-    background: var(--bg-2); color: var(--ink);
-    border: 1px solid var(--line-2); border-radius: 9px;
-    font-size: .95rem; font-family: inherit;
-  }
   input[type=text]::placeholder { color: var(--ink-faint); }
   #abBox { display: none; }
   #abBox.show { display: block; }
@@ -264,7 +260,7 @@
     margin: 0 0 4px; font-size: .95rem; font-weight: 700; color: var(--gold-hi);
   }
   .qline {
-    margin: 0 0 16px; font-size: .86rem; color: var(--ink-dim);
+    margin: 0 0 16px; font-size: .89rem; color: var(--ink-dim);
     border-left: 2px solid var(--gold-lo); padding-left: 11px;
   }
   .qline b { color: var(--ink); font-weight: 600; }
@@ -279,7 +275,7 @@
   .fork-branches { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
   .branch { border: 1px solid var(--line); border-radius: 12px; padding: 13px 12px; background: rgba(255,255,255,.015); }
   .branch h5 {
-    margin: 0 0 11px; font-size: .78rem; font-weight: 700; color: var(--gold);
+    margin: 0 0 11px; font-size: .82rem; font-weight: 700; color: var(--gold);
     letter-spacing: .04em; text-align: center;
     overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
   }
@@ -306,16 +302,16 @@
   }
   .tcard.rev { border-color: rgba(201,169,106,.28); }
   .tcard .tpos {
-    font-size: .66rem; font-weight: 600; letter-spacing: .1em; color: var(--gold);
+    font-size: .71rem; font-weight: 600; letter-spacing: .06em; color: var(--gold);
     line-height: 1.4; word-break: keep-all;
     padding: 0 20px;          /* 역방향 배지와 겹치지 않도록 양쪽으로 자리를 비운다 */
   }
   .tcard .tglyph { font-size: 1.9rem; line-height: 1; }
   .tcard.rev .tglyph { transform: rotate(180deg); }
-  .tcard .tname { font-size: .83rem; font-weight: 600; line-height: 1.45; color: var(--ink); word-break: keep-all; }
-  .tcard .tmeta { font-size: .66rem; color: var(--ink-faint); margin-top: 3px; }
+  .tcard .tname { font-size: .85rem; font-weight: 600; line-height: 1.45; color: var(--ink); word-break: keep-all; }
+  .tcard .tmeta { font-size: .7rem; color: var(--ink-faint); margin-top: 3px; }
   .tcard .trev {
-    position: absolute; top: 8px; right: 7px; font-size: .58rem; letter-spacing: .06em;
+    position: absolute; top: 8px; right: 7px; font-size: .64rem; letter-spacing: .04em;
     color: var(--gold); border: 1px solid rgba(201,169,106,.4); border-radius: 3px; padding: 0 4px; line-height: 1.5;
   }
 
@@ -323,7 +319,7 @@
   .flowwrap { margin: 22px 0 6px; }
   .flowwrap + .flowwrap { margin-top: 16px; }
   .flowwrap .branch-tag {
-    display: inline-block; font-size: .68rem; letter-spacing: .06em; color: var(--gold);
+    display: inline-block; font-size: .73rem; letter-spacing: .04em; color: var(--gold);
     border: 1px solid var(--gold-lo); border-radius: 20px; padding: 0 9px; margin-bottom: 10px;
   }
   .flowline {
@@ -335,9 +331,9 @@
     border-radius: 50%; border: 1px solid currentColor; background: currentColor;
     box-shadow: 0 0 0 4px rgba(255,255,255,.035);
   }
-  .fnode b { display: block; font-size: .76rem; font-weight: 700; color: var(--gold); letter-spacing: .1em; }
+  .fnode b { display: block; font-size: .79rem; font-weight: 700; color: var(--gold); letter-spacing: .1em; }
   .fnode em {
-    display: block; font-style: normal; font-size: .71rem; line-height: 1.45;
+    display: block; font-style: normal; font-size: .75rem; line-height: 1.45;
     color: var(--ink-dim); margin-top: 3px; word-break: keep-all;
   }
   .fconn { position: relative; padding: 0 4px; min-width: 54px; text-align: center; }
@@ -347,10 +343,10 @@
   }
   .fconn span {
     position: relative; display: inline-block; margin-top: 16px;
-    font-size: .67rem; letter-spacing: .06em; color: var(--ink-faint);
+    font-size: .72rem; letter-spacing: .04em; color: var(--ink-faint);
     border: 1px solid var(--line); border-radius: 20px; padding: 0 8px; background: var(--panel);
   }
-  .flow-note { margin: 4px 0 0; font-size: .8rem; color: var(--ink-dim); }
+  .flow-note { margin: 4px 0 0; font-size: .84rem; color: var(--ink-dim); }
   .flow-note + .flow-note { margin-top: 5px; }
   .flow-note b { color: var(--gold); font-weight: 600; }
 
@@ -358,25 +354,25 @@
   .reading { border-top: 1px solid var(--line); padding-top: 18px; margin-top: 18px; }
   .rhead { display: flex; align-items: baseline; gap: 9px; flex-wrap: wrap; margin-bottom: 8px; }
   .rpos {
-    font-size: .7rem; font-weight: 600; letter-spacing: .16em; color: var(--gold);
+    font-size: .74rem; font-weight: 600; letter-spacing: .1em; color: var(--gold);
     border: 1px solid var(--gold-lo); border-radius: 3px; padding: 1px 7px; line-height: 1.6;
   }
   .rhead h3 { font-size: 1.02rem; font-weight: 700; margin: 0; color: var(--ink); }
-  .rdesc { margin: 0 0 13px; font-size: .86rem; color: var(--ink-dim); }
+  .rdesc { margin: 0 0 13px; font-size: .89rem; color: var(--ink-dim); }
   .rgrid { display: grid; grid-template-columns: 1fr 1fr; gap: 11px; }
   .rcell { background: var(--panel-2); border: 1px solid var(--line); border-radius: 10px; padding: 13px 14px; }
   .rcell .clab {
-    display: block; font-size: .68rem; font-weight: 600; letter-spacing: .16em;
+    display: block; font-size: .72rem; font-weight: 600; letter-spacing: .12em;
     color: var(--gold); margin-bottom: 6px;
   }
-  .rcell p { margin: 0; font-size: .83rem; color: var(--ink); }
-  .rcell p + p { margin-top: 6px; color: var(--ink-dim); font-size: .8rem; }
+  .rcell p { margin: 0; font-size: .87rem; color: var(--ink); }
+  .rcell p + p { margin-top: 6px; color: var(--ink-dim); font-size: .84rem; }
 
   /* ── 총평 ────────────────────────────────────────────── */
-  .verdict p { margin: 0; font-size: .89rem; }
+  .verdict p { margin: 0; font-size: .92rem; }
   .vrow { margin-bottom: 15px; }
   .vrow .clab {
-    display: block; font-size: .68rem; font-weight: 600; letter-spacing: .16em;
+    display: block; font-size: .73rem; font-weight: 600; letter-spacing: .12em;
     color: var(--gold); margin-bottom: 5px;
   }
   .vrow p { color: var(--ink-dim); }
@@ -399,12 +395,12 @@
   .ol-head { display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; margin-bottom: 6px; }
   .ol-head .who { font-size: .8rem; font-weight: 700; color: var(--gold-hi); }
   .grade {
-    font-size: .66rem; letter-spacing: .06em; padding: 1px 8px; border-radius: 20px;
+    font-size: .71rem; letter-spacing: .04em; padding: 1px 8px; border-radius: 20px;
     border: 1px solid currentColor;
   }
-  .ol p { color: var(--ink); font-size: .9rem; line-height: 1.8; }
+  .ol p { color: var(--ink); font-size: .94rem; line-height: 1.82; }
   .ol .evidence {
-    margin-top: 6px; font-size: .75rem; color: var(--ink-faint);
+    margin-top: 6px; font-size: .79rem; color: var(--ink-faint);
     font-variant-numeric: tabular-nums;
   }
 
@@ -413,22 +409,22 @@
   }
   .domain p { color: var(--ink); }
   .domain .clab {
-    display: block; font-size: .68rem; font-weight: 600; letter-spacing: .16em;
+    display: block; font-size: .73rem; font-weight: 600; letter-spacing: .12em;
     color: var(--gold); margin-bottom: 5px;
   }
 
   .verdict .close { border-top: 1px solid var(--line); padding-top: 15px; }
   .verdict .close .clab {
-    display: block; font-size: .68rem; font-weight: 600; letter-spacing: .16em;
+    display: block; font-size: .73rem; font-weight: 600; letter-spacing: .12em;
     color: var(--gold); margin-bottom: 8px;
   }
-  .verdict .close p { color: var(--ink); font-size: .92rem; line-height: 1.8; }
+  .verdict .close p { color: var(--ink); font-size: .95rem; line-height: 1.82; }
   .verdict .close p + p { margin-top: 10px; }
   .verdict .close b { color: var(--gold-hi); font-weight: 700; }
 
   footer {
     margin-top: 40px; padding-top: 24px; border-top: 1px solid var(--line);
-    font-size: .73rem; color: var(--ink-faint); line-height: 1.9; text-align: center;
+    font-size: .78rem; color: var(--ink-faint); line-height: 1.9; text-align: center;
   }
 
   @media (max-width: 560px) {
@@ -438,7 +434,7 @@
     .howto ol { grid-template-columns: 1fr; gap: 10px; }
     .stage { padding-left: 38px; }
     .stage::before { left: 13px; }
-    .stage > .badge { width: 27px; height: 27px; font-size: .66rem; }
+    .stage > .badge { width: 27px; height: 27px; font-size: .7rem; }
     .pillars { gap: 6px; }
     .pillar { padding: 11px 3px 9px; }
     .pillar .han { font-size: 1.22rem; }
@@ -451,6 +447,31 @@
     .draw.five { grid-template-columns: repeat(3, 1fr); }
     .fork-branches { grid-template-columns: 1fr; }
     .groups { grid-template-columns: 1fr; }
+    .branch { padding: 12px 9px; }
+    .tcard .tpos { padding: 0 15px; letter-spacing: 0; }
+    .tcard .trev { top: 6px; right: 5px; padding: 0 3px; }
+
+    /* 긴 흐름은 세로 목록으로 (인라인 grid-template-columns 를 눌러야 해서 !important) */
+    .flowline.long { grid-template-columns: 1fr !important; gap: 0; }
+    .flowline.long .fnode {
+      display: flex; align-items: baseline; gap: 8px; text-align: left; padding: 3px 0;
+    }
+    .flowline.long .fdot { margin: 0; align-self: center; flex: none; }
+    .flowline.long .fnode b { flex: none; }
+    .flowline.long .fnode em { margin-top: 0; }
+    .flowline.long .fconn {
+      min-width: 0; text-align: left; padding: 0 0 0 4px; height: 16px;
+    }
+    .flowline.long .fconn::before {
+      left: 6px; right: auto; top: 0; bottom: 0; width: 1px; height: auto;
+      background: var(--line-2);
+    }
+    .flowline.long .fconn span { margin-top: 0; margin-left: 16px; }
+  }
+
+  /* 아주 좁은 화면(구형 iPhone SE 등)에서는 한 줄에 두 장까지만 */
+  @media (max-width: 400px) {
+    .gcards.c3, .branch .bcards, .draw.five { grid-template-columns: repeat(2, 1fr); }
     .row { flex-direction: column; gap: 0; }
   }
 </style>
@@ -484,7 +505,7 @@
       <li>
         <span class="n">2</span>
         <b>스프레드를 고르고 뽑습니다</b>
-        <p>무엇을 묻느냐에 따라 배열이 다릅니다. 하루 운은 1장, 흐름은 3장, 선택은 7장. 고르면 어떤 자리가 나오는지 바로 보여드려요.</p>
+        <p>무엇을 묻느냐에 따라 배열이 다릅니다. 하루는 1장, 흐름은 3장, 더 깊게 보려면 5장, 두 갈래 중 고를 땐 7장, 가장 깊은 켈틱 크로스는 10장. 고르면 어떤 자리가 나오는지 바로 보여드려요.</p>
       </li>
       <li>
         <span class="n">3</span>
@@ -572,9 +593,9 @@
 </div>
 
 <!-- ?v= 는 캐시 무효화용. JS를 고치면 아래 세 곳과 필요버전을 함께 올린다. -->
-<script src="saju-core.js?v=20260918i"></script>
-<script src="tarot-data.js?v=20260918i"></script>
-<script src="fortune-data.js?v=20260918i"></script>
+<script src="saju-core.js?v=20260918j"></script>
+<script src="tarot-data.js?v=20260918j"></script>
+<script src="fortune-data.js?v=20260918j"></script>
 <script>
 (function () {
   'use strict';
@@ -585,7 +606,7 @@
   };
   var GLYPH = { major: '✦', wands: '❋', cups: '☾', swords: '✧', pentacles: '✵' };
   var WX = ['목', '화', '토', '금', '수'];
-  var 필요버전 = '20260918i';
+  var 필요버전 = '20260918j';
 
   /** 브라우저가 예전 JS를 캐시해 두면 조용히 깨진다. 눌렀을 때 바로 알려준다. */
   function 버전확인() {
@@ -761,7 +782,9 @@
     if (chain.가지) {
       h += '<span class="branch-tag">' + esc(갈래이름(reading.카드[chain.nodes[0]].위치)) + ' 갈래</span>';
     }
-    h += '<div class="flowline" style="grid-template-columns:' + gtc + '">';
+    // 마디가 넷 이상이면 좁은 화면에서 가로로 다 못 들어간다 → 세로로 세운다
+    h += '<div class="flowline' + (chain.nodes.length >= 4 ? ' long' : '') +
+         '" style="grid-template-columns:' + gtc + '">';
     chain.nodes.forEach(function (n, i) {
       if (i > 0) h += '<div class="fconn"><span>' + esc(chain.links[i - 1].관계) + '</span></div>';
       var c = reading.카드[n];
