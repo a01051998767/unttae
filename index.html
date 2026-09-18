@@ -593,9 +593,9 @@
 </div>
 
 <!-- ?v= 는 캐시 무효화용. JS를 고치면 아래 세 곳과 필요버전을 함께 올린다. -->
-<script src="saju-core.js?v=20260919a"></script>
-<script src="tarot-data.js?v=20260919a"></script>
-<script src="fortune-data.js?v=20260919a"></script>
+<script src="saju-core.js?v=20260919d"></script>
+<script src="tarot-data.js?v=20260919d"></script>
+<script src="fortune-data.js?v=20260919d"></script>
 <script>
 (function () {
   'use strict';
@@ -606,7 +606,7 @@
   };
   var GLYPH = { major: '✦', wands: '❋', cups: '☾', swords: '✧', pentacles: '✵' };
   var WX = ['목', '화', '토', '금', '수'];
-  var 필요버전 = '20260919a';
+  var 필요버전 = '20260919d';
 
   /** 브라우저가 예전 JS를 캐시해 두면 조용히 깨진다. 눌렀을 때 바로 알려준다. */
   function 버전확인() {
@@ -877,7 +877,7 @@
     v.겹침.forEach(function (g) {
       b += '<div class="ol"><div class="ol-head">' +
            (g.라벨 ? '<span class="who">' + esc(g.라벨) + '</span>' : '') +
-           '<span class="tag">' + esc(g.십성) + '</span>' +
+           '<span class="tag">' + esc(g.십성) + (g.십성뜻 ? ' · ' + esc(g.십성뜻) : '') + '</span>' +
            (g.등급 === '태극' ? '' :
              '<span class="grade" style="color:' + (GRADE_COLOR[g.등급] || 'var(--gold)') + '">' +
              esc(g.등급) + '</span>') + '</div>' +
@@ -891,7 +891,7 @@
 
     b += '<div class="close"><span class="clab">그래서</span>';
     v.맺음.forEach(function (m) {
-      b += '<p>' + (m.라벨 ? '<b>' + esc(m.라벨) + '</b> — ' : '') + esc(m.글) + '</p>';
+      b += '<p>' + (m.라벨 ? '<b>' + esc(m.라벨) + '</b> \u2014 ' : '') + esc(m.글) + '</p>';
     });
     b += '</div></div>';
     return b;
