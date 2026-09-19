@@ -404,6 +404,28 @@
   }
   .rhead h3 { font-size: 1.02rem; font-weight: 700; margin: 0; color: var(--ink); }
   .rdesc { margin: 0 0 13px; font-size: .89rem; color: var(--ink-dim); }
+  .reading p.key {
+    margin: 0 0 7px; font-size: .95rem; font-weight: 600;
+    color: var(--gold-hi); line-height: 1.6;
+  }
+  .reading p.rline { margin: 0 0 5px; font-size: .86rem; color: var(--ink-dim); line-height: 1.75; }
+  .reading p.rline:last-child { margin-bottom: 0; }
+
+  /* 자리마다 겹쳐 보기 (운때) */
+  .cross { margin: 0 0 20px; }
+  .cross .clab {
+    display: flex; align-items: center; gap: 8px;
+    font-size: .72rem; font-weight: 600; letter-spacing: .12em; color: var(--gold); margin-bottom: 7px;
+  }
+  .cross-lead { margin: 0 0 12px; font-size: .84rem; color: var(--ink-faint); }
+  .cross-lead b { color: var(--ink-dim); font-weight: 600; }
+  .crow { border-top: 1px solid var(--line); padding: 11px 0; }
+  .crow:last-child { padding-bottom: 0; }
+  .crow-h { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 5px; }
+  .crow-h b { font-size: .88rem; color: var(--ink); font-weight: 600; }
+  .crow p { margin: 0; font-size: .85rem; color: var(--ink-dim); line-height: 1.75; }
+  .crow p.same { color: var(--ink-faint); font-style: normal; }
+
   .rgrid { display: grid; grid-template-columns: 1fr 1fr; gap: 11px; }
   .rcell { background: var(--panel-2); border: 1px solid var(--line); border-radius: 10px; padding: 13px 14px; }
   .rcell .clab {
@@ -760,9 +782,9 @@
 </div>
 
 <!-- ?v= 는 캐시 무효화용. JS를 고치면 아래 세 곳과 필요버전을 함께 올린다. -->
-<script src="saju-core.js?v=20260919t"></script>
-<script src="tarot-data.js?v=20260919t"></script>
-<script src="fortune-data.js?v=20260919t"></script>
+<script src="saju-core.js?v=20260919u"></script>
+<script src="tarot-data.js?v=20260919u"></script>
+<script src="fortune-data.js?v=20260919u"></script>
 <script>
 (function () {
   'use strict';
@@ -778,7 +800,7 @@
   };
   var GLYPH = { major: '✦', wands: '❋', cups: '☾', swords: '✧', pentacles: '✵' };
   var WX = ['목', '화', '토', '금', '수'];
-  var 필요버전 = '20260919t';
+  var 필요버전 = '20260919u';
 
   /** 브라우저가 예전 JS를 캐시해 두면 조용히 깨진다. 눌렀을 때 바로 알려준다. */
   function 버전확인() {
@@ -1080,21 +1102,16 @@
     if (관계순서.length) b += '<div class="refrow">' + ref('rel', '카드 사이 관계') + '</div>';
 
     reading.카드.forEach(function (c) {
+      // 여기(때)에서는 카드만 말한다. 사주와 겹치는 이야기는 운때에서 한다.
       b += '<article class="reading">' +
            '<div class="rhead"><span class="rpos">' + esc(c.위치) + '</span>' +
            '<h3>' + esc(c.카드이름) + '</h3>' +
-           '<span class="tag">' + esc(c.오행) + ' · ' + esc(c.십성) +
-           (c.십성뜻 ? '(' + esc(c.십성뜻) + ')' : '') + '</span></div>' +
+           '<span class="tag">' + esc(c.오행) + ' · ' + esc(c.음양) + '</span></div>' +
            '<p class="rdesc">' + esc(c.설명) + '</p>' +
-           '<div class="rgrid">' +
-             '<div class="rcell"><span class="clab">때 · 카드가 말하는 것</span>' +
-               '<p class="key">' + esc(c.핵심) + '.</p>' +
-               '<p>' + esc(c.틀문장) + '</p>' +
-               (c.방향 ? '<p>' + esc(c.방향) + '</p>' : '') + '</div>' +
-             '<div class="rcell"><span class="clab">운 · 내 사주와 겹치면</span>' +
-               '<p>' + esc(c.겹침) + ' ' + esc(c.십성정의) + '</p>' +
-               '<p>' + esc(c.십성글) + '</p></div>' +
-           '</div></article>';
+           '<p class="key">' + esc(c.핵심) + '.</p>' +
+           '<p class="rline">' + esc(c.틀문장) + '</p>' +
+           (c.방향 ? '<p class="rline">' + esc(c.방향) + '</p>' : '') +
+           '</article>';
     });
     return b;
   }
@@ -1123,7 +1140,29 @@
     b += '<div class="vrow"><span class="clab">때 · 타로가 말하는 흐름</span>' +
          '<p>' + esc(v.때) + '</p></div>';
 
-    b += '<div class="overlap"><span class="clab">운때 · 겹쳐 보면' +
+    // 자리마다 그 카드가 내 사주에서 무엇이 되는지 — 여기가 겹치는 자리다
+    if (reading.카드 && reading.카드.length) {
+      b += '<div class="cross"><span class="clab">자리마다 겹쳐 보면' +
+           ref('sip', '십성이란') + '</span>' +
+           '<p class="cross-lead">내 일간은 <b>' + esc(reading.일간.글자) + '</b>(' +
+           esc(reading.일간오행) + ')입니다. 각 자리의 카드가 나에게 무엇이 되는지 봅니다.</p>';
+      var 본십성글 = {};
+      reading.카드.forEach(function (c) {
+        // 십성과 시제가 같으면 같은 문장이 나온다. 두 번 읽히게 두지 않는다.
+        var 되풀이 = 본십성글[c.십성글];
+        본십성글[c.십성글] = true;
+        b += '<div class="crow"><div class="crow-h">' +
+             '<span class="rpos">' + esc(c.위치) + '</span>' +
+             '<b>' + esc(c.카드이름) + '</b>' +
+             '<span class="tag">' + esc(c.오행) + ' → ' + esc(c.십성) +
+             (c.십성뜻 ? '(' + esc(c.십성뜻) + ')' : '') + '</span></div>' +
+             (되풀이 ? '<p class="same">앞 자리와 같은 관계입니다.</p>'
+                     : '<p>' + esc(c.십성글) + '</p>') + '</div>';
+      });
+      b += '</div>';
+    }
+
+    b += '<div class="overlap"><span class="clab">결론 자리를 겹쳐 보면' +
          ref('sip', '십성이란') + '</span>';
     v.겹침.forEach(function (g) {
       b += '<div class="ol"><div class="ol-head">' +
@@ -1159,7 +1198,7 @@
     h += stage('03', '운때 — 겹쳐 읽기',
                reading.총평.판정
                  ? '카드가 낸 답에, 내 사주가 그 답을 받쳐 주는지를 더해 봅니다.'
-                 : '카드가 가리키는 기운이 내 사주에 넘치는지 모자라는지까지 함께 봅니다.',
+                 : '카드마다 내 사주에서 무엇이 되는지 겹쳐 보고, 결론 자리로 마무리합니다.',
                운때HTML(reading, 질문));
 
     h += '<div class="redraw"><button type="button" class="go" id="redrawBtn">' +
