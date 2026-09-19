@@ -668,11 +668,14 @@
 <div class="wrap">
 
   <header>
+    <!-- 삭 → 상현 → 보름 → 하현 → 삭. 북반구에서 달은 오른쪽부터 차오르므로
+         상현달(차는 쪽)이 오른쪽, 하현달(기우는 쪽)이 왼쪽이 밝다.
+         sweep-flag 0 = 왼쪽 반원, 1 = 오른쪽 반원. -->
     <div class="moons" aria-hidden="true">
       <svg width="15" height="15" viewBox="0 0 20 20"><circle cx="10" cy="10" r="8.5" fill="none" stroke="#8C7749"/></svg>
-      <svg width="15" height="15" viewBox="0 0 20 20"><circle cx="10" cy="10" r="8.5" fill="none" stroke="#8C7749"/><path d="M10 1.5a8.5 8.5 0 0 0 0 17z" fill="#C9A96A" opacity=".55"/></svg>
-      <svg width="15" height="15" viewBox="0 0 20 20"><circle cx="10" cy="10" r="8.5" fill="#C9A96A" opacity=".8"/></svg>
       <svg width="15" height="15" viewBox="0 0 20 20"><circle cx="10" cy="10" r="8.5" fill="none" stroke="#8C7749"/><path d="M10 1.5a8.5 8.5 0 0 1 0 17z" fill="#C9A96A" opacity=".55"/></svg>
+      <svg width="15" height="15" viewBox="0 0 20 20"><circle cx="10" cy="10" r="8.5" fill="#C9A96A" opacity=".8"/></svg>
+      <svg width="15" height="15" viewBox="0 0 20 20"><circle cx="10" cy="10" r="8.5" fill="none" stroke="#8C7749"/><path d="M10 1.5a8.5 8.5 0 0 0 0 17z" fill="#C9A96A" opacity=".55"/></svg>
       <svg width="15" height="15" viewBox="0 0 20 20"><circle cx="10" cy="10" r="8.5" fill="none" stroke="#8C7749"/></svg>
     </div>
     <h1>운<span class="dim">·</span>때</h1>
@@ -687,7 +690,7 @@
       <li>
         <span class="n">1</span>
         <b>생년월일시를 넣습니다</b>
-        <p>양력 기준이에요. 처음엔 <b style="display:inline;color:var(--gold)">지금 시각</b>이 들어가 있으니 본인 것으로 바꿔 주세요. 태어난 시각을 모른다면 체크 한 번으로 삼주만 볼 수 있어요.</p>
+        <p>양력 기준이에요. 처음엔 <b style="display:inline;color:var(--gold)">예시 값</b>이 들어가 있으니 본인 것으로 바꿔 주세요. 태어난 시각을 모른다면 체크 한 번으로 삼주만 볼 수 있어요.</p>
       </li>
       <li>
         <span class="n">2</span>
@@ -802,9 +805,9 @@
 </div>
 
 <!-- ?v= 는 캐시 무효화용. JS를 고치면 아래 세 곳과 필요버전을 함께 올린다. -->
-<script src="saju-core.js?v=20260919v"></script>
-<script src="tarot-data.js?v=20260919v"></script>
-<script src="fortune-data.js?v=20260919v"></script>
+<script src="saju-core.js?v=20260919w"></script>
+<script src="tarot-data.js?v=20260919w"></script>
+<script src="fortune-data.js?v=20260919w"></script>
 <script>
 (function () {
   'use strict';
@@ -820,7 +823,7 @@
   };
   var GLYPH = { major: '✦', wands: '❋', cups: '☾', swords: '✧', pentacles: '✵' };
   var WX = ['목', '화', '토', '금', '수'];
-  var 필요버전 = '20260919v';
+  var 필요버전 = '20260919w';
 
   /** 브라우저가 예전 JS를 캐시해 두면 조용히 깨진다. 눌렀을 때 바로 알려준다. */
   function 버전확인() {
@@ -840,7 +843,6 @@
       return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
     });
   }
-  function pad2(n) { return (n < 10 ? '0' : '') + n; }
 
   // ── 별 배경 ──────────────────────────────────────────
   (function stars() {
@@ -854,13 +856,13 @@
     box.innerHTML = html;
   }());
 
-  // ── 초기값: 현재 시각 ────────────────────────────────
-  (function now() {
-    var d = new Date();
-    document.getElementById('birthdate').value =
-      d.getFullYear() + '-' + pad2(d.getMonth() + 1) + '-' + pad2(d.getDate());
-    document.getElementById('birthtime').value =
-      pad2(d.getHours()) + ':' + pad2(Math.round(d.getMinutes() / 10) % 6 * 10);
+  // ── 초기값 ───────────────────────────────────────────
+  // 입력란이 10분 단위(step=600)라 02:57은 넣을 수 없다.
+  // 가장 가까운 03:00으로 둔다 — 진태양시 보정(-30분) 뒤 둘 다 축시라 사주가 같다.
+  var 기본생일 = '1990-01-19', 기본시각 = '03:00';
+  (function 초기값() {
+    document.getElementById('birthdate').value = 기본생일;
+    document.getElementById('birthtime').value = 기본시각;
   }());
 
   /** 78장에서 중복 없이 n장 + 정/역 */
