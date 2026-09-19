@@ -103,6 +103,13 @@
   }
 
   /* ── 사용법 ──────────────────────────────────────────── */
+  details.howto > summary { list-style: none; cursor: pointer; user-select: none; }
+  details.howto > summary::-webkit-details-marker { display: none; }
+  details.howto:not([open]) > summary { margin-bottom: 0; padding-bottom: 0; border-bottom: none; }
+  details.howto .fold { margin-left: auto; font-size: .72rem; font-weight: 500; color: var(--ink-faint); letter-spacing: 0; }
+  details.howto:not([open]) .fold::before { content: "펼치기"; }
+  details.howto:not([open]) .fold { font-size: 0; }
+  details.howto:not([open]) .fold::before { font-size: .72rem; }
   .howto ol { list-style: none; margin: 0; padding: 0; display: grid; gap: 14px; grid-template-columns: repeat(3, 1fr); }
   .howto li {
     background: var(--panel-2); border: 1px solid var(--line);
@@ -192,7 +199,8 @@
   .pillar.void .han { color: var(--ink-faint); }
 
   /* 오행 막대 */
-  .wx-bars { display: flex; flex-direction: column; gap: 7px; margin: 20px 0 2px; }
+  .wx-cap { margin: 20px 0 8px; font-size: .78rem; color: var(--ink-faint); }
+  .wx-bars { display: flex; flex-direction: column; gap: 7px; margin: 0 0 2px; }
   .wx-row { display: flex; align-items: center; gap: 10px; font-size: .82rem; }
   .wx-name { width: 22px; color: var(--ink-dim); flex: none; font-weight: 600; }
   .wx-track { flex: 1; height: 8px; background: var(--bg-2); border-radius: 4px; overflow: hidden; }
@@ -525,6 +533,9 @@
   .refrow { display: flex; flex-wrap: wrap; gap: 6px; justify-content: flex-end; margin-top: 12px; }
   .spread-head .reflink, .overlap .clab .reflink { margin-left: auto; }
 
+  .redraw { margin: 10px 0 0; }
+  .redraw p { margin: 10px 0 0; font-size: .78rem; color: var(--ink-faint); text-align: center; }
+
   footer {
     margin-top: 40px; padding-top: 24px; border-top: 1px solid var(--line);
     font-size: .78rem; color: var(--ink-faint); line-height: 1.9; text-align: center;
@@ -600,18 +611,18 @@
   </header>
 
   <!-- ── 사용법 ─────────────────────────────────────────── -->
-  <section class="panel howto">
-    <h2 class="eyebrow">처음 오셨다면</h2>
+  <details class="panel howto" id="howto" open>
+    <summary class="eyebrow">처음 오셨다면 <span class="fold">접기</span></summary>
     <ol>
       <li>
         <span class="n">1</span>
         <b>생년월일시를 넣습니다</b>
-        <p>양력 기준이에요. 처음엔 <b style="display:inline;color:var(--gold)">지금 시각</b>이 들어가 있으니 본인 것으로 바꿔 주세요. 시각을 모르면 아래 체크를 누르면 삼주만 봅니다.</p>
+        <p>양력 기준이에요. 처음엔 <b style="display:inline;color:var(--gold)">지금 시각</b>이 들어가 있으니 본인 것으로 바꿔 주세요. 태어난 시각을 모른다면 체크 한 번으로 삼주만 볼 수 있어요.</p>
       </li>
       <li>
         <span class="n">2</span>
-        <b>스프레드를 고르고 뽑습니다</b>
-        <p>무엇을 묻느냐에 따라 배열이 다릅니다. 하루는 1장, 흐름은 3장, 더 깊게 보려면 5장, 두 갈래 중 고를 땐 7장, 가장 깊은 켈틱 크로스는 10장. 고르면 어떤 자리가 나오는지 바로 보여드려요.</p>
+        <b>주제를 고르고 뽑습니다</b>
+        <p>무엇을 묻느냐에 따라 카드를 놓는 자리가 달라집니다. 가볍게는 1장, 기본은 3장, 깊게 볼수록 5장·7장·10장. 주제만 골라도 어울리는 배열을 맞춰 드려요.</p>
       </li>
       <li>
         <span class="n">3</span>
@@ -619,7 +630,7 @@
         <p>사주가 <b style="display:inline;color:var(--gold)">타고난 운</b>, 타로가 <b style="display:inline;color:var(--gold)">지금의 때</b>. 이 둘을 포개서 보는 것이 운때입니다.</p>
       </li>
     </ol>
-  </section>
+  </details>
 
   <!-- ── 입력 ───────────────────────────────────────────── -->
   <section class="panel">
@@ -646,10 +657,10 @@
 
   <!-- ── 스프레드와 질문 ─────────────────────────────────── -->
   <section class="panel">
-    <h2 class="eyebrow">무엇을 물을까요</h2>
+    <h2 class="eyebrow">질문과 배열</h2>
 
     <div class="field">
-      <label>무엇에 대한 질문인가요 <span style="color:var(--ink-faint)">— 고르면 어울리는 배열을 맞춰 드립니다 (선택)</span></label>
+      <label>주제 <span style="color:var(--ink-faint)">— 고르면 어울리는 배열을 맞춰 드립니다 (선택)</span></label>
       <div class="topics" id="topics"></div>
     </div>
 
@@ -671,7 +682,7 @@
 
     <div class="field">
       <label for="spread" style="display:flex;align-items:center;gap:9px">
-        <span>스프레드 — 묻는 방식에 따라 배열이 달라집니다</span>
+        <span>카드 배열 <span style="color:var(--ink-faint)">— 스프레드라고 부릅니다</span></span>
         <button type="button" class="reflink" data-ref="spr" style="margin-left:auto">9종 모두 보기</button>
       </label>
       <select id="spread"></select>
@@ -686,11 +697,11 @@
     <div id="abBox">
       <div class="row">
         <div class="field">
-          <label for="optA">선택 A</label>
+          <label for="optA">첫째 선택지</label>
           <input type="text" id="optA" maxlength="14" placeholder="예: 남는다">
         </div>
         <div class="field">
-          <label for="optB">선택 B</label>
+          <label for="optB">둘째 선택지</label>
           <input type="text" id="optB" maxlength="14" placeholder="예: 옮긴다">
         </div>
       </div>
@@ -720,9 +731,9 @@
 </div>
 
 <!-- ?v= 는 캐시 무효화용. JS를 고치면 아래 세 곳과 필요버전을 함께 올린다. -->
-<script src="saju-core.js?v=20260919n"></script>
-<script src="tarot-data.js?v=20260919n"></script>
-<script src="fortune-data.js?v=20260919n"></script>
+<script src="saju-core.js?v=20260919p"></script>
+<script src="tarot-data.js?v=20260919p"></script>
+<script src="fortune-data.js?v=20260919p"></script>
 <script>
 (function () {
   'use strict';
@@ -738,7 +749,7 @@
   };
   var GLYPH = { major: '✦', wands: '❋', cups: '☾', swords: '✧', pentacles: '✵' };
   var WX = ['목', '화', '토', '금', '수'];
-  var 필요버전 = '20260919n';
+  var 필요버전 = '20260919p';
 
   /** 브라우저가 예전 JS를 캐시해 두면 조용히 깨진다. 눌렀을 때 바로 알려준다. */
   function 버전확인() {
@@ -832,7 +843,10 @@
       Array.prototype.forEach.call(box.children, function (c) {
         c.className = 'topic' + (c.getAttribute('data-topic') === id ? ' on' : '');
       });
+      // 주제가 바뀌면 앞 주제에 맞춰 적었던 질문은 더 이상 맞지 않는다
+      document.getElementById('question').value = '';
       if (선택주제 && 선택주제.추천) { selSpread.value = 선택주제.추천; 스프레드갱신(); }
+      else 스프레드갱신();
       주제안내();
     });
   }());
@@ -898,7 +912,7 @@
 
     var max = 1;
     WX.forEach(function (k) { if (saju.오행분포[k] > max) max = saju.오행분포[k]; });
-    b += '<div class="wx-bars">';
+    b += '<p class="wx-cap">여덟 글자에 오행이 몇 개씩 들었는지</p><div class="wx-bars">';
     WX.forEach(function (k) {
       var v = saju.오행분포[k];
       b += '<div class="wx-row"><span class="wx-name">' + k + '</span>' +
@@ -975,7 +989,7 @@
     b += 질문
       ? '<p class="qline">질문 — <b>' + esc(질문) + '</b></p>'
       : '<p class="qline" style="border-color:var(--line);color:var(--ink-faint)">' +
-        '질문은 적지 않으셨습니다. 뽑기 전 마음에 두셨던 물음을 떠올리며 읽어 보세요.</p>';
+        '마음에 두셨던 물음을 떠올리며 읽어 보세요.</p>';
 
     if (sp.레이아웃 === 'group' && sp.묶음) {
       b += '<div class="groups">';
@@ -1086,13 +1100,17 @@
                '카드가 가리키는 기운이 내 사주에 넘치는지 모자라는지까지 함께 봅니다.',
                운때HTML(reading));
 
+    h += '<div class="redraw"><button type="button" class="go" id="redrawBtn">' +
+         '같은 조건으로 다시 뽑기</button>' +
+         '<p>같은 질문을 거듭 뽑으면 답이 흐려집니다. 물음을 바꿔 보세요.</p></div>';
+
     var out = document.getElementById('out');
     out.innerHTML = h;
     out.classList.add('show');
     out.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
 
-  document.getElementById('drawBtn').addEventListener('click', function () {
+  function 뽑기실행() {
     if (!버전확인()) return;
 
     var dateStr = document.getElementById('birthdate').value;
@@ -1128,7 +1146,15 @@
 
     var draw = 카드뽑기(sp.장수);
     render(saju, FortuneData.조립(saju, draw, sp, ab), 질문);
-    this.textContent = '다시 뽑기 (' + sp.장수 + '장)';
+    document.getElementById('drawBtn').textContent = '다시 뽑기 (' + sp.장수 + '장)';
+    // 결과를 본 뒤에는 사용법이 자리를 비켜준다
+    document.getElementById('howto').open = false;
+  }
+
+  document.getElementById('drawBtn').addEventListener('click', 뽑기실행);
+  // 결과 맨 아래의 다시 뽑기 버튼 — 맨 위로 올라가지 않아도 되도록
+  document.getElementById('out').addEventListener('click', function (e) {
+    if (e.target.closest('#redrawBtn')) 뽑기실행();
   });
 
   // ── 자료실 ───────────────────────────────────────────
