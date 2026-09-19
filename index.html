@@ -284,6 +284,18 @@
   .ask ul { margin: 0; padding-left: 17px; font-size: .83rem; color: var(--ink-faint); line-height: 1.75; }
   .ask ul b { color: var(--ink-dim); font-weight: 600; }
   input[type=text]::placeholder { color: var(--ink-faint); }
+  .qhint {
+    display: none; margin: 9px 0 0; font-size: .82rem; color: var(--ink-dim);
+    align-items: center; gap: 9px; flex-wrap: wrap;
+  }
+  .qhint.show { display: flex; }
+  .qhint b { color: var(--gold-hi); font-weight: 600; }
+  .qhint button {
+    background: transparent; border: 1px solid var(--gold-lo); border-radius: 20px;
+    color: var(--gold); font-family: inherit; font-size: .78rem; padding: 3px 12px; cursor: pointer;
+  }
+  .qhint button:hover { background: var(--gold-film); }
+
   #abBox { display: none; }
   #abBox.show { display: block; }
 
@@ -694,6 +706,7 @@
     <div class="field">
       <label for="question">질문 <span style="color:var(--ink-faint)">— 적어두면 결과에 함께 표시됩니다 (선택)</span></label>
       <input type="text" id="question" maxlength="80" placeholder="">
+      <p class="qhint" id="qhint"></p>
     </div>
 
     <div class="field">
@@ -747,9 +760,9 @@
 </div>
 
 <!-- ?v= 는 캐시 무효화용. JS를 고치면 아래 세 곳과 필요버전을 함께 올린다. -->
-<script src="saju-core.js?v=20260919r"></script>
-<script src="tarot-data.js?v=20260919r"></script>
-<script src="fortune-data.js?v=20260919r"></script>
+<script src="saju-core.js?v=20260919t"></script>
+<script src="tarot-data.js?v=20260919t"></script>
+<script src="fortune-data.js?v=20260919t"></script>
 <script>
 (function () {
   'use strict';
@@ -765,7 +778,7 @@
   };
   var GLYPH = { major: '✦', wands: '❋', cups: '☾', swords: '✧', pentacles: '✵' };
   var WX = ['목', '화', '토', '금', '수'];
-  var 필요버전 = '20260919r';
+  var 필요버전 = '20260919t';
 
   /** 브라우저가 예전 JS를 캐시해 두면 조용히 깨진다. 눌렀을 때 바로 알려준다. */
   function 버전확인() {
@@ -864,6 +877,7 @@
       if (선택주제 && 선택주제.추천) { selSpread.value = 선택주제.추천; 스프레드갱신(); }
       else 스프레드갱신();
       주제안내();
+      질문힌트();
     });
   }());
 
@@ -878,11 +892,29 @@
     });
     box.innerHTML = h + '</div>';
   }
+  // ── 적어 넣은 질문의 모양을 보고 배열을 짚어 준다 ──────
+  var qBox = document.getElementById('question'), qHint = document.getElementById('qhint');
+  function 질문힌트() {
+    var 추천 = FortuneData.배열추천(qBox.value);
+    if (!추천 || 추천.id === selSpread.value) { qHint.className = 'qhint'; qHint.innerHTML = ''; return; }
+    qHint.innerHTML = '이 물음은 <b>' + esc(추천.이름) + '</b> 배열이 더 맞아 보여요. ' +
+                      '<button type="button" data-sp="' + 추천.id + '">그 배열로 바꾸기</button>';
+    qHint.className = 'qhint show';
+  }
+  qBox.addEventListener('input', 질문힌트);
+  qHint.addEventListener('click', function (e) {
+    var b = e.target.closest('button[data-sp]'); if (!b) return;
+    selSpread.value = b.getAttribute('data-sp');
+    스프레드갱신();
+    질문힌트();
+  });
+
   document.getElementById('topicEx').addEventListener('click', function (e) {
     var b = e.target.closest('button[data-q]'); if (!b) return;
     var q = document.getElementById('question');
     q.value = b.getAttribute('data-q');
     q.focus();
+    질문힌트();
   });
 
   function 스프레드갱신() {
@@ -900,7 +932,7 @@
     document.getElementById('abBox').className = sp.선택지입력 ? 'show' : '';
     document.getElementById('drawBtn').textContent = '카드 ' + sp.장수 + '장 뽑기';
   }
-  selSpread.addEventListener('change', 스프레드갱신);
+  selSpread.addEventListener('change', function () { 스프레드갱신(); 질문힌트(); });
   스프레드갱신();
 
   function pillarHTML(label, p) {
