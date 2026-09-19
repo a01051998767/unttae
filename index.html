@@ -406,6 +406,22 @@
     margin-bottom: 8px;
   }
 
+  /* ── 예·아니오 답 ───────────────────────────────────── */
+  .yn {
+    border: 1px solid var(--line-2); border-radius: 13px;
+    padding: 20px 22px 18px; margin: 0 0 22px; text-align: center;
+  }
+  .yn .yn-q { margin: 0 0 8px; font-size: .78rem; color: var(--ink-faint); }
+  .yn .yn-a { font-size: 2rem; font-weight: 700; letter-spacing: .04em; line-height: 1.25; }
+  .yn p.yn-why { margin: 12px 0 0; font-size: .92rem; color: var(--ink); line-height: 1.75; }
+  .yn p.yn-but { margin: 7px 0 0; font-size: .85rem; color: var(--ink-dim); }
+  .yn.yes { border-color: rgba(127,191,154,.45); background: rgba(127,191,154,.06); }
+  .yn.yes .yn-a { color: var(--mok); }
+  .yn.no { border-color: rgba(224,138,114,.45); background: rgba(224,138,114,.06); }
+  .yn.no .yn-a { color: var(--hwa); }
+  .yn.maybe { border-color: rgba(216,188,122,.45); background: rgba(216,188,122,.06); }
+  .yn.maybe .yn-a { color: var(--to); font-size: 1.6rem; }
+
   /* ── 총평 ────────────────────────────────────────────── */
   .verdict p { margin: 0; font-size: .92rem; }
   .vrow { margin-bottom: 15px; }
@@ -731,9 +747,9 @@
 </div>
 
 <!-- ?v= 는 캐시 무효화용. JS를 고치면 아래 세 곳과 필요버전을 함께 올린다. -->
-<script src="saju-core.js?v=20260919p"></script>
-<script src="tarot-data.js?v=20260919p"></script>
-<script src="fortune-data.js?v=20260919p"></script>
+<script src="saju-core.js?v=20260919r"></script>
+<script src="tarot-data.js?v=20260919r"></script>
+<script src="fortune-data.js?v=20260919r"></script>
 <script>
 (function () {
   'use strict';
@@ -749,7 +765,7 @@
   };
   var GLYPH = { major: '✦', wands: '❋', cups: '☾', swords: '✧', pentacles: '✵' };
   var WX = ['목', '화', '토', '금', '수'];
-  var 필요버전 = '20260919p';
+  var 필요버전 = '20260919r';
 
   /** 브라우저가 예전 JS를 캐시해 두면 조용히 깨진다. 눌렀을 때 바로 알려준다. */
   function 버전확인() {
@@ -1054,9 +1070,21 @@
   // ── STEP 03 · 운때 ───────────────────────────────────
   var GRADE_COLOR = { 과다: 'var(--hwa)', 적정: 'var(--mok)', 부족: 'var(--su)', 태극: 'var(--gold)' };
 
-  function 운때HTML(reading) {
+  var YN_CLASS = { '예': 'yes', '아니오': 'no', '조건부': 'maybe' };
+
+  function 운때HTML(reading, 질문) {
     var v = reading.총평;
     var b = '<div class="verdict">';
+
+    // 예·아니오 배열이면 답을 맨 앞에 크게 둔다
+    if (v.판정) {
+      b += '<div class="yn ' + (YN_CLASS[v.판정.결] || 'maybe') + '">' +
+           '<p class="yn-q">' + (질문 ? esc(질문) : '물음에 대한 답') + '</p>' +
+           '<div class="yn-a">' + esc(v.판정.답) + '</div>' +
+           '<p class="yn-why">' + esc(v.판정.글) + '</p>' +
+           '<p class="yn-but">' + esc(v.판정.단서) + '</p>' +
+           '<div class="refrow" style="justify-content:center">' + ref('wx', '음양이란') + '</div></div>';
+    }
 
     b += '<div class="vrow"><span class="clab">운 · 사주가 말하는 바탕</span>' +
          '<p>' + esc(v.운) + '</p></div>';
@@ -1077,7 +1105,7 @@
     });
     b += '</div>';
 
-    b += '<div class="domain"><span class="clab">' + esc(v.갈래) + '에 대해서는</span>' +
+    b += '<div class="domain"><span class="clab">' + esc(v.갈래제목) + '</span>' +
          '<p>' + esc(v.갈래글) + '</p></div>';
 
     b += '<div class="close"><span class="clab">정리하면</span>';
@@ -1097,8 +1125,10 @@
                '78장에서 뽑은 ' + reading.스프레드.장수 + '장이 각 자리에 놓였습니다.',
                때HTML(reading, 질문));
     h += stage('03', '운때 — 겹쳐 읽기',
-               '카드가 가리키는 기운이 내 사주에 넘치는지 모자라는지까지 함께 봅니다.',
-               운때HTML(reading));
+               reading.총평.판정
+                 ? '카드가 낸 답에, 내 사주가 그 답을 받쳐 주는지를 더해 봅니다.'
+                 : '카드가 가리키는 기운이 내 사주에 넘치는지 모자라는지까지 함께 봅니다.',
+               운때HTML(reading, 질문));
 
     h += '<div class="redraw"><button type="button" class="go" id="redrawBtn">' +
          '같은 조건으로 다시 뽑기</button>' +
