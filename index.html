@@ -392,6 +392,11 @@
   }
   .rcell p { margin: 0; font-size: .87rem; color: var(--ink); }
   .rcell p + p { margin-top: 6px; color: var(--ink-dim); font-size: .84rem; }
+  /* 카드가 말하는 한마디를 눈에 먼저 들어오게 */
+  .rcell p.key {
+    font-size: .95rem; font-weight: 600; color: var(--gold-hi); line-height: 1.6;
+    margin-bottom: 8px;
+  }
 
   /* ── 총평 ────────────────────────────────────────────── */
   .verdict p { margin: 0; font-size: .92rem; }
@@ -715,9 +720,9 @@
 </div>
 
 <!-- ?v= 는 캐시 무효화용. JS를 고치면 아래 세 곳과 필요버전을 함께 올린다. -->
-<script src="saju-core.js?v=20260919k"></script>
-<script src="tarot-data.js?v=20260919k"></script>
-<script src="fortune-data.js?v=20260919k"></script>
+<script src="saju-core.js?v=20260919n"></script>
+<script src="tarot-data.js?v=20260919n"></script>
+<script src="fortune-data.js?v=20260919n"></script>
 <script>
 (function () {
   'use strict';
@@ -733,7 +738,7 @@
   };
   var GLYPH = { major: '✦', wands: '❋', cups: '☾', swords: '✧', pentacles: '✵' };
   var WX = ['목', '화', '토', '금', '수'];
-  var 필요버전 = '20260919k';
+  var 필요버전 = '20260919n';
 
   /** 브라우저가 예전 JS를 캐시해 두면 조용히 깨진다. 눌렀을 때 바로 알려준다. */
   function 버전확인() {
@@ -1016,13 +1021,15 @@
       b += '<article class="reading">' +
            '<div class="rhead"><span class="rpos">' + esc(c.위치) + '</span>' +
            '<h3>' + esc(c.카드이름) + '</h3>' +
-           '<span class="tag">' + esc(c.오행) + ' · ' + esc(c.십성) + '</span></div>' +
+           '<span class="tag">' + esc(c.오행) + ' · ' + esc(c.십성) +
+           (c.십성뜻 ? '(' + esc(c.십성뜻) + ')' : '') + '</span></div>' +
            '<p class="rdesc">' + esc(c.설명) + '</p>' +
            '<div class="rgrid">' +
-             '<div class="rcell"><span class="clab">때 · 타로</span>' +
-               '<p>' + esc(c.틀) + ' — ' + esc(c.핵심) + '.</p>' +
-               '<p>' + esc(c.방향) + '</p></div>' +
-             '<div class="rcell"><span class="clab">운 · 사주</span>' +
+             '<div class="rcell"><span class="clab">때 · 카드가 말하는 것</span>' +
+               '<p class="key">' + esc(c.핵심) + '.</p>' +
+               '<p>' + esc(c.틀문장) + '</p>' +
+               (c.방향 ? '<p>' + esc(c.방향) + '</p>' : '') + '</div>' +
+             '<div class="rcell"><span class="clab">운 · 내 사주와 겹치면</span>' +
                '<p>' + esc(c.겹침) + ' ' + esc(c.십성정의) + '</p>' +
                '<p>' + esc(c.십성글) + '</p></div>' +
            '</div></article>';
@@ -1059,7 +1066,7 @@
     b += '<div class="domain"><span class="clab">' + esc(v.갈래) + '에 대해서는</span>' +
          '<p>' + esc(v.갈래글) + '</p></div>';
 
-    b += '<div class="close"><span class="clab">그래서</span>';
+    b += '<div class="close"><span class="clab">정리하면</span>';
     v.맺음.forEach(function (m) {
       b += '<p>' + (m.라벨 ? '<b>' + esc(m.라벨) + '</b> \u2014 ' : '') + esc(m.글) + '</p>';
     });
