@@ -805,9 +805,9 @@
 </div>
 
 <!-- ?v= 는 캐시 무효화용. JS를 고치면 아래 세 곳과 필요버전을 함께 올린다. -->
-<script src="saju-core.js?v=20260919w"></script>
-<script src="tarot-data.js?v=20260919w"></script>
-<script src="fortune-data.js?v=20260919w"></script>
+<script src="saju-core.js?v=20260922a"></script>
+<script src="tarot-data.js?v=20260922a"></script>
+<script src="fortune-data.js?v=20260922a"></script>
 <script>
 (function () {
   'use strict';
@@ -823,7 +823,7 @@
   };
   var GLYPH = { major: '✦', wands: '❋', cups: '☾', swords: '✧', pentacles: '✵' };
   var WX = ['목', '화', '토', '금', '수'];
-  var 필요버전 = '20260919w';
+  var 필요버전 = '20260922a';
 
   /** 브라우저가 예전 JS를 캐시해 두면 조용히 깨진다. 눌렀을 때 바로 알려준다. */
   function 버전확인() {
@@ -857,11 +857,12 @@
   }());
 
   // ── 초기값 ───────────────────────────────────────────
-  // 입력란이 10분 단위(step=600)라 02:57은 넣을 수 없다.
-  // 가장 가까운 03:00으로 둔다 — 진태양시 보정(-30분) 뒤 둘 다 축시라 사주가 같다.
-  var 기본생일 = '1990-01-19', 기본시각 = '03:00';
+  // 연도만 올해로 띄우고 월·일·시각은 고정한다. 바꿀 자리가 연도 하나로 줄어든다.
+  // 시각이 03:00인 이유 — 입력란이 10분 단위(step=600)라 02:57은 넣을 수 없다.
+  // 진태양시 보정(-30분) 뒤 02:27도 02:30도 축시라 사주는 어차피 같다.
+  var 기본월일 = '-01-19', 기본시각 = '03:00';
   (function 초기값() {
-    document.getElementById('birthdate').value = 기본생일;
+    document.getElementById('birthdate').value = new Date().getFullYear() + 기본월일;
     document.getElementById('birthtime').value = 기본시각;
   }());
 
