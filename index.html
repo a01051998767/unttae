@@ -102,29 +102,6 @@
     border: 1px solid var(--gold); transform: rotate(45deg);
   }
 
-  /* ── 사용법 ──────────────────────────────────────────── */
-  details.howto > summary { list-style: none; cursor: pointer; user-select: none; }
-  details.howto > summary::-webkit-details-marker { display: none; }
-  details.howto:not([open]) > summary { margin-bottom: 0; padding-bottom: 0; border-bottom: none; }
-  details.howto .fold { margin-left: auto; font-size: .72rem; font-weight: 500; color: var(--ink-faint); letter-spacing: 0; }
-  details.howto:not([open]) .fold::before { content: "펼치기"; }
-  details.howto:not([open]) .fold { font-size: 0; }
-  details.howto:not([open]) .fold::before { font-size: .72rem; }
-  .howto ol { list-style: none; margin: 0; padding: 0; display: grid; gap: 14px; grid-template-columns: repeat(3, 1fr); }
-  .howto li {
-    background: var(--panel-2); border: 1px solid var(--line);
-    border-radius: 11px; padding: 15px 14px 14px;
-  }
-  .howto .n {
-    display: inline-flex; align-items: center; justify-content: center;
-    width: 24px; height: 24px; margin-bottom: 9px;
-    border: 1px solid var(--gold-lo); border-radius: 50%;
-    font-size: .74rem; font-weight: 700; color: var(--gold);
-    line-height: 1;
-  }
-  .howto b { display: block; font-size: .87rem; color: var(--ink); margin-bottom: 4px; }
-  .howto p { margin: 0; font-size: .82rem; color: var(--ink-faint); line-height: 1.65; }
-
   /* ── 입력 ────────────────────────────────────────────── */
   .field { margin-bottom: 16px; }
   label { display: block; font-size: .82rem; color: var(--ink-dim); margin-bottom: 7px; letter-spacing: .02em; }
@@ -228,76 +205,20 @@
   .prose { margin: 12px 0 0; font-size: .92rem; color: var(--ink); }
   .prose.dim { color: var(--ink-dim); font-size: .88rem; margin-top: 7px; }
 
-  /* ── 스프레드 고르기 ─────────────────────────────────── */
-  .sp-info {
-    background: var(--panel-2); border: 1px solid var(--line);
-    border-radius: 11px; padding: 14px 15px; margin: 2px 0 14px;
+  /* ── 카드 배열 고르기 — 세 칸 버튼 ──────────────────── */
+  .spick { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin: 0 0 14px; }
+  .spick > * { min-width: 0; }
+  .spick button {
+    background: var(--panel-2); border: 1px solid var(--line-2); border-radius: 11px;
+    color: var(--ink-dim); font-family: inherit; font-size: 1rem; line-height: 1.35;
+    padding: 12px 6px 11px; cursor: pointer; transition: all .15s ease;
   }
-  .sp-info .sp-use { margin: 0 0 10px; font-size: .87rem; color: var(--ink); }
-  .sp-slots { display: flex; flex-wrap: wrap; gap: 6px; }
-  .sp-slots span {
-    font-size: .75rem; color: var(--ink-dim); letter-spacing: .02em;
-    border: 1px solid var(--line-2); border-radius: 20px; padding: 2px 9px;
-  }
-  .sp-guide {
-    margin: 12px 0 0; padding-top: 11px; border-top: 1px dashed var(--line-2);
-    font-size: .82rem; color: var(--ink-faint); line-height: 1.7;
-  }
-  .sp-slots span i {
-    font-style: normal; color: var(--gold); margin-right: 5px;
-    font-variant-numeric: tabular-nums;
-  }
-  .topics { display: flex; flex-wrap: wrap; gap: 7px; }
-  .topic {
-    background: transparent; border: 1px solid var(--line-2); border-radius: 20px;
-    color: var(--ink-dim); font-family: inherit; font-size: .82rem; padding: 6px 13px;
-    cursor: pointer; transition: all .15s ease;
-  }
-  .topic:hover { border-color: var(--gold-lo); color: var(--ink); }
-  .topic.on { border-color: var(--gold-lo); background: var(--gold-film); color: var(--gold-hi); font-weight: 600; }
-  .exq { display: flex; flex-direction: column; gap: 6px; margin: 0 0 14px; }
-  .exq button {
-    text-align: left; background: var(--panel-2); border: 1px solid var(--line);
-    border-radius: 9px; color: var(--ink-dim); font-family: inherit; font-size: .83rem;
-    padding: 9px 12px; cursor: pointer; transition: all .15s ease;
-  }
-  .exq button:hover { border-color: var(--gold-lo); color: var(--ink); }
-  .exq button::before { content: "\201C"; color: var(--gold-lo); margin-right: 5px; }
-  .caution {
-    font-size: .8rem; color: var(--ink-faint); line-height: 1.7;
-    border-left: 2px solid var(--line-2); padding-left: 11px; margin: 0 0 14px;
-  }
-
-  .ask {
-    border: 1px solid rgba(201,169,106,.3); background: var(--gold-film);
-    border-radius: 11px; padding: 15px 16px; margin: 0 0 16px;
-  }
-  .ask h4 {
-    margin: 0 0 8px; font-size: .78rem; font-weight: 700; letter-spacing: .14em; color: var(--gold);
-    display: flex; align-items: center; gap: 8px;
-  }
-  .ask h4::before {
-    content: ""; width: 5px; height: 5px; flex: none;
-    border: 1px solid var(--gold); transform: rotate(45deg);
-  }
-  .ask p { margin: 0 0 8px; font-size: .85rem; color: var(--ink-dim); }
-  .ask ul { margin: 0; padding-left: 17px; font-size: .83rem; color: var(--ink-faint); line-height: 1.75; }
-  .ask ul b { color: var(--ink-dim); font-weight: 600; }
-  input[type=text]::placeholder { color: var(--ink-faint); }
-  .qhint {
-    display: none; margin: 9px 0 0; font-size: .82rem; color: var(--ink-dim);
-    align-items: center; gap: 9px; flex-wrap: wrap;
-  }
-  .qhint.show { display: flex; }
-  .qhint b { color: var(--gold-hi); font-weight: 600; }
-  .qhint button {
-    background: transparent; border: 1px solid var(--gold-lo); border-radius: 20px;
-    color: var(--gold); font-family: inherit; font-size: .78rem; padding: 3px 12px; cursor: pointer;
-  }
-  .qhint button:hover { background: var(--gold-film); }
-
-  #abBox { display: none; }
-  #abBox.show { display: block; }
+  .spick button b { display: block; font-weight: 700; color: var(--ink); }
+  .spick button span { display: block; margin-top: 2px; font-size: .75rem; color: var(--ink-faint); }
+  .spick button:hover { border-color: var(--gold-lo); }
+  .spick button.on { border-color: var(--gold); background: var(--gold-film); }
+  .spick button.on b { color: var(--gold-hi); }
+  .pick-guide { margin: 0 0 14px; font-size: .88rem; color: var(--ink-dim); text-align: center; }
 
   /* ── 타로 카드 ───────────────────────────────────────── */
   .spread-head {
@@ -314,17 +235,13 @@
   .draw.one { grid-template-columns: minmax(0, 190px); justify-content: center; }
   .draw.five { grid-template-columns: repeat(5, 1fr); }
 
-  /* 양자택일 갈래 */
-  .fork-top { display: grid; grid-template-columns: minmax(0, 170px); justify-content: center; }
-  .fork-mark { text-align: center; color: var(--gold-lo); font-size: 1.1rem; line-height: 1; margin: 12px 0 10px; }
-  .fork-branches { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  /* 켈틱 크로스의 묶음 상자 */
   .branch { border: 1px solid var(--line); border-radius: 12px; padding: 13px 12px; background: rgba(255,255,255,.015); }
   .branch h5 {
     margin: 0 0 11px; font-size: .82rem; font-weight: 700; color: var(--gold);
     letter-spacing: .04em; text-align: center;
     overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
   }
-  .branch .bcards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 7px; }
 
   /* 묶음 배열 (켈틱 크로스) */
   .groups { display: grid; grid-template-columns: 3fr 2fr; gap: 13px; align-items: start; }
@@ -360,89 +277,6 @@
     color: var(--gold); border: 1px solid rgba(201,169,106,.4); border-radius: 3px; padding: 0 4px; line-height: 1.5;
   }
 
-  /* ── 흐름 타임라인 ───────────────────────────────────── */
-  .flowwrap { margin: 22px 0 6px; }
-  .flowwrap + .flowwrap { margin-top: 16px; }
-  .flowwrap .branch-tag {
-    display: inline-block; font-size: .73rem; letter-spacing: .04em; color: var(--gold);
-    border: 1px solid var(--gold-lo); border-radius: 20px; padding: 0 9px; margin-bottom: 10px;
-  }
-  .flowline {
-    display: grid; align-items: start; gap: 4px;
-  }
-  .fnode { text-align: center; min-width: 0; }
-  .fdot {
-    display: block; width: 13px; height: 13px; margin: 0 auto 8px;
-    border-radius: 50%; border: 1px solid currentColor; background: currentColor;
-    box-shadow: 0 0 0 4px rgba(255,255,255,.035);
-  }
-  .fnode b { display: block; font-size: .79rem; font-weight: 700; color: var(--gold); letter-spacing: .1em; }
-  .fnode em {
-    display: block; font-style: normal; font-size: .75rem; line-height: 1.45;
-    color: var(--ink-dim); margin-top: 3px; word-break: keep-all;
-  }
-  .fconn { position: relative; padding: 0 4px; min-width: 54px; text-align: center; }
-  .fconn::before {
-    content: ""; position: absolute; left: 0; right: 0; top: 6px; height: 1px;
-    background: linear-gradient(90deg, transparent, var(--line-2) 22%, var(--line-2) 78%, transparent);
-  }
-  .fconn span {
-    position: relative; display: inline-block; margin-top: 16px;
-    font-size: .72rem; letter-spacing: .04em; color: var(--ink-faint);
-    border: 1px solid var(--line); border-radius: 20px; padding: 0 8px; background: var(--panel);
-  }
-  .flow-note { margin: 4px 0 0; font-size: .84rem; color: var(--ink-dim); }
-  .flow-note + .flow-note { margin-top: 5px; }
-  .flow-note b { color: var(--gold); font-weight: 600; }
-
-  /* ── 카드별 해설 ─────────────────────────────────────── */
-  .reading { border-top: 1px solid var(--line); padding-top: 18px; margin-top: 18px; }
-  .rhead { display: flex; align-items: baseline; gap: 9px; flex-wrap: wrap; margin-bottom: 8px; }
-  .rpos {
-    font-size: .74rem; font-weight: 600; letter-spacing: .1em; color: var(--gold);
-    border: 1px solid var(--gold-lo); border-radius: 3px; padding: 1px 7px; line-height: 1.6;
-  }
-  .rhead h3 { font-size: 1.02rem; font-weight: 700; margin: 0; color: var(--ink); }
-
-  /* 라벨 달린 줄 — 무엇에 대한 이야기인지 왼쪽에 먼저 적는다 */
-  .lrow { display: grid; grid-template-columns: 5.4rem 1fr; gap: 11px; align-items: start; }
-  .lrow > * { min-width: 0; }
-  .lrow + .lrow { margin-top: 9px; padding-top: 9px; border-top: 1px dashed var(--line); }
-  .lname {
-    font-size: .72rem; font-weight: 700; letter-spacing: .04em;
-    line-height: 1.85; color: var(--gold);
-  }
-  .lname.is-pos { color: var(--ink-faint); font-weight: 600; }
-  .lrow > p { margin: 0; font-size: .88rem; color: var(--ink-dim); line-height: 1.8; }
-  .lrow > p.key { font-size: .95rem; font-weight: 600; color: var(--gold-hi); line-height: 1.7; }
-  .lrow > p.frame { color: var(--ink); }
-  @media (max-width: 480px) {
-    .lrow { grid-template-columns: 1fr; gap: 2px; }
-    .lname { line-height: 1.5; }
-  }
-
-  .rlegend {
-    margin: 0 0 4px; font-size: .78rem; color: var(--ink-faint); line-height: 1.7;
-  }
-  .rlegend b { font-weight: 700; }
-  .rlegend b.is-pos { color: var(--ink-dim); }
-  .rlegend b.is-card { color: var(--gold); }
-
-  /* 카드 구성 — 한 장씩 읽기 전에 판의 모양 */
-  .compo {
-    border: 1px solid var(--line); background: var(--panel-2);
-    border-radius: 12px; padding: 15px 16px; margin: 18px 0 4px;
-  }
-  .compo > .clab {
-    display: flex; align-items: center; gap: 8px;
-    font-size: .72rem; font-weight: 700; letter-spacing: .14em;
-    color: var(--gold); margin-bottom: 11px;
-  }
-  .compo .evidence {
-    margin: 10px 0 0; padding-top: 9px; border-top: 1px dashed var(--line);
-    font-size: .78rem; color: var(--ink-faint); font-variant-numeric: tabular-nums;
-  }
-
   /* 자리마다 겹쳐 보기 (운때) */
   .cross { margin: 0 0 20px; }
   .cross .clab {
@@ -458,21 +292,49 @@
   .crow p { margin: 0; font-size: .85rem; color: var(--ink-dim); line-height: 1.75; }
   .crow p.same { color: var(--ink-faint); font-style: normal; }
 
-  /* ── 예·아니오 답 ───────────────────────────────────── */
-  .yn {
-    border: 1px solid var(--line-2); border-radius: 13px;
-    padding: 20px 22px 18px; margin: 0 0 22px; text-align: center;
+  /* ── 운때 결론 — 결과에서 가장 먼저 보이는 한 줄 ─────────── */
+  .answer {
+    position: relative; text-align: center;
+    border: 1px solid var(--gold); border-radius: 16px;
+    background:
+      radial-gradient(120% 140% at 50% 0%, rgba(201,169,106,.22), rgba(201,169,106,.05) 60%, transparent),
+      var(--panel);
+    box-shadow: 0 0 0 4px rgba(201,169,106,.07), 0 12px 40px rgba(0,0,0,.35);
+    padding: 26px 22px 22px;
   }
-  .yn .yn-q { margin: 0 0 8px; font-size: .78rem; color: var(--ink-faint); }
-  .yn .yn-a { font-size: 2rem; font-weight: 700; letter-spacing: .04em; line-height: 1.25; }
-  .yn p.yn-why { margin: 12px 0 0; font-size: .92rem; color: var(--ink); line-height: 1.75; }
-  .yn p.yn-but { margin: 7px 0 0; font-size: .85rem; color: var(--ink-dim); }
-  .yn.yes { border-color: rgba(127,191,154,.45); background: rgba(127,191,154,.06); }
-  .yn.yes .yn-a { color: var(--mok); }
-  .yn.no { border-color: rgba(224,138,114,.45); background: rgba(224,138,114,.06); }
-  .yn.no .yn-a { color: var(--hwa); }
-  .yn.maybe { border-color: rgba(216,188,122,.45); background: rgba(216,188,122,.06); }
-  .yn.maybe .yn-a { color: var(--to); font-size: 1.6rem; }
+  .answer::before, .answer::after {
+    content: "\2726"; position: absolute; top: 13px;
+    color: var(--gold-lo); font-size: .8rem; line-height: 1;
+  }
+  .answer::before { left: 16px; }
+  .answer::after { right: 16px; }
+  .answer-eyebrow {
+    display: block; margin-bottom: 12px;
+    font-size: .72rem; font-weight: 700; letter-spacing: .24em; color: var(--gold);
+  }
+  .answer-line {
+    margin: 0; font-size: 1.42rem; font-weight: 700; line-height: 1.5;
+    color: var(--gold-hi); word-break: keep-all;
+  }
+  .answer-card { display: block; margin-top: 13px; font-size: .78rem; color: var(--ink-faint); }
+
+  /* 근거는 접어 둔다 */
+  .more { margin-top: 12px; }
+  .more > summary {
+    list-style: none; cursor: pointer; user-select: none;
+    display: flex; align-items: center; justify-content: center; gap: 7px;
+    border: 1px solid var(--line-2); border-radius: var(--radius);
+    padding: 12px 14px; font-size: .86rem; color: var(--ink-dim);
+    transition: border-color .15s ease, color .15s ease;
+  }
+  .more > summary::-webkit-details-marker { display: none; }
+  .more > summary::after { content: "\25BE"; color: var(--gold-lo); }
+  .more[open] > summary::after { content: "\25B4"; }
+  .more > summary:hover { border-color: var(--gold-lo); color: var(--ink); }
+  .more-body {
+    margin-top: 10px; padding: 20px;
+    background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius);
+  }
 
   /* ── 총평 ────────────────────────────────────────────── */
   .verdict p { margin: 0; font-size: .92rem; }
@@ -530,82 +392,7 @@
   }
   .ftime b { color: var(--gold-hi); }
 
-  /* ── 자료실 ──────────────────────────────────────────── */
-  details.ref { margin-top: 28px; }
-  details.ref > summary {
-    list-style: none; cursor: pointer; user-select: none;
-    background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius);
-    padding: 16px 20px; display: flex; align-items: center; gap: 11px;
-  }
-  details.ref > summary::-webkit-details-marker { display: none; }
-  details.ref > summary::before {
-    content: "+"; width: 22px; height: 22px; flex: none;
-    border: 1px solid var(--gold-lo); border-radius: 50%;
-    display: flex; align-items: center; justify-content: center;
-    color: var(--gold); font-size: .86rem; line-height: 1;
-  }
-  details.ref[open] > summary::before { content: "\2212"; }
-  details.ref > summary b { font-size: .92rem; color: var(--gold-hi); font-weight: 700; }
-  details.ref > summary span { font-size: .78rem; color: var(--ink-faint); }
-  details.ref[open] > summary { border-radius: var(--radius) var(--radius) 0 0; border-bottom: none; }
-  .ref-body {
-    background: var(--panel); border: 1px solid var(--line); border-top: none;
-    border-radius: 0 0 var(--radius) var(--radius); padding: 4px 20px 22px;
-  }
-  .tabs { display: flex; flex-wrap: wrap; gap: 7px; padding: 14px 0 16px; border-bottom: 1px solid var(--line); }
-  .tab {
-    background: transparent; border: 1px solid var(--line-2); border-radius: 20px;
-    color: var(--ink-dim); font-family: inherit; font-size: .79rem; padding: 5px 13px;
-    cursor: pointer; transition: all .15s ease;
-  }
-  .tab:hover { border-color: var(--gold-lo); color: var(--ink); }
-  .tab.on { border-color: var(--gold-lo); background: var(--gold-film); color: var(--gold-hi); font-weight: 600; }
-  .ref-pane { padding-top: 16px; }
-  .ref-pane h4 {
-    margin: 20px 0 9px; font-size: .84rem; font-weight: 700; color: var(--gold);
-    letter-spacing: .04em;
-  }
-  .ref-pane h4:first-child { margin-top: 4px; }
-  .ref-pane > p { margin: 0 0 14px; font-size: .86rem; color: var(--ink-dim); }
-  .rtable { width: 100%; border-collapse: collapse; font-size: .83rem; }
-  .rtable th, .rtable td {
-    text-align: left; padding: 8px 9px; border-bottom: 1px solid var(--line); vertical-align: top;
-  }
-  .rtable th { color: var(--ink-faint); font-weight: 600; font-size: .76rem; white-space: nowrap; }
-  .rtable td.han { font-family: var(--serif); font-size: 1.05rem; color: var(--gold-hi); white-space: nowrap; }
-  .rtable td b { color: var(--ink); font-weight: 600; }
-  .rtable tr:last-child td { border-bottom: none; }
-  .wxdot {
-    display: inline-block; width: 8px; height: 8px; border-radius: 50%;
-    margin-right: 6px; vertical-align: 1px;
-  }
-  .cyc { display: grid; gap: 8px; margin: 0 0 6px; }
-  .cyc div { font-size: .85rem; color: var(--ink); }
-  .cyc b { color: var(--gold); font-weight: 600; }
-  .deckgrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(168px, 1fr)); gap: 8px; }
-  .dcard {
-    border: 1px solid var(--line); border-radius: 9px; padding: 9px 11px;
-    background: var(--panel-2); min-width: 0;
-  }
-  .dcard .dn { font-size: .82rem; font-weight: 600; color: var(--ink); }
-  .dcard .dm { font-size: .73rem; color: var(--ink-faint); margin-top: 2px; }
-  .dcard .dd { font-size: .76rem; color: var(--ink-dim); margin-top: 5px; line-height: 1.6; }
-
-  /* 문맥 바로가기 */
-  .reflink {
-    background: transparent; border: 1px solid var(--line-2); border-radius: 20px;
-    color: var(--ink-faint); font-family: inherit; font-size: .73rem;
-    padding: 2px 10px; cursor: pointer; white-space: nowrap;
-    transition: all .15s ease;
-  }
-  .reflink:hover { border-color: var(--gold-lo); color: var(--gold); }
-  .reflink::before { content: "?"; margin-right: 5px; color: var(--gold-lo); font-weight: 700; }
-  .refrow { display: flex; flex-wrap: wrap; gap: 6px; justify-content: flex-end; margin-top: 12px; }
-  .spread-head .reflink, .overlap .clab .reflink,
-  .compo > .clab .reflink { margin-left: auto; }
-
   .redraw { margin: 10px 0 0; }
-  .redraw p { margin: 10px 0 0; font-size: .78rem; color: var(--ink-faint); text-align: center; }
 
   footer {
     margin-top: 40px; padding-top: 24px; border-top: 1px solid var(--line);
@@ -616,10 +403,12 @@
     .wrap { padding: 36px 14px 64px; }
     h1 { font-size: 1.85rem; }
     .panel { padding: 20px 16px; }
-    .howto ol { grid-template-columns: 1fr; gap: 10px; }
     .stage { padding-left: 38px; }
     .stage::before { left: 13px; }
     .stage > .badge { width: 27px; height: 27px; font-size: .7rem; }
+    .answer { padding: 24px 16px 20px; }
+    .answer-line { font-size: 1.24rem; }
+    .more-body { padding: 18px 14px; }
     .pillars { gap: 6px; }
     .pillar { padding: 11px 3px 9px; }
     .pillar .han { font-size: 1.22rem; }
@@ -627,38 +416,16 @@
     .tcard { padding: 10px 5px; }
     .tcard .tglyph { font-size: 1.45rem; }
     .tcard .tname { font-size: .72rem; }
-    .fconn { min-width: 34px; }
-    .draw.five { grid-template-columns: repeat(3, 1fr); }
-    .fork-branches { grid-template-columns: 1fr; }
     .groups { grid-template-columns: 1fr; }
-    .ref-body { padding: 4px 14px 18px; }
-    details.ref > summary { padding: 14px 15px; }
-    .deckgrid { grid-template-columns: 1fr 1fr; }
     .branch { padding: 12px 9px; }
     .tcard .tpos { padding: 0 15px; letter-spacing: 0; }
     .tcard .trev { top: 6px; right: 5px; padding: 0 3px; }
 
-    /* 긴 흐름은 세로 목록으로 (인라인 grid-template-columns 를 눌러야 해서 !important) */
-    .flowline.long { grid-template-columns: 1fr !important; gap: 0; }
-    .flowline.long .fnode {
-      display: flex; align-items: baseline; gap: 8px; text-align: left; padding: 3px 0;
-    }
-    .flowline.long .fdot { margin: 0; align-self: center; flex: none; }
-    .flowline.long .fnode b { flex: none; }
-    .flowline.long .fnode em { margin-top: 0; }
-    .flowline.long .fconn {
-      min-width: 0; text-align: left; padding: 0 0 0 4px; height: 16px;
-    }
-    .flowline.long .fconn::before {
-      left: 6px; right: auto; top: 0; bottom: 0; width: 1px; height: auto;
-      background: var(--line-2);
-    }
-    .flowline.long .fconn span { margin-top: 0; margin-left: 16px; }
   }
 
   /* 아주 좁은 화면(구형 iPhone SE 등)에서는 한 줄에 두 장까지만 */
   @media (max-width: 400px) {
-    .gcards.c3, .branch .bcards, .draw.five { grid-template-columns: repeat(2, 1fr); }
+    .gcards.c3 { grid-template-columns: repeat(2, 1fr); }
     .row { flex-direction: column; gap: 0; }
   }
 </style>
@@ -683,28 +450,6 @@
     <p class="sub">사주로 타고난 <b>운</b>을 세우고, 타로로 지금의 <b>때</b>를 읽습니다</p>
   </header>
 
-  <!-- ── 사용법 ─────────────────────────────────────────── -->
-  <details class="panel howto" id="howto" open>
-    <summary class="eyebrow">처음 오셨다면 <span class="fold">접기</span></summary>
-    <ol>
-      <li>
-        <span class="n">1</span>
-        <b>생년월일시를 넣습니다</b>
-        <p>양력 기준이에요. 처음엔 <b style="display:inline;color:var(--gold)">예시 값</b>이 들어가 있으니 본인 것으로 바꿔 주세요. 태어난 시각을 모른다면 체크 한 번으로 삼주만 볼 수 있어요.</p>
-      </li>
-      <li>
-        <span class="n">2</span>
-        <b>주제를 고르고 뽑습니다</b>
-        <p>무엇을 묻느냐에 따라 카드를 놓는 자리가 달라집니다. 가볍게는 1장, 기본은 3장, 깊게 볼수록 5장·7장·10장. 주제만 골라도 어울리는 배열을 맞춰 드려요.</p>
-      </li>
-      <li>
-        <span class="n">3</span>
-        <b>운과 때를 겹쳐 읽습니다</b>
-        <p>사주가 <b style="display:inline;color:var(--gold)">타고난 운</b>, 타로가 <b style="display:inline;color:var(--gold)">지금의 때</b>. 이 둘을 포개서 보는 것이 운때입니다.</p>
-      </li>
-    </ol>
-  </details>
-
   <!-- ── 입력 ───────────────────────────────────────────── -->
   <section class="panel">
     <h2 class="eyebrow">생년월일시</h2>
@@ -728,74 +473,15 @@
 
   </section>
 
-  <!-- ── 스프레드와 질문 ─────────────────────────────────── -->
+  <!-- ── 카드 배열 ──────────────────────────────────────── -->
   <section class="panel">
-    <h2 class="eyebrow">질문과 배열</h2>
-
-    <div class="field">
-      <label>주제 <span style="color:var(--ink-faint)">— 고르면 어울리는 배열을 맞춰 드립니다 (선택)</span></label>
-      <div class="topics" id="topics"></div>
-    </div>
-
-    <div id="topicEx"></div>
-
-    <div class="ask">
-      <h4>질문 정하기</h4>
-      <ul>
-        <li>묻고 싶은 것을 <b>한 문장</b>으로 정리해 보세요. 질문이 흐리면 답도 흐립니다.</li>
-        <li>"될까요?"보다 <b>"어떻게 하면 좋을까요?"</b>가 읽기 좋은 질문입니다.</li>
-        <li>같은 질문을 계속 다시 뽑지 마세요. 오늘의 답은 한 번이면 충분합니다.</li>
-      </ul>
-    </div>
-
-    <div class="field">
-      <label for="question">질문 <span style="color:var(--ink-faint)">— 적어두면 결과에 함께 표시됩니다 (선택)</span></label>
-      <input type="text" id="question" maxlength="80" placeholder="">
-      <p class="qhint" id="qhint"></p>
-    </div>
-
-    <div class="field">
-      <label for="spread" style="display:flex;align-items:center;gap:9px">
-        <span>카드 배열 <span style="color:var(--ink-faint)">— 스프레드라고 부릅니다</span></span>
-        <button type="button" class="reflink" data-ref="spr" style="margin-left:auto">9종 모두 보기</button>
-      </label>
-      <select id="spread"></select>
-    </div>
-
-    <div class="sp-info">
-      <p class="sp-use" id="spUse"></p>
-      <div class="sp-slots" id="spSlots"></div>
-      <p class="sp-guide" id="spGuide"></p>
-    </div>
-
-    <div id="abBox">
-      <div class="row">
-        <div class="field">
-          <label for="optA">첫째 선택지</label>
-          <input type="text" id="optA" maxlength="14" placeholder="예: 남는다">
-        </div>
-        <div class="field">
-          <label for="optB">둘째 선택지</label>
-          <input type="text" id="optB" maxlength="14" placeholder="예: 옮긴다">
-        </div>
-      </div>
-    </div>
-
+    <h2 class="eyebrow">카드 배열</h2>
+    <div class="spick" id="spread"></div>
+    <p class="pick-guide">궁금한 일을 떠올리며 뽑으세요.</p>
     <button class="go" id="drawBtn">카드 뽑기</button>
   </section>
 
   <div id="out"></div>
-
-  <details class="ref" id="ref">
-    <summary>
-      <b>재료 살펴보기</b>
-      <span>음양오행 · 천간 10 · 십성 · 카드 사이 관계 · 스프레드 · 타로 78장</span>
-    </summary>
-    <div class="ref-body">
-      <div class="tabs" id="refTabs"></div>
-      <div class="ref-pane" id="refPane"></div>
-    </div>
-  </details>
 
   <footer>
     재미로 보는 페이지입니다. 진로·건강·재정 등 실제 결정의 근거로 삼지 마세요.<br>
@@ -805,9 +491,9 @@
 </div>
 
 <!-- ?v= 는 캐시 무효화용. JS를 고치면 아래 세 곳과 필요버전을 함께 올린다. -->
-<script src="saju-core.js?v=20260922a"></script>
-<script src="tarot-data.js?v=20260922a"></script>
-<script src="fortune-data.js?v=20260922a"></script>
+<script src="saju-core.js?v=20261003a"></script>
+<script src="tarot-data.js?v=20261003a"></script>
+<script src="fortune-data.js?v=20261003a"></script>
 <script>
 (function () {
   'use strict';
@@ -823,7 +509,7 @@
   };
   var GLYPH = { major: '✦', wands: '❋', cups: '☾', swords: '✧', pentacles: '✵' };
   var WX = ['목', '화', '토', '금', '수'];
-  var 필요버전 = '20260922a';
+  var 필요버전 = '20261003a';
 
   /** 브라우저가 예전 JS를 캐시해 두면 조용히 깨진다. 눌렀을 때 바로 알려준다. */
   function 버전확인() {
@@ -876,109 +562,28 @@
     return picked;
   }
 
-  // ── 스프레드 선택 배선 ───────────────────────────────
-  var selSpread = document.getElementById('spread');
+  // ── 카드 배열 고르기 ─────────────────────────────────
+  // 세 칸 버튼. 배열 목록은 FortuneData.스프레드 가 단일 출처다.
+  var 선택배열 = 'three-time';
+  var spBox = document.getElementById('spread');
 
-  (function 스프레드채우기() {
-    var 묶음 = {}, 순서 = [];
+  function 배열그리기() {
+    var h = '';
     FortuneData.스프레드.forEach(function (sp) {
-      if (!묶음[sp.장수]) { 묶음[sp.장수] = []; 순서.push(sp.장수); }
-      묶음[sp.장수].push(sp);
+      h += '<button type="button" data-sp="' + sp.id + '"' +
+           (sp.id === 선택배열 ? ' class="on"' : '') + '>' +
+           '<b>' + esc(sp.이름) + '</b><span>' + sp.장수 + '장</span></button>';
     });
-    순서.sort(function (a, b) { return a - b; });
-    var h = '';
-    순서.forEach(function (n) {
-      h += '<optgroup label="' + n + '장">';
-      묶음[n].forEach(function (sp) {
-        h += '<option value="' + sp.id + '"' + (sp.id === 'three-time' ? ' selected' : '') + '>' +
-             esc(sp.이름 + ' · ' + sp.부제) + '</option>';
-      });
-      h += '</optgroup>';
-    });
-    selSpread.innerHTML = h;
-  }());
-
-  function 현재스프레드() { return FortuneData.스프레드찾기(selSpread.value); }
-
-  // ── 주제 고르기 (선택 사항) ──────────────────────────
-  var 선택주제 = null;
-
-  (function 주제채우기() {
-    var box = document.getElementById('topics');
-    var h = '<button type="button" class="topic on" data-topic="">고르지 않음</button>';
-    FortuneData.주제.forEach(function (t) {
-      h += '<button type="button" class="topic" data-topic="' + t.id + '">' + esc(t.이름) + '</button>';
-    });
-    box.innerHTML = h;
-    box.addEventListener('click', function (e) {
-      var b = e.target.closest('.topic'); if (!b) return;
-      var id = b.getAttribute('data-topic');
-      선택주제 = id ? FortuneData.주제찾기(id) : null;
-      Array.prototype.forEach.call(box.children, function (c) {
-        c.className = 'topic' + (c.getAttribute('data-topic') === id ? ' on' : '');
-      });
-      // 주제가 바뀌면 앞 주제에 맞춰 적었던 질문은 더 이상 맞지 않는다
-      document.getElementById('question').value = '';
-      if (선택주제 && 선택주제.추천) { selSpread.value = 선택주제.추천; 스프레드갱신(); }
-      else 스프레드갱신();
-      주제안내();
-      질문힌트();
-    });
-  }());
-
-  function 주제안내() {
-    var box = document.getElementById('topicEx');
-    if (!선택주제) { box.innerHTML = ''; return; }
-    var h = '';
-    if (선택주제.주의) h += '<p class="caution">' + esc(선택주제.주의) + '</p>';
-    h += '<div class="exq">';
-    선택주제.예시.forEach(function (q) {
-      h += '<button type="button" data-q="' + esc(q) + '">' + esc(q) + '</button>';
-    });
-    box.innerHTML = h + '</div>';
+    spBox.innerHTML = h;
+    document.getElementById('drawBtn').textContent = '카드 ' + 현재스프레드().장수 + '장 뽑기';
   }
-  // ── 적어 넣은 질문의 모양을 보고 배열을 짚어 준다 ──────
-  var qBox = document.getElementById('question'), qHint = document.getElementById('qhint');
-  function 질문힌트() {
-    var 추천 = FortuneData.배열추천(qBox.value);
-    if (!추천 || 추천.id === selSpread.value) { qHint.className = 'qhint'; qHint.innerHTML = ''; return; }
-    qHint.innerHTML = '이 물음은 <b>' + esc(추천.이름) + '</b> 배열이 더 맞아 보여요. ' +
-                      '<button type="button" data-sp="' + 추천.id + '">그 배열로 바꾸기</button>';
-    qHint.className = 'qhint show';
-  }
-  qBox.addEventListener('input', 질문힌트);
-  qHint.addEventListener('click', function (e) {
+  spBox.addEventListener('click', function (e) {
     var b = e.target.closest('button[data-sp]'); if (!b) return;
-    selSpread.value = b.getAttribute('data-sp');
-    스프레드갱신();
-    질문힌트();
+    선택배열 = b.getAttribute('data-sp');
+    배열그리기();
   });
-
-  document.getElementById('topicEx').addEventListener('click', function (e) {
-    var b = e.target.closest('button[data-q]'); if (!b) return;
-    var q = document.getElementById('question');
-    q.value = b.getAttribute('data-q');
-    q.focus();
-    질문힌트();
-  });
-
-  function 스프레드갱신() {
-    var sp = 현재스프레드();
-    document.getElementById('spUse').textContent = sp.쓰임;
-    var slots = '';
-    sp.위치.forEach(function (p, i) {
-      var 라벨 = p.라벨.replace('{A}', 'A').replace('{B}', 'B');
-      slots += '<span><i>' + (i + 1) + '</i>' + esc(라벨) + '</span>';
-    });
-    document.getElementById('spSlots').innerHTML = slots;
-    document.getElementById('spGuide').textContent = sp.안내;
-    document.getElementById('question').placeholder =
-      '예) ' + ((선택주제 && 선택주제.예시[0]) || sp.질문예);
-    document.getElementById('abBox').className = sp.선택지입력 ? 'show' : '';
-    document.getElementById('drawBtn').textContent = '카드 ' + sp.장수 + '장 뽑기';
-  }
-  selSpread.addEventListener('change', function () { 스프레드갱신(); 질문힌트(); });
-  스프레드갱신();
+  function 현재스프레드() { return FortuneData.스프레드찾기(선택배열); }
+  배열그리기();
 
   function pillarHTML(label, p) {
     if (!p) {
@@ -990,11 +595,11 @@
            '<div class="kor">' + esc(p.한글) + '</div></div>';
   }
 
-  function stage(no, title, lead, body) {
+  function stage(no, title, lead, body, 맨몸) {
     return '<section class="stage"><div class="badge">' + no + '</div>' +
            '<h3 class="stitle">' + title + '</h3>' +
-           '<p class="slead">' + lead + '</p>' +
-           '<div class="panel">' + body + '</div></section>';
+           (lead ? '<p class="slead">' + lead + '</p>' : '') +
+           (맨몸 ? body : '<div class="panel">' + body + '</div>') + '</section>';
   }
 
   // ── STEP 01 · 운 (사주) ──────────────────────────────
@@ -1027,13 +632,6 @@
   }
 
   // ── STEP 02 · 때 (타로) ──────────────────────────────
-  /** 라벨 달린 한 줄. 무엇에 대한 이야기인지 왼쪽에 먼저 적는다. */
-  function lrow(라벨, 글, 라벨클래스, 글클래스) {
-    return '<div class="lrow"><span class="lname' + (라벨클래스 ? ' ' + 라벨클래스 : '') + '">' +
-           esc(라벨) + '</span><p' + (글클래스 ? ' class="' + 글클래스 + '"' : '') + '>' +
-           글 + '</p></div>';
-  }
-
   function tileHTML(c) {
     var g = c.종류 === '메이저' ? GLYPH.major : GLYPH[c.수트키];
     return '<div class="tcard' + (c.역방향 ? ' rev' : '') + '">' +
@@ -1044,52 +642,12 @@
            '<div class="tmeta">' + esc(c.오행) + ' · ' + esc(c.음양) + '</div></div></div>';
   }
 
-  /** 흐름 링크를 이어지는 사슬 단위로 묶는다 (갈래가 다르면 끊는다) */
-  function 사슬만들기(흐름) {
-    var chains = [], cur = null;
-    흐름.forEach(function (f) {
-      if (cur && cur.nodes[cur.nodes.length - 1] === f.from && cur.가지 === f.가지) {
-        cur.nodes.push(f.to); cur.links.push(f);
-      } else {
-        cur = { 가지: f.가지, nodes: [f.from, f.to], links: [f] };
-        chains.push(cur);
-      }
-    });
-    return chains;
-  }
-
-  function 갈래이름(라벨) { return String(라벨).split(' · ')[0]; }
-
-  function 타임라인HTML(chain, reading) {
-    var gtc = '';
-    for (var q = 0; q < chain.nodes.length - 1; q++) gtc += '1fr auto ';
-    gtc += '1fr';
-
-    var h = '<div class="flowwrap">';
-    if (chain.가지) {
-      h += '<span class="branch-tag">' + esc(갈래이름(reading.카드[chain.nodes[0]].위치)) + ' 갈래</span>';
-    }
-    // 마디가 넷 이상이면 좁은 화면에서 가로로 다 못 들어간다 → 세로로 세운다
-    h += '<div class="flowline' + (chain.nodes.length >= 4 ? ' long' : '') +
-         '" style="grid-template-columns:' + gtc + '">';
-    chain.nodes.forEach(function (n, i) {
-      if (i > 0) h += '<div class="fconn"><span>' + esc(chain.links[i - 1].관계) + '</span></div>';
-      var c = reading.카드[n];
-      h += '<div class="fnode"><span class="fdot" style="color:' +
-           (WX_COLOR[c.오행] || 'var(--gold)') + '"></span><b>' + esc(c.위치) + '</b>' +
-           '<em>' + esc(c.카드이름) + '</em></div>';
-    });
-    return h + '</div></div>';
-  }
-
-  function 때HTML(reading, 질문) {
+  // 여기(때)에서는 카드가 어느 자리에 어떻게 놓였는지만 보인다.
+  // 카드 설명·흐름·판의 모양은 화면이 너무 길어져 뺐다 (사용자 요청).
+  function 때HTML(reading) {
     var sp = reading.스프레드;
     var b = '<div class="spread-head">' + esc(sp.이름) + ' · ' + esc(sp.부제) +
-            ' <span class="tag">' + sp.장수 + '장</span>' + ref('deck', '타로 78장') + '</div>';
-    b += 질문
-      ? '<p class="qline">질문 — <b>' + esc(질문) + '</b></p>'
-      : '<p class="qline" style="border-color:var(--line);color:var(--ink-faint)">' +
-        '마음에 두셨던 물음을 떠올리며 읽어 보세요.</p>';
+            ' <span class="tag">' + sp.장수 + '장</span></div>';
 
     if (sp.레이아웃 === 'group' && sp.묶음) {
       b += '<div class="groups">';
@@ -1100,87 +658,30 @@
         b += '</div></div>';
       });
       b += '</div>';
-    } else if (sp.레이아웃 === 'fork' && reading.카드.length === 7) {
-      b += '<div class="fork-top">' + tileHTML(reading.카드[0]) + '</div>';
-      b += '<div class="fork-mark" aria-hidden="true">⋁</div>';
-      b += '<div class="fork-branches">';
-      [[1, 2, 3], [4, 5, 6]].forEach(function (grp) {
-        b += '<div class="branch"><h5>' + esc(갈래이름(reading.카드[grp[0]].위치)) + '</h5>' +
-             '<div class="bcards">';
-        grp.forEach(function (i) { b += tileHTML(reading.카드[i]); });
-        b += '</div></div>';
-      });
-      b += '</div>';
     } else {
       b += '<div class="draw ' + esc(sp.레이아웃) + '">';
       reading.카드.forEach(function (c) { b += tileHTML(c); });
       b += '</div>';
     }
-
-    // 한 장씩 읽기 전에 판의 모양부터 — 여기도 타로 이야기만 한다
-    var cp = reading.구성;
-    if (cp) {
-      b += '<div class="compo"><span class="clab">뽑힌 판의 모양' +
-           ref('suit', '수트란') + '</span>';
-      b += lrow('구성', cp.아르카나);
-      if (cp.수트) b += lrow('수트', cp.수트);
-      b += lrow('놓인 방향', cp.역방향);
-      b += lrow('움직이는 속도', cp.시기);
-      b += '<p class="evidence">' + esc(cp.근거) + '</p></div>';
-    }
-
-    사슬만들기(reading.흐름).forEach(function (ch) { b += 타임라인HTML(ch, reading); });
-
-    // 같은 관계가 여러 구간에 걸리면 설명이 똑같이 반복되므로 한 줄로 묶는다
-    var 관계순서 = [], 관계별구간 = {}, 관계별글 = {};
-    reading.흐름.forEach(function (f) {
-      if (!관계별구간[f.관계]) { 관계별구간[f.관계] = []; 관계순서.push(f.관계); 관계별글[f.관계] = f.글; }
-      관계별구간[f.관계].push(f.구간);
-    });
-    관계순서.forEach(function (rel) {
-      b += '<p class="flow-note"><b>' + esc(관계별구간[rel].join(' / ')) + ' · ' + esc(rel) +
-           '</b> — ' + esc(관계별글[rel]) + '</p>';
-    });
-    if (관계순서.length) b += '<div class="refrow">' + ref('rel', '카드 사이 관계') + '</div>';
-
-    // 자리 이야기인지 카드 이야기인지를 줄마다 왼쪽에 적어 둔다
-    b += '<p class="rlegend" style="margin-top:20px">아래 해설에서 ' +
-         '<b class="is-pos">이 자리</b>는 배열이 미리 정해 둔 물음이고, ' +
-         '<b class="is-card">카드</b>로 시작하는 줄은 뽑혀 나온 그림 이야기입니다.</p>';
-    reading.카드.forEach(function (c) {
-      // 여기(때)에서는 카드만 말한다. 사주와 겹치는 이야기는 운때에서 한다.
-      b += '<article class="reading">' +
-           '<div class="rhead"><span class="rpos">' + esc(c.위치) + '</span>' +
-           '<h3>' + esc(c.카드이름) + '</h3>' +
-           '<span class="tag">' + esc(c.오행) + ' · ' + esc(c.음양) + '</span></div>' +
-           lrow('이 자리', esc(c.틀보기), 'is-pos', 'frame') +
-           lrow('카드 그림', esc(c.설명)) +
-           lrow('카드 한마디', esc(c.핵심) + '.', '', 'key') +
-           (c.방향 ? lrow('뒤집힘', esc(c.방향)) : '') +
-           '</article>';
-    });
     return b;
   }
 
   // ── STEP 03 · 운때 ───────────────────────────────────
   var GRADE_COLOR = { 과다: 'var(--hwa)', 적정: 'var(--mok)', 부족: 'var(--su)', 태극: 'var(--gold)' };
 
-  var YN_CLASS = { '예': 'yes', '아니오': 'no', '조건부': 'maybe' };
-
-  function 운때HTML(reading, 질문) {
+  function 운때HTML(reading) {
     var v = reading.총평;
-    var b = '<div class="verdict">';
 
-    // 예·아니오 배열이면 답을 맨 앞에 크게 둔다
-    if (v.판정) {
-      b += '<div class="yn ' + (YN_CLASS[v.판정.결] || 'maybe') + '">' +
-           '<p class="yn-q">' + (질문 ? esc(질문) : '물음에 대한 답') + '</p>' +
-           '<div class="yn-a">' + esc(v.판정.답) + '</div>' +
-           '<p class="yn-why">' + esc(v.판정.글) + '</p>' +
-           '<p class="yn-but">' + esc(v.판정.단서) + '</p>' +
-           '<div class="refrow" style="justify-content:center">' + ref('wx', '음양이란') + '</div></div>';
-    }
+    // 결론 한 줄 — 결과에서 가장 먼저 눈에 들어와야 하는 문장. 30자 이내.
+    var b = '<div class="answer">' +
+            '<span class="answer-eyebrow">운때 결론</span>' +
+            '<p class="answer-line">' + esc(v.한줄) + '</p>' +
+            '<span class="answer-card">결론 카드 \u300c' + esc(v.한줄카드) + '\u300d</span>' +
+            '</div>';
 
+    // 근거는 펼쳐서 본다. 처음부터 다 보이면 결론이 묻힌다.
+    b += '<details class="more"><summary>왜 이런 결론인지 자세히</summary>' +
+         '<div class="more-body verdict">';
     b += '<div class="vrow"><span class="clab">운 · 사주가 말하는 바탕</span>' +
          '<p>' + esc(v.운) + '</p></div>';
     b += '<div class="vrow"><span class="clab">때 · 타로가 말하는 흐름</span>' +
@@ -1188,8 +689,7 @@
 
     // 자리마다 그 카드가 내 사주에서 무엇이 되는지 — 여기가 겹치는 자리다
     if (reading.카드 && reading.카드.length) {
-      b += '<div class="cross"><span class="clab">자리마다 겹쳐 보면' +
-           ref('sip', '십성이란') + '</span>' +
+      b += '<div class="cross"><span class="clab">자리마다 겹쳐 보면</span>' +
            '<p class="cross-lead">내 일간은 <b>' + esc(reading.일간.글자) + '</b>(' +
            esc(reading.일간오행) + ')입니다. 각 자리의 카드가 나에게 무엇이 되는지 봅니다.</p>';
       var 본십성글 = {};
@@ -1210,8 +710,7 @@
 
     // 결론 — 기운의 저울 · 결론 자리 진단 · 갈래 조언 · 맺음을 한 줄기로 읽는다.
     // 예전에는 셋으로 쪼개 라벨을 붙였더니, 읽고 나서도 '그래서 뭘 하라는 건가'가 남았다.
-    b += '<div class="overlap final"><span class="clab">겹쳐서 내린 결론' +
-         ref('sip', '십성이란') + '</span>';
+    b += '<div class="overlap final"><span class="clab">겹쳐서 내린 결론</span>';
 
     // (1) 뽑힌 카드의 기운을 타고난 여덟 자 위에 얹어 본다 — 운때의 출발점
     if (v.쏠림) {
@@ -1247,28 +746,24 @@
     if (v.시기문장) b += '<p class="ftime">' + esc(v.시기문장) + '</p>';
     b += '</div>';
 
-    b += '</div></div>';
+    b += '</div>';            // .overlap
+    b += '</div></details>';  // .more-body, .more
     return b;
   }
 
-  function render(saju, reading, 질문) {
+  function render(saju, reading) {
     var h = '';
     h += stage('01', '운 — 타고난 바탕',
                '태어난 순간의 하늘을 네 기둥으로 세웁니다.',
                운HTML(saju, reading));
     h += stage('02', '때 — 지금의 흐름',
-               '78장에서 뽑은 ' + reading.스프레드.장수 + '장이 각 자리에 놓였습니다. ' +
-               '판 전체의 모양을 먼저 보고, 자리마다 한 장씩 읽습니다.',
-               때HTML(reading, 질문));
-    h += stage('03', '운때 — 겹쳐 읽기',
-               reading.총평.판정
-                 ? '카드가 낸 답에, 내 사주가 그 답을 받쳐 주는지를 더해 봅니다.'
-                 : '뽑힌 기운을 타고난 바탕 위에 얹어 보고, 하나의 결론으로 맺습니다.',
-               운때HTML(reading, 질문));
+               '78장에서 뽑은 ' + reading.스프레드.장수 + '장이 이렇게 놓였습니다.',
+               때HTML(reading));
+    // 운때는 패널로 감싸지 않는다 — 결론 상자가 다른 단과 다르게 보여야 한다
+    h += stage('03', '운때 — 겹쳐 읽기', '', 운때HTML(reading), true);
 
     h += '<div class="redraw"><button type="button" class="go" id="redrawBtn">' +
-         '같은 조건으로 다시 뽑기</button>' +
-         '<p>같은 질문을 거듭 뽑으면 답이 흐려집니다. 물음을 바꿔 보세요.</p></div>';
+         '같은 조건으로 다시 뽑기</button></div>';
 
     var out = document.getElementById('out');
     out.innerHTML = h;
@@ -1289,14 +784,6 @@
     var tp = timeStr.split(':').map(Number);
     tp[1] = Math.round((tp[1] || 0) / 10) * 10;      // 10분 단위로 맞춘다
     if (tp[1] === 60) { tp[1] = 0; tp[0] = (tp[0] + 1) % 24; }
-    var 질문 = document.getElementById('question').value.trim();
-
-    var ab = { A: 'A', B: 'B', 갈래: 선택주제 ? 선택주제.갈래 : null };
-    if (sp.선택지입력) {
-      ab.A = document.getElementById('optA').value.trim() || 'A';
-      ab.B = document.getElementById('optB').value.trim() || 'B';
-      if (ab.A === ab.B) { alert('두 선택지를 다르게 적어 주세요.'); return; }
-    }
 
     var saju;
     try {
@@ -1311,10 +798,8 @@
     }
 
     var draw = 카드뽑기(sp.장수);
-    render(saju, FortuneData.조립(saju, draw, sp, ab), 질문);
+    render(saju, FortuneData.조립(saju, draw, sp));
     document.getElementById('drawBtn').textContent = '다시 뽑기 (' + sp.장수 + '장)';
-    // 결과를 본 뒤에는 사용법이 자리를 비켜준다
-    document.getElementById('howto').open = false;
   }
 
   document.getElementById('drawBtn').addEventListener('click', 뽑기실행);
@@ -1322,189 +807,6 @@
   document.getElementById('out').addEventListener('click', function (e) {
     if (e.target.closest('#redrawBtn')) 뽑기실행();
   });
-
-  // ── 자료실 ───────────────────────────────────────────
-  var WX_TONE = { 목: '뻗어나감', 화: '드러냄', 토: '버티고 쌓음', 금: '자르고 가림', 수: '흐르고 스밈' };
-
-  function 점(오행) {
-    return '<span class="wxdot" style="background:' + (WX_COLOR[오행] || 'var(--gold)') + '"></span>';
-  }
-  /** 문맥 속 바로가기 버튼 */
-  function ref(tab, label) {
-    return '<button type="button" class="reflink" data-ref="' + tab + '">' + esc(label) + '</button>';
-  }
-
-  var REF = [
-    { id: 'wx', 이름: '음양오행', 그리기: function () {
-      var h = '<p>이 페이지의 모든 연결은 오행 다섯 가지와 그 사이의 관계에서 나옵니다. ' +
-              '사주의 여덟 글자도, 타로 78장도 일단 오행으로 옮긴 뒤에 겹쳐 읽습니다.</p>';
-      h += '<h4>오행 다섯</h4><table class="rtable"><tr><th>오행</th><th>성질</th><th>사주에 많으면</th></tr>';
-      WX.forEach(function (k) {
-        h += '<tr><td class="han">' + 점(k) + k + '</td><td><b>' + esc(WX_TONE[k]) + '</b></td>' +
-             '<td>' + esc(FortuneData.강한오행[k]) + '</td></tr>';
-      });
-      h += '</table>';
-      h += '<h4>상생 — 앞이 뒤를 낳는다</h4><div class="cyc"><div>' +
-           '목 → 화 → 토 → 금 → 수 → 목' +
-           '</div><div style="color:var(--ink-dim);font-size:.8rem">나무가 불을 지피고, 불이 재가 되어 흙이 되고, 흙에서 쇠가 나오고, 쇠에 물이 맺히고, 물이 나무를 기릅니다.</div></div>';
-      h += '<h4>상극 — 앞이 뒤를 누른다</h4><div class="cyc"><div>' +
-           '목 → 토 → 수 → 화 → 금 → 목' +
-           '</div><div style="color:var(--ink-dim);font-size:.8rem">나무가 흙을 파고, 흙이 물을 막고, 물이 불을 끄고, 불이 쇠를 녹이고, 쇠가 나무를 벱니다.</div></div>';
-      h += '<h4>음양</h4><p style="margin:0">천간·지지와 카드마다 음양이 붙습니다. ' +
-           '타로는 숫자 홀수와 킹·나이트를 양, 짝수와 퀸·페이지를 음으로 봅니다. ' +
-           '뒤집혀 나온 카드는 음양이 반대로 뒤집힙니다.</p>';
-      return h;
-    } },
-
-    { id: 'gan', 이름: '천간 10 · 지지 12', 그리기: function () {
-      var h = '<p>사주 여덟 글자는 위 네 자(천간)와 아래 네 자(지지)로 이뤄집니다. ' +
-              '그중 <b style="color:var(--gold)">일주의 천간</b>이 곧 나 자신, 일간입니다.</p>';
-      h += '<h4>천간 10 — 일간이 되는 글자</h4><table class="rtable">' +
-           '<tr><th>글자</th><th>오행·음양</th><th>별명</th><th>성질</th></tr>';
-      SajuCore.천간표.forEach(function (g) {
-        var d = FortuneData.일간해설[g.한글] || { 별명: '', 글: '' };
-        h += '<tr><td class="han">' + esc(g.한자) + ' ' + esc(g.한글) + '</td>' +
-             '<td>' + 점(g.오행) + esc(g.오행) + ' · ' + esc(g.음양) + '</td>' +
-             '<td><b>' + esc(d.별명) + '</b></td><td>' + esc(d.글) + '</td></tr>';
-      });
-      h += '</table>';
-      h += '<h4>지지 12 — 띠와 시각이 되는 글자</h4><table class="rtable">' +
-           '<tr><th>글자</th><th>오행·음양</th><th>속에 든 천간</th></tr>';
-      SajuCore.지지표.forEach(function (z) {
-        h += '<tr><td class="han">' + esc(z.한자) + ' ' + esc(z.한글) + '</td>' +
-             '<td>' + 점(z.오행) + esc(z.오행) + ' · ' + esc(z.음양) + '</td>' +
-             '<td>' + esc(z.지장간.join(' · ')) + '</td></tr>';
-      });
-      return h + '</table>';
-    } },
-
-    { id: 'sip', 이름: '십성', 그리기: function () {
-      var h = '<p>십성은 <b style="color:var(--gold)">내 일간에서 본 상대의 자리</b>입니다. ' +
-              '같은 카드라도 뽑은 사람의 일간이 다르면 십성이 달라지고, 그래서 뜻도 달라집니다. ' +
-              '이 페이지가 사주와 타로를 잇는 고리예요.</p>';
-      h += '<table class="rtable"><tr><th>십성</th><th>한 줄 뜻</th><th>일간과의 관계</th></tr>';
-      ['비겁', '식상', '재성', '관성', '인성', '태극'].forEach(function (k) {
-        h += '<tr><td class="han">' + esc(k) + '</td>' +
-             '<td><b>' + esc(FortuneData.십성짧은뜻[k] || '') + '</b></td>' +
-             '<td>' + esc(FortuneData.십성정의[k] || '') + '</td></tr>';
-      });
-      h += '</table><h4>자리(과거·현재·미래)에 따라</h4><table class="rtable">' +
-           '<tr><th>십성</th><th>과거</th><th>현재</th><th>미래</th></tr>';
-      ['비겁', '식상', '재성', '관성', '인성', '태극'].forEach(function (k) {
-        var d = FortuneData.십성해설[k];
-        h += '<tr><td class="han">' + esc(k) + '</td><td>' + esc(d.과거) + '</td>' +
-             '<td>' + esc(d.현재) + '</td><td>' + esc(d.미래) + '</td></tr>';
-      });
-      return h + '</table>';
-    } },
-
-    { id: 'rel', 이름: '카드 사이 관계', 그리기: function () {
-      var h = '<p>이어진 두 카드의 오행을 견줘 흐름을 봅니다. ' +
-              '결과 화면의 타임라인에 붙는 칩이 이것이고, 총평에서는 쉬운 말로 바꿔 씁니다.</p>';
-      h += '<table class="rtable"><tr><th>관계</th><th>쉬운 말</th><th>뜻</th></tr>';
-      ['상생', '역생', '상극', '역극', '비견', '무관', '태극'].forEach(function (k) {
-        var e = FortuneData.관계쉬움[k] || {};
-        h += '<tr><td class="han">' + esc(k) + '</td><td><b>' + esc(e.관형 || '') + '</b></td>' +
-             '<td>' + esc(FortuneData.흐름해설[k] || '') + '</td></tr>';
-      });
-      return h + '</table>';
-    } },
-
-    { id: 'spr', 이름: '카드 배열 ' + FortuneData.스프레드.length + '종', 그리기: function () {
-      var h = '<p>무엇을 묻느냐에 따라 카드를 놓는 자리가 달라집니다. ' +
-              '자리 이름이 곧 그 카드를 읽는 틀이에요.</p><table class="rtable">' +
-              '<tr><th>스프레드</th><th>장수</th><th>쓰임</th><th>자리</th></tr>';
-      FortuneData.스프레드.forEach(function (sp) {
-        h += '<tr><td><b>' + esc(sp.이름) + '</b><br><span style="color:var(--ink-faint);font-size:.78rem">' +
-             esc(sp.부제) + '</span></td><td>' + sp.장수 + '</td><td>' + esc(sp.쓰임) + '</td>' +
-             '<td>' + esc(sp.위치.map(function (p) {
-               return p.라벨.replace('{A}', 'A').replace('{B}', 'B');
-             }).join(' · ')) + '</td></tr>';
-      });
-      return h + '</table>';
-    } },
-
-    { id: 'suit', 이름: '수트 4종', 그리기: function () {
-      var h = '<p>마이너 56장은 네 가지 수트로 나뉩니다. ' +
-              '어느 수트가 많이 나왔는지가 <b>무엇이 판을 끌고 가는지</b>를 말해 줍니다. ' +
-              '결과 화면의 「뽑힌 판의 모양」이 세는 것이 이것이에요.</p>';
-      h += '<table class="rtable"><tr><th>수트</th><th>원소 · 오행</th><th>무엇을 보나</th>' +
-           '<th>속도</th></tr>';
-      var 속도말 = { 완드: '가장 빠름', 소드: '빠름', 컵: '보통', 펜타클: '가장 느림' };
-      TarotData.SUITS.forEach(function (su) {
-        h += '<tr><td><b style="white-space:nowrap">' + esc(su.name) + '</b></td>' +
-             '<td>' + esc(su.원소) + ' · ' + 점(su.오행) + esc(su.오행) + '</td>' +
-             '<td>' + esc(su.설명) + '</td>' +
-             '<td>' + esc(속도말[su.name] || '') + '</td></tr>';
-      });
-      h += '<tr><td><b style="white-space:nowrap">메이저</b></td><td>오행 제각각</td>' +
-           '<td>수트에 속하지 않는 22장입니다. 하루치 사정이 아니라 큰 국면을 가리킵니다.</td>' +
-           '<td>내 속도가 아님</td></tr></table>';
-      h += '<p>움직이는 속도는 이 순서로 냅니다 — 완드가 가장 빠르고 펜타클이 가장 느려요. ' +
-           '뽑힌 카드들의 평균을 내 「며칠에서 두어 주」부터 「한 계절」까지 네 구간으로 봅니다. ' +
-           '타로에서 흔히 쓰는 기준이고, 확정된 예언이 아니라 <b>대략의 호흡</b>입니다.</p>';
-      h += '<table class="rtable"><tr><th>구간</th><th>때에 적는 말</th></tr>';
-      FortuneData.시기표.forEach(function (t) {
-        h += '<tr><td><b>' + esc(t.말) + '</b></td><td>' + esc(t.글) + '</td></tr>';
-      });
-      return h + '</table>';
-    } },
-
-    { id: 'deck', 이름: '타로 78장', 그리기: function () {
-      var h = '<p>78장 전부와 각 카드의 오행·음양, 그리고 바로 놓였을 때와 뒤집혀 놓였을 때의 뜻입니다. ' +
-              '수트를 오행으로 옮긴 연결은 창작입니다 — 전통 교리가 아닙니다.</p>';
-      function 묶음(제목, 목록) {
-        var t = '<h4>' + esc(제목) + '</h4><div class="deckgrid">';
-        목록.forEach(function (c) {
-          t += '<div class="dcard"><div class="dn">' + esc(c.이름) + '</div>' +
-               '<div class="dm">' + 점(c.오행) + esc(c.오행) + ' · ' + esc(c.음양) + '</div>' +
-               '<div class="dd">' + esc(c.설명) + '</div>' +
-               '<div class="dd"><b style="color:var(--ink)">정</b> ' + esc(c.정) + '<br>' +
-               '<b style="color:var(--ink)">역</b> ' + esc(c.역) + '</div></div>';
-        });
-        return t + '</div>';
-      }
-      h += 묶음('메이저 아르카나 22장', TarotData.DECK.filter(function (c) { return c.종류 === '메이저'; }));
-      TarotData.SUITS.forEach(function (su) {
-        h += 묶음(su.name + ' 14장 — ' + su.원소 + ' · ' + su.오행 + ' · ' + su.주제,
-                  TarotData.DECK.filter(function (c) { return c.수트키 === su.key; }));
-      });
-      return h;
-    } }
-  ];
-
-  (function 자료실() {
-    var tabs = document.getElementById('refTabs'), pane = document.getElementById('refPane');
-    var h = '';
-    REF.forEach(function (r, i) {
-      h += '<button type="button" class="tab' + (i === 0 ? ' on' : '') + '" data-t="' + r.id + '">' +
-           esc(r.이름) + '</button>';
-    });
-    tabs.innerHTML = h;
-    var 그려짐 = {};
-    function 보이기(id) {
-      REF.forEach(function (r) { if (r.id === id) {
-        if (!그려짐[id]) 그려짐[id] = r.그리기();
-        pane.innerHTML = 그려짐[id];
-      }});
-      Array.prototype.forEach.call(tabs.children, function (b) {
-        b.className = 'tab' + (b.getAttribute('data-t') === id ? ' on' : '');
-      });
-    }
-    tabs.addEventListener('click', function (e) {
-      var b = e.target.closest('.tab'); if (b) 보이기(b.getAttribute('data-t'));
-    });
-    보이기(REF[0].id);
-
-    // 문맥 버튼 → 자료실 열고 해당 탭으로
-    document.addEventListener('click', function (e) {
-      var b = e.target.closest('.reflink'); if (!b) return;
-      var box = document.getElementById('ref');
-      box.open = true;
-      보이기(b.getAttribute('data-ref'));
-      box.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    });
-  }());
 
   document.getElementById('unknownHour').addEventListener('change', function () {
     document.getElementById('birthtime').disabled = this.checked;
