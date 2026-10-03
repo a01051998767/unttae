@@ -277,21 +277,6 @@
     color: var(--gold); border: 1px solid rgba(201,169,106,.4); border-radius: 3px; padding: 0 4px; line-height: 1.5;
   }
 
-  /* 자리마다 겹쳐 보기 (운때) */
-  .cross { margin: 0 0 20px; }
-  .cross .clab {
-    display: flex; align-items: center; gap: 8px;
-    font-size: .72rem; font-weight: 600; letter-spacing: .12em; color: var(--gold); margin-bottom: 7px;
-  }
-  .cross-lead { margin: 0 0 12px; font-size: .84rem; color: var(--ink-faint); }
-  .cross-lead b { color: var(--ink-dim); font-weight: 600; }
-  .crow { border-top: 1px solid var(--line); padding: 11px 0; }
-  .crow:last-child { padding-bottom: 0; }
-  .crow-h { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 5px; }
-  .crow-h b { font-size: .88rem; color: var(--ink); font-weight: 600; }
-  .crow p { margin: 0; font-size: .85rem; color: var(--ink-dim); line-height: 1.75; }
-  .crow p.same { color: var(--ink-faint); font-style: normal; }
-
   /* ── 운때 결론 — 결과에서 가장 먼저 보이는 한 줄 ─────────── */
   .answer {
     position: relative; text-align: center;
@@ -331,9 +316,12 @@
   .more > summary::after { content: "\25BE"; color: var(--gold-lo); }
   .more[open] > summary::after { content: "\25B4"; }
   .more > summary:hover { border-color: var(--gold-lo); color: var(--ink); }
-  .more-body {
-    margin-top: 10px; padding: 20px;
-    background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius);
+  /* 안에는 결론 상자 하나뿐이라 바깥 틀을 두지 않는다 (상자 속 상자가 된다) */
+  .more-body { margin-top: 10px; }
+  .more-body .overlap {
+    margin: 0;
+    /* 반투명 금빛 위에 패널색을 깔아 뒤의 별이 글자 사이로 비치지 않게 */
+    background: linear-gradient(var(--gold-film), var(--gold-film)), var(--panel);
   }
 
   /* ── 총평 ────────────────────────────────────────────── */
@@ -408,7 +396,6 @@
     .stage > .badge { width: 27px; height: 27px; font-size: .7rem; }
     .answer { padding: 24px 16px 20px; }
     .answer-line { font-size: 1.24rem; }
-    .more-body { padding: 18px 14px; }
     .pillars { gap: 6px; }
     .pillar { padding: 11px 3px 9px; }
     .pillar .han { font-size: 1.22rem; }
@@ -682,28 +669,8 @@
     // 근거는 펼쳐서 본다. 처음부터 다 보이면 결론이 묻힌다.
     b += '<details class="more"><summary>왜 이런 결론인지 자세히</summary>' +
          '<div class="more-body verdict">';
-    // 운·때 요약 줄은 01·02 단과 같은 말을 되풀이해 뺐다 (사용자 요청). 결론 설명만 둔다.
-
-    // 자리마다 그 카드가 내 사주에서 무엇이 되는지 — 여기가 겹치는 자리다
-    if (reading.카드 && reading.카드.length) {
-      b += '<div class="cross"><span class="clab">자리마다 겹쳐 보면</span>' +
-           '<p class="cross-lead">내 일간은 <b>' + esc(reading.일간.글자) + '</b>(' +
-           esc(reading.일간오행) + ')입니다. 각 자리의 카드가 나에게 무엇이 되는지 봅니다.</p>';
-      var 본십성글 = {};
-      reading.카드.forEach(function (c) {
-        // 십성과 시제가 같으면 같은 문장이 나온다. 두 번 읽히게 두지 않는다.
-        var 되풀이 = 본십성글[c.십성글];
-        본십성글[c.십성글] = true;
-        b += '<div class="crow"><div class="crow-h">' +
-             '<span class="rpos">' + esc(c.위치) + '</span>' +
-             '<b>' + esc(c.카드이름) + '</b>' +
-             '<span class="tag">' + esc(c.오행) + ' → ' + esc(c.십성) +
-             (c.십성뜻 ? '(' + esc(c.십성뜻) + ')' : '') + '</span></div>' +
-             (되풀이 ? '<p class="same">앞 자리와 같은 관계입니다.</p>'
-                     : '<p>' + esc(c.십성글) + '</p>') + '</div>';
-      });
-      b += '</div>';
-    }
+    // 자세히 안에는 결론 설명만 둔다 (사용자 요청).
+    // 운·때 요약 줄과 '자리마다 겹쳐 보면' 은 01·02 단과 겹치는 말이라 뺐다.
 
     // 결론 — 기운의 저울 · 결론 자리 진단 · 갈래 조언 · 맺음을 한 줄기로 읽는다.
     // 예전에는 셋으로 쪼개 라벨을 붙였더니, 읽고 나서도 '그래서 뭘 하라는 건가'가 남았다.
