@@ -682,10 +682,7 @@
     // 근거는 펼쳐서 본다. 처음부터 다 보이면 결론이 묻힌다.
     b += '<details class="more"><summary>왜 이런 결론인지 자세히</summary>' +
          '<div class="more-body verdict">';
-    b += '<div class="vrow"><span class="clab">운 · 사주가 말하는 바탕</span>' +
-         '<p>' + esc(v.운) + '</p></div>';
-    b += '<div class="vrow"><span class="clab">때 · 타로가 말하는 흐름</span>' +
-         '<p>' + esc(v.때) + '</p></div>';
+    // 운·때 요약 줄은 01·02 단과 같은 말을 되풀이해 뺐다 (사용자 요청). 결론 설명만 둔다.
 
     // 자리마다 그 카드가 내 사주에서 무엇이 되는지 — 여기가 겹치는 자리다
     if (reading.카드 && reading.카드.length) {
